@@ -3,4 +3,6 @@ OUTFILE=out.pdf
 .PHONY: doc
 
 doc: $(OUTFILE)
-	pandoc notizen.md -o out.pdf
+
+$(OUTFILE): doc/notizen.md
+	pandoc $^ -o doc/doc.pdf
