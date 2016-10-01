@@ -47,14 +47,14 @@ parseAtoms([H|T], Atoms) :-
 	H =.. [_|HAtom],
 	parseAtoms(T, R),
 	append(HAtom, R, Atoms).
-parseAtoms(_, []).
+parseAtoms([], []).
 
 
 antiUnifyAll([H|T], AUPairs) :-
 	antiUnify(H, AUPair),
 	antiUnifyAll(T, R),
 	addHeader(AUPair, R, AUPairs).
-antiUnifyAll(_, []).
+antiUnifyAll([], []).
 
 antiUnify(Pair, AUPair) :-
 	arg(1,Pair,ContP1),
