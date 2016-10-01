@@ -30,7 +30,7 @@ searchBackground([H|T], Atoms, NewRule) :-
 	append([H], R, NewRule).
 searchBackground([_|T], Atoms, NewRule) :-
 	searchBackground(T, Atoms, NewRule).
-searchBackground(_, _, []).
+searchBackground([], _, []).
 
 % Checks if L1 a sublist of L2.
 isSublist([H1|T1], L2) :-
