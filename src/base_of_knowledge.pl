@@ -1,31 +1,26 @@
 /* vim: set filetype=prolog */
 
-female(nancy).
-female(helen).
-female(eve).
-female(mary).
-
-parent(helen, mary).
-parent(helen, tom).
-parent(george, mary).
-
-parent(tom, eve).
-parent(nancy, eve).
-
-daughter(X, Y) :- female(X),parent(Y,X).
-
-background(female(nancy),female(helen),female(eve),female(mary),parent(helen,mary),parent(helen,tom),parent(george,mary),parent(tom,eve),parent(nancy,eve)).
-
-positives(daughter(mary,helen), daughter(eve, tom)).
-
+% A naive implementation of the
+% rlgg algorithm
 rlgg(Background, PositiveExamples, R) :-
 	Background =.. [_|PredEx],
 	PositiveExamples =.. [_|PredPos],
+
+	% Generate pairs of complex terms having
+	% the same outer-most functor
 	generatePairs(PredEx, PredEx, [], PairsBack),
 	generatePairs(PredPos, PredPos, [], PairsPosEx),
+
+	% Anti-Unify the pairs
 	antiUnifyAll(PairsPosEx, PosAU),
 	antiUnifyAll(PairsBack, BackAU),
+
+	% Parse the positive examples
 	parseAtoms(PosAU, Atoms),
+
+	% Delete all background literals that uses
+	% other anti-unified variables than the positive
+	% ones.
 	searchBackground(BackAU, Atoms, R).
 
 searchBackground([H|T], Atoms, NewRule) :-
@@ -37,18 +32,20 @@ searchBackground([_|T], Atoms, NewRule) :-
 	searchBackground(T, Atoms, NewRule).
 searchBackground(_, _, []).
 
+% Checks if L1 a sublist of L2.
 isSublist([H1|T1], L2) :-
 	memberchk(H1, L2),
 	isSublist(T1, L2).
 isSublist([],_).
 
-
+% Relates a list of complex terms to a list of
+% their arguments.
+% Therefore the name 'parseAtoms' is not fully correct.
 parseAtoms([H|T], Atoms) :-
 	H =.. [_|HAtom],
 	parseAtoms(T, R),
 	append(HAtom, R, Atoms).
 parseAtoms([], []).
-
 
 antiUnifyAll([H|T], AUPairs) :-
 	antiUnify(H, AUPair),
@@ -101,6 +98,7 @@ deletePermutedPairs2(Pair, [H|T], Akk, R) :-
 	deletePermutedPairs2(Pair,T, [H|Akk], R).
 deletePermutedPairs2(_,_,Akk,R) :- reverse(Akk,R).
 
+% Are two pairs the same, with a switched order respectivly.
 isPermuted(X,Y) :-
 	functor(X, pair,2),
 	functor(Y, pair,2),
@@ -119,5 +117,25 @@ isComplexTerm(X) :-
 	functor(X,_,A),
 	A > 0.
 
-attribute(Subject, Object,Fact) :-
-	  Fact =.. [Object, Subject].
+
+%%%%%%%%%%%%%%%%%%%% BACKGROUND KNOWLEDGE %%%%%%%%%%%%%%%%%%%%%%%%
+
+female(nancy).
+female(helen).
+female(eve).
+female(mary).
+
+parent(helen, mary).
+parent(helen, tom).
+parent(george, mary).
+
+parent(tom, eve).
+parent(nancy, eve).
+
+background(female(nancy),female(helen),female(eve),female(mary),parent(helen,mary),parent(helen,tom),parent(george,mary),parent(tom,eve),parent(nancy,eve)).
+
+%%%%%%%%%%%%%%%%%%%% POSITIVE EXAMPLES %%%%%%%%%%%%%%%%%%%%%%%%%%%
+positives(daughter(mary,helen), daughter(eve, tom)).
+
+%What we expect after the rlgg algorithm
+%daughter(X, Y) :- female(X),parent(Y,X).
