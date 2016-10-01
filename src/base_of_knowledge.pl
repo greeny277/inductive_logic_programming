@@ -65,7 +65,7 @@ antiUnify(Pair, AUPair) :-
 	AUPair =.. [P1Func|Foo].
 
 concateHelper([H1|T1], [H2|T2], Akk, R) :-
-	sort([H1,H2|[]], [HS1,HS2|_]),
+	msort([H1,H2|[]], [HS1,HS2|_]),
 	atom_concat(HS1, '_', Tmp),
 	atom_concat(Tmp, HS2, Hr),
 	concateHelper(T1, T2, [Hr|Akk], R).
