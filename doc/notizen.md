@@ -90,7 +90,7 @@ letters or else at least one of them is a variable.
 different function letters.
 3. When no such $t\_{1,2}$ exist, the algorithm terminates.
 4. Choose a free variable $x$ and replace each
-$t\_{1,2}$ in $V\_{1,2}$.
+$t\_{1,2}$ in $V\_{1,2}$ with $x$, if they occur in the **same** place.
 5. Add to substitution list
 6. Goto 2.
 
