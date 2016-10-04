@@ -63,6 +63,7 @@ antiUnify(Pair, AUPair) :-
 
 concateHelper([H1|T1], [H2|T2], Akk, R) :-
 	msort([H1,H2|[]], [HS1,HS2|_]),
+	%TODO for complex terms using term_string from prolog extension 7
 	atom_concat(HS1, '_', Tmp),
 	atom_concat(Tmp, HS2, Hr),
 	concateHelper(T1, T2, [Hr|Akk], R).
@@ -118,8 +119,9 @@ isComplexTerm(X) :-
 	A > 0.
 
 
-%%%%%%%%%%%%%%%%%%%% BACKGROUND KNOWLEDGE %%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% Family Example %%%%%%%%%%%%%%%%%%%%%%%%
 
+% background family
 female(nancy).
 female(helen).
 female(eve).
@@ -132,10 +134,14 @@ parent(george, mary).
 parent(tom, eve).
 parent(nancy, eve).
 
-background(female(nancy),female(helen),female(eve),female(mary),parent(helen,mary),parent(helen,tom),parent(george,mary),parent(tom,eve),parent(nancy,eve)).
+background_family(female(nancy),female(helen),female(eve),female(mary),parent(helen,mary),parent(helen,tom),parent(george,mary),parent(tom,eve),parent(nancy,eve)).
 
-%%%%%%%%%%%%%%%%%%%% POSITIVE EXAMPLES %%%%%%%%%%%%%%%%%%%%%%%%%%%
-positives(daughter(mary,helen), daughter(eve, tom)).
+% positive examples
+positives_family(daughter(mary,helen), daughter(eve, tom)).
+
+% testcase
+test_1(X) :-
+	rlgg(background_family(female(nancy),female(helen),female(eve),female(mary),parent(helen,mary),parent(helen,tom),parent(george,mary),parent(tom,eve),parent(nancy,eve)), positives(daughter(mary,helen), daughter(eve, tom)), X).
 
 %What we expect after the rlgg algorithm
 %daughter(X, Y) :- female(X),parent(Y,X).
