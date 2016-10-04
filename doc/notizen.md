@@ -59,7 +59,7 @@ following requirements:
 Algorithms for hypothesis search
 ---------------------------------
 ### Relative least general generalization (rlgg)
-Invented by Plotkin.
+This algorithm was the basic of GOLEM. It was invented by Plotkin.
 
 Algorithm:
 
@@ -69,3 +69,37 @@ Algorithm:
 2. Convert each implication to clause normalform: $\neg B \vee e$
 
 3. *Anti-unify* each compatible pair of literals
+
+4. Delete all negated literals containing variables that don't occur in a positive literal
+
+5. Convert final clause back to Horn form.
+
+#### Inductive Generalization
+The *rlgg* algorithm depends heavily on Plotkins generalization of literals.
+
+The notation is as following: $P$ is a predicate, $g,f$ are symbols and $z$ is a variable.
+A word $W$ is a term or a variable.
+
+The algorithm lgg algorithm:
+
+1. Choose two compatible words $V1$ and $V2$.
+2. Try to find terms $t\_1,t\_2$ such that $t\_1 \neq t\_2$
+and both have the same position in $V\_1$ and $V\_2$. Either
+$t\_{1}$ and $t\_{2} either needs to start with different function
+letters or else at least one of them is a variable.
+different function letters.
+3. When no such $t\_{1,2}$ exist, the algorithm terminates.
+4. Choose a free variable $x$ and replace each
+$t\_{1,2}$ in $V\_{1,2}$.
+5. Add to substitution list
+6. Goto 2.
+
+Let use this algorithm to finde the *least general generalisation* of the terms
+$V\_1 = P(f(x), g(z))$ and $V\_2 = P(f(g(z)), g(z))$:
+
+We take:
+$t\_1 = f(x); t\_2= g(z)$ and $v$ as new variable.
+
+$V\_1 = P(f(v), g(z))$ and $V\_2 = P(f(v), g(z))$:
+
+with: $\epsilon\_1 = \{x | v\}$ and $\epsilon\_2 = \{g(z) | v\}$
