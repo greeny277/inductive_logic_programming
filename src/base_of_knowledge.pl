@@ -69,6 +69,29 @@ concateHelper([H1|T1], [H2|T2], Akk, R) :-
 	concateHelper(T1, T2, [Hr|Akk], R).
 concateHelper(_, _, Akk, R) :- reverse(Akk, R).
 
+antiUnifyTerms(T1, T2, New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
+	T1 \= T2,
+	isComplexTerm(T1), isComplexTerm(T2),
+	sameFunctor(T1,T2),
+	T1 =.. [_|T1Args],
+	T2 =.. [_|T2Args],
+	antiUnifyTerms2(T1Args, T2Args, New_Variable, SubstitutedTermT1, SubstitutedTermT2).
+antiUnifyTerms(T1, T2, New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
+	antiUnifyTerms2([T1], [T2], New_Variable, SubstitutedTermT1, SubstitutedTermT2).
+
+antiUnifyTerms2([H1|T1], [H2|T2], New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
+	H1 == H2,
+	antiUnifyTerms2(T1, T2, New_Variable, SubstitutedTermT1, SubstitutedTermT2).
+antiUnifyTerms2([H1|T1], [H2|T2], New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
+	isComplexTerm(H1), isComplexTerm(H2),
+	sameFunctor(T1,T2),
+	antiUnifyTerms2(T1, T2, New_Variable, SubstitutedTermT1, SubstitutedTermT2).
+antiUnifyTerms2([H1|_], [H2|_], New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
+	term_string(H1, H1String),
+	term_string(H2, H2String),
+	string_concat(H1,H2, New_Variable),
+	id(H2,SubstitutedTermT2),
+	id(H1,SubstitutedTermT1).
 
 generatePairs([H|T], FullList, Akk, R) :-
 	findPair(H, FullList, [], Pairs),
@@ -118,6 +141,7 @@ isComplexTerm(X) :-
 	functor(X,_,A),
 	A > 0.
 
+id(X,X).
 
 %%%%%%%%%%%%%%% Family Example %%%%%%%%%%%%%%%%%%%%%%%%
 
