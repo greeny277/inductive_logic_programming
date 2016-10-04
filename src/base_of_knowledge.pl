@@ -2,7 +2,7 @@
 
 % A naive implementation of the
 % rlgg algorithm
-rlgg(Background, PositiveExamples, R) :-
+rlgg(Background, PositiveExamples, PosAU, BackAU) :-
 	Background =.. [_|PredEx],
 	PositiveExamples =.. [_|PredPos],
 
@@ -13,15 +13,19 @@ rlgg(Background, PositiveExamples, R) :-
 
 	% Anti-Unify the pairs
 	antiUnifyAll(PairsPosEx, PosAU),
-	antiUnifyAll(PairsBack, BackAU),
+	antiUnifyAll(PairsBack, BackAU).
 
+	%TODO Get variables of PosAU
+	%
 	% Parse the positive examples
-	parseAtoms(PosAU, Atoms),
+	%	parseAtoms(PosAU, Atoms),
 
+	%TODO Delete background literals
+	%
 	% Delete all background literals that uses
 	% other anti-unified variables than the positive
 	% ones.
-	searchBackground(BackAU, Atoms, R).
+	%searchBackground(BackAU, Atoms, R).
 
 searchBackground([H|T], Atoms, NewRule) :-
 	parseAtoms([H], BackAtoms),
@@ -56,11 +60,13 @@ antiUnifyAll([], []).
 antiUnify(Pair, AUPair) :-
 	arg(1,Pair,ContP1),
 	arg(2,Pair,ContP2),
-	ContP1 =.. [P1Func|P1Args],
-	ContP2 =.. [_|P2Args],
-	concateHelper(P1Args, P2Args, [], Foo),
-	AUPair =.. [P1Func|Foo].
-
+	%TODO: Use here antiUnifyTermsMaster
+	antiUnifyTermsMaster(ContP1, ContP2, AUPair).
+%ContP1 =.. [P1Func|P1Args],
+%	ContP2 =.. [_|P2Args],
+%	concateHelper(P1Args, P2Args, [], Foo),
+%	AUPair =.. [P1Func|Foo].
+%
 concateHelper([H1|T1], [H2|T2], Akk, R) :-
 	msort([H1,H2|[]], [HS1,HS2|_]),
 	%TODO for complex terms using term_string from prolog extension 7
@@ -68,6 +74,12 @@ concateHelper([H1|T1], [H2|T2], Akk, R) :-
 	atom_concat(Tmp, HS2, Hr),
 	concateHelper(T1, T2, [Hr|Akk], R).
 concateHelper(_, _, Akk, R) :- reverse(Akk, R).
+
+antiUnifyTermsMaster(T, T, T).
+antiUnifyTermsMaster(T1, T2, LGG) :-
+	antiUnifyTerms(T1, T2, New_Variable, SubstitutedTermT1, SubstitutedTermT2),
+	substitute(T1, T2, SubstitutedTermT1, SubstitutedTermT2, New_Variable, SubT1, SubT2),
+	antiUnifyTermsMaster(SubT1, SubT2, LGG).
 
 antiUnifyTerms(T1, T2, New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
 	T1 \= T2,
@@ -84,14 +96,53 @@ antiUnifyTerms2([H1|T1], [H2|T2], New_Variable, SubstitutedTermT1, SubstitutedTe
 	antiUnifyTerms2(T1, T2, New_Variable, SubstitutedTermT1, SubstitutedTermT2).
 antiUnifyTerms2([H1|T1], [H2|T2], New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
 	isComplexTerm(H1), isComplexTerm(H2),
-	sameFunctor(T1,T2),
+	sameFunctor(H1,H2),
 	antiUnifyTerms2(T1, T2, New_Variable, SubstitutedTermT1, SubstitutedTermT2).
 antiUnifyTerms2([H1|_], [H2|_], New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
-	term_string(H1, H1String),
-	term_string(H2, H2String),
-	string_concat(H1,H2, New_Variable),
+	msort([H1,H2|[]],L), %TODO Does msort/2 delete any information?
+	New_Variable =.. [variable|L],
 	id(H2,SubstitutedTermT2),
 	id(H1,SubstitutedTermT1).
+
+substitute(T1, T2, From1, From2, To, SubstitutedTermT1, SubstitutedTermT2) :-
+	T1 == From1, T2 == From2,
+	id(To, SubstitutedTermT1),
+	id(To, SubstitutedTermT2).
+substitute(T1, T2, From1, From2, To, SubstitutedTermT1, SubstitutedTermT2) :-
+	isComplexTerm(T1), isComplexTerm(T2),
+	T1 =.. [Func1|L1],
+	T2 =.. [Func2|L2],
+	substituteHelper(L1, L2, From1, From2, To, SubT1, SubT2),
+	SubstitutedTermT1 =.. [Func1|SubT1],
+	SubstitutedTermT2 =.. [Func2|SubT2].
+%substitute(_, _, From1, From2, _, From1, From2).
+
+substituteHelper([H1|T1], [H2|T2], From1, From2, To, SubstitutedTerm1, SubstitutedTerm2) :-
+	H1 == From1, H2 == From2,
+	substituteHelper(T1, T2, From1, From2, To, S1, S2),
+	id([To|S1], SubstitutedTerm1),
+	id([To|S2], SubstitutedTerm2).
+substituteHelper([H1|T1], [H2|T2], From1, From2, To, SubstitutedTerm1, SubstitutedTerm2) :-
+	H1 == H2,
+	substituteHelper(T1, T2, From1, From2, To, S1, S2),
+	addHeader(H1, S1, SubstitutedTerm1),
+	addHeader(H2, S2, SubstitutedTerm2).
+substituteHelper([H1|T1], [H2|T2], From1, From2, To, SubstitutedTerm1, SubstitutedTerm2) :-
+	isComplexTerm(H1), isComplexTerm(H2),
+	H1 =.. [H1Func|H1List],
+	H2 =.. [H2Func|H2List],
+	substituteHelper(H1List, H2List, From1, From2, To, S1Tmp, S2Tmp),
+	H1Sub =.. [H1Func|S1Tmp],
+	H2Sub =.. [H2Func|S2Tmp],
+	substituteHelper(T1, T2, From1, From2, To, S1TmpTmp, S2TmpTmp),
+	id([H1Sub|S1TmpTmp], SubstitutedTerm1),
+	id([H2Sub|S2TmpTmp], SubstitutedTerm2).
+substituteHelper([H1|T1], [H2|T2], From1, From2, To, SubstitutedTerm1, SubstitutedTerm2) :-
+	substituteHelper(T1, T2, From1, From2, To, S1Tmp, S2Tmp),
+	addHeader(H1, S1Tmp, SubstitutedTerm1),
+	addHeader(H2, S2Tmp, SubstitutedTerm2).
+substituteHelper([], T2, _, _, _, [], T2).
+substituteHelper(T1, [], _, _, _, T1, []).
 
 generatePairs([H|T], FullList, Akk, R) :-
 	findPair(H, FullList, [], Pairs),
@@ -164,8 +215,18 @@ background_family(female(nancy),female(helen),female(eve),female(mary),parent(he
 positives_family(daughter(mary,helen), daughter(eve, tom)).
 
 % testcase
-test_1(X) :-
-	rlgg(background_family(female(nancy),female(helen),female(eve),female(mary),parent(helen,mary),parent(helen,tom),parent(george,mary),parent(tom,eve),parent(nancy,eve)), positives(daughter(mary,helen), daughter(eve, tom)), X).
+test_1(X,Y) :-
+	rlgg(background_family(female(nancy),female(helen),female(eve),female(mary),parent(helen,mary),parent(helen,tom),parent(george,mary),parent(tom,eve),parent(nancy,eve)), positives(daughter(mary,helen), daughter(eve, tom)), X, Y).
 
 %What we expect after the rlgg algorithm
 %daughter(X, Y) :- female(X),parent(Y,X).
+%
+test_substitute(X,Y) :-
+	substitute(p(f(a, g(y)), x, g(y)), p(h(a,g(x)),x,g(x)), f(a, g(y)), h(a, g(x)),  x(f(a, g(y)), h(a, g(x))), X, Y).
+
+test_AU(New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
+	antiUnifyTerms(p(x(f(a, g(y)), h(a, g(x))), x, g(y)), p(x(f(a, g(y)), h(a, g(x))), x, g(x)), New_Variable, SubstitutedTermT1, SubstitutedTermT2).
+
+test_substitute2(X,Y) :-
+	test_AU(New_Variable, Sub1, Sub2),
+	substitute(p(variable(f(a, g(y)), h(a, g(x))), x, g(y)), p(variable(f(a, g(y)), h(a, g(x))), x, g(x)), Sub1, Sub2, New_Variable, X, Y).
