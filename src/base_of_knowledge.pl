@@ -2,7 +2,7 @@
 
 % A naive implementation of the
 % rlgg algorithm
-rlgg(Background, PositiveExamples, PosAU, BackAU) :-
+rlgg(Background, PositiveExamples, R) :-
 	Background =.. [_|PredEx],
 	PositiveExamples =.. [_|PredPos],
 
@@ -13,19 +13,20 @@ rlgg(Background, PositiveExamples, PosAU, BackAU) :-
 
 	% Anti-Unify the pairs
 	antiUnifyAll(PairsPosEx, PosAU),
-	antiUnifyAll(PairsBack, BackAU).
+	antiUnifyAll(PairsBack, BackAU),
 
 	%TODO Get variables of PosAU
 	%
+	%
 	% Parse the positive examples
-	%	parseAtoms(PosAU, Atoms),
+	parseAtoms(PosAU, Atoms),
 
 	%TODO Delete background literals
 	%
 	% Delete all background literals that uses
 	% other anti-unified variables than the positive
 	% ones.
-	%searchBackground(BackAU, Atoms, R).
+	searchBackground(BackAU, Atoms, R).
 
 searchBackground([H|T], Atoms, NewRule) :-
 	parseAtoms([H], BackAtoms),
@@ -44,7 +45,7 @@ isSublist([],_).
 
 % Relates a list of complex terms to a list of
 % their arguments.
-% Therefore the name 'parseAtoms' is not fully correct.
+% TODO Traverse recursivly
 parseAtoms([H|T], Atoms) :-
 	H =.. [_|HAtom],
 	parseAtoms(T, R),
@@ -99,8 +100,13 @@ antiUnifyTerms2([H1|T1], [H2|T2], New_Variable, SubstitutedTermT1, SubstitutedTe
 	sameFunctor(H1,H2),
 	antiUnifyTerms2(T1, T2, New_Variable, SubstitutedTermT1, SubstitutedTermT2).
 antiUnifyTerms2([H1|_], [H2|_], New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
-	msort([H1,H2|[]],L), %TODO Does msort/2 delete any information?
-	New_Variable =.. [variable|L],
+	term_string(H1, H1_s),
+	term_string(H2, H2_s),
+	msort([H1_s,H2_s|[]],L), %TODO Does msort/2 delete any information?
+	ins('_',L, 2, L2),
+	string_concat(x, '_', Tmp),
+	addHeader(Tmp, L2, Tmp2),
+	atomic_list_concat(Tmp2, New_Variable),
 	id(H2,SubstitutedTermT2),
 	id(H1,SubstitutedTermT1).
 
@@ -194,6 +200,11 @@ isComplexTerm(X) :-
 
 id(X,X).
 
+ins(Val,[H|List],Pos,[H|Res]):-
+	Pos > 1, !,
+	Pos1 is Pos - 1, ins(Val,List,Pos1,Res).
+ins(Val, List, 1, [Val|List]).
+
 %%%%%%%%%%%%%%% Family Example %%%%%%%%%%%%%%%%%%%%%%%%
 
 % background family
@@ -215,18 +226,19 @@ background_family(female(nancy),female(helen),female(eve),female(mary),parent(he
 positives_family(daughter(mary,helen), daughter(eve, tom)).
 
 % testcase
-test_1(X,Y) :-
-	rlgg(background_family(female(nancy),female(helen),female(eve),female(mary),parent(helen,mary),parent(helen,tom),parent(george,mary),parent(tom,eve),parent(nancy,eve)), positives(daughter(mary,helen), daughter(eve, tom)), X, Y).
+test_1(X) :-
+	rlgg(background_family(female(nancy),female(helen),female(eve),female(mary),parent(helen,mary),parent(helen,tom),parent(george,mary),parent(tom,eve),parent(nancy,eve)), positives(daughter(mary,helen), daughter(eve, tom)), X).
 
 %What we expect after the rlgg algorithm
 %daughter(X, Y) :- female(X),parent(Y,X).
 %
 test_substitute(X,Y) :-
-	substitute(p(f(a, g(y)), x, g(y)), p(h(a,g(x)),x,g(x)), f(a, g(y)), h(a, g(x)),  x(f(a, g(y)), h(a, g(x))), X, Y).
+	substitute(p(f(a, g(y)), x, g(y)), p(h(a,g(x)),x,g(x)), f(a, g(y)), h(a, g(x)),
+	'x_f(a, g(y)), h(a, g(x))', X, Y).
 
 test_AU(New_Variable, SubstitutedTermT1, SubstitutedTermT2) :-
 	antiUnifyTerms(p(x(f(a, g(y)), h(a, g(x))), x, g(y)), p(x(f(a, g(y)), h(a, g(x))), x, g(x)), New_Variable, SubstitutedTermT1, SubstitutedTermT2).
 
 test_substitute2(X,Y) :-
 	test_AU(New_Variable, Sub1, Sub2),
-	substitute(p(variable(f(a, g(y)), h(a, g(x))), x, g(y)), p(variable(f(a, g(y)), h(a, g(x))), x, g(x)), Sub1, Sub2, New_Variable, X, Y).
+	substitute(p('x_f(a, g(y))', h(a, g(x)), x, g(y)), p('x_f(a, g(y))', h(a, g(x)), x, g(x)), Sub1, Sub2, New_Variable, X, Y).
