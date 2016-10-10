@@ -91,7 +91,7 @@ The lgg algorithm is defined as followed:
 1. Choose two compatible words $V_1$ and $V_2$.
 2. Try to find terms $t_1,t_2$ such that $t_1 \neq t_2$
 and both have the same position in $V_1$ and $V_2$. The terms
-$t_{1}$ and $t_2$ either needs to start with different function
+$t_1$ and $t_2$ either needs to start with different function
 letters or else at least one of them is a variable.
 3. When no such $t_1$ and $t_2$ are existing, the algorithm terminates.
 4. Choose a variable $x$ which is free in $V_1$ and $V_2$ and replace each
@@ -161,4 +161,16 @@ For instance:
 	p(a, X) \vee p(b,Z) \succeq p(a,c)\\
 	\theta=\{X | c\}.
 \end{align}
+
+#### Refinement Operators
+@shapiro1983algorithmic introduced a concept of **refinment operators**
+to search from general to more specific clauses (one it subsumes).
+
+The refinement operator $\rho$ is defined as as:
+$\forall D \in \rho(C). C \succeq D$.
+
+Common refinement operators are:
+1. Substitute for one variable a term built from a functor of
+arity $n$ and $n$ distinct operators.
+
 #References
