@@ -127,10 +127,10 @@ $rlgg_B(E)$. is a single clause.
 
 The general idea is to find a *bridge hypothesis* $F$ [@yamamoto2010inverse]. But from the beginning:
 We need to find an hyptothesis such that Sufficiency, Necessity, Weak and Strong
-consistency holds.
-Those requirements leeds to $B \wedge \neg E \vDash \neg H$. This equivalency
-means that $H$ can be computed by deducing its negation $\neg H$ from $B$ and
-$\neg E$ as follows:
+consistency holds. The *deduction theorem* in first order logic proofs that
+$B \wedge H \vDash E$ is logically equivalent to $B \wedge \neg E \vDash \neg H$.
+This equivalency means that $H$ can be computed by deducing its negation $\neg H$
+from $B$ and $\neg E$ as follows:
 
 \begin{align}
 B \wedge \neg E \vDash F_1 \vDash \ldots \vDash F_i \vDash \neg H
@@ -140,13 +140,17 @@ At next the negation of the bridge theory $F_i$ can be generalizised into
 the hypothesis $H$ with inverse relation of entailment.
 
 \begin{align}
-\neg(B \wedge  \neg E) \Dashv \neg F_i \Dashv \ldots \Dashv \neg F_i \Dashv
+\neg(B \wedge  \neg E) \Dashv \neg F_1 \Dashv \ldots \Dashv \neg F_i \Dashv
 \ldots \Dashv \neg F_n \Dashv H
 \end{align}
 
-The tricky part about inverse entailment is that many different operaters can be
-applied with many choice-points. The reason for this is, that it's general
-undecidable wheter one definite clause implies another.
+The tricky part about inverse entailment is that many different operaters need to be
+applied to it until a result will be found. In addition it takes a huge
+amount of search space.
+<!--- The reason for this is, that it's general
+undecidable whether one definite clause implies another.
+ Wie genau hängen Inverse Entailment und die
+Unentscheidbarkeit der Implikation von Klauseln zusammen? --->
 
 #### Subsumption
 Therefore PROGOL[@muggleton1995inverse] uses subsumption due to computational
@@ -162,14 +166,28 @@ For instance:
 	\theta=\{X | c\}.
 \end{align}
 
+In @yamamoto2010inverse work it has been shown that inverse subsumption
+is an alternative generalization method to inverse entailment.
+Thus the searched hyptothesis $H$ can be found through the following relations:
+
+\begin{align}
+\neg(B \wedge  \neg E) \Dashv \neg F_1 \Dashv \ldots \Dashv \neg F_i \preceq
+\ldots \preceq \neg F_n \preceq H
+\end{align}
+
+In conclusion $H$ subsumes the clause $\neg(B \wedge  \neg E)$.
+
 #### Refinement Operators
-@shapiro1983algorithmic introduced a concept of **refinment operators**
+
+
+@shapiro1983algorithmic introduced a concept of **refinement operators**
 to search from general to more specific clauses (one it subsumes).
 
 The refinement operator $\rho$ is defined as as:
 $\forall D \in \rho(C). C \succeq D$.
 
 Common refinement operators are:
+
 1. Substitute for one variable a term built from a functor of
 arity $n$ and $n$ distinct operators.
 
