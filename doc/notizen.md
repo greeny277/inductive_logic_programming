@@ -200,7 +200,6 @@ $\theta=\{X | Y\}$
 
 3. Add a literal to the body of the clause whose arguments are distinct variables
 and not in clause:
-<!--- Insert tikz graphic here --->
 
 The example \ref{fig:refinement_operator} shows a refinement graph with some operators.
 The numeration of the operators is referring to the enumeration above.
