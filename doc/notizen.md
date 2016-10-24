@@ -178,6 +178,9 @@ Thus the searched hypothesis $H$ can be found through the following relations:
 
 In conclusion $H$ subsumes the clause $\neg F_i$ as well as $\neg(B \wedge  \neg E)$.
 
+#### Saturation
+TODO Explain Saturation to get $\not F_i$
+
 #### Refinement Operators
 Let's assume that we already have found our half way clause $\neg F_i$.
 This section shows how an hypothesis can $H$ derived from $\neg F_i$.
@@ -199,19 +202,21 @@ $\theta=\{X | f(Y_1, \ldots, Y_n)\}$
 2. Substitute for one variable another variable already in the clause:
 $\theta=\{X | Y\}$
 
-3. Add a literal to the body of the clause whose arguments are distinct variables
-and not in clause:
+3. Add a literal $l_k = p(u_1, \ldots, u_m)$, which is the $k$-th literal of $F_i$, where each
+	$u_j$ with $1 \leq j \leq m$ is substituted by $\{v_j|u_j\} \in \theta$ or
+	$\theta' = \theta \cup \{v_j|u_j\}$.
+<!-- TODO Das stimmt so nicht. Siehe Muggleton S.265 -->
 
 The example \ref{fig:refinement_operator} shows a refinement graph with some operators.
 The numeration of the operators is referring to the enumeration above.
-\begin{figure}
+\begin{figure}[h]
 	\begin{center}
 		\begin{tikzpicture}
 			\node (A) at (1.5,1) {$p(X,Y)$};
 			\node (B) at (-3,-1) {$p(X,X)$};
 			\node (C) at (0,-1) {$p(f(Z_1,Z_2), Y)$};
 			\node (D) at (3,-1) {$p(X,f(Z_1,Z_2))$};
-			\node (E) at (7,-1) {$p(X,Y) \leftarrow p(Z_1, Z_2)$};
+			\node (E) at (7,-1) {$p(X,Y) \leftarrow q(Z_1, Z_2)$};
 
 			\path [->] (A) edge node[left] {op2} (B);
 			\path [->] (A) edge node[left] {op1} (C);
@@ -232,7 +237,29 @@ a subsumed one.
 
 Regarding to @van1993subsumption not all three properties can be fulfilled at the same time.
 Therefore the third one is not considered.
-The set of operators shown in \ref{fig:refinement_operator} is finite and complete.
+The set of operators shown in \ref{fig:refinement_operator} is finite and complete but
+redundant (see Figure \ref{fig:prop_refinment_op}).
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{tikzpicture}
+			\node (A) at (1.5,1) {$p(X,Y)$};
+			\node (B) at (0,-1) {$p(X,Y)\leftarrow q(U) $};
+			\node (C) at (3,-1) {$p(X,Y)\leftarrow r(V)$};
+			\node (D) at (1.5,-3) {$p(X,Y) \leftarrow q(U), r(V)$};
+
+			\path [->] (A) edge node[left] {} (B);
+			\path [->] (A) edge node[left] {} (C);
+			\path [->] (B) edge node[left] {} (D);
+			\path [->] (C) edge node[left] {} (D);
+		\end{tikzpicture}
+	\end{center}
+	\caption{Example for non-redundancy in refinement operator $\rho$}
+	\label{fig:prop_refinment_op}
+\end{figure}
+
+<!-- TODO: Beispiel Graph der zeigt wie mit Subsumption
+           allgemeinste klausel gefunden wird.  -->
 
 $H$ has an upper and lower border:
 
