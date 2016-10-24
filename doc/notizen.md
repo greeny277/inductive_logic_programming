@@ -65,12 +65,13 @@ following requirements:
 Algorithms for hypothesis search
 ---------------------------------
 ### Relative least general generalization (rlgg)
-This algorithm was the basic of GOLEM. It was invented by Plotkin[@plotkin1970note].
+This algorithm was the basic of GOLEM. It was invented by @plotkin1970note.
 
 Algorithm:
 
+<!-- TODO: Introduce \theta_{1,2} -->
 1. Build for each positive example $E'$ an implication
-   with $B \to E'$
+   with $B \to E'$ <!-- TODO: Mentioning/Defining Saturation! -->
 
 2. Convert each implication to clause normalform: $\neg B \vee E'$
 
@@ -101,14 +102,14 @@ $t_1$ in $V_1$ respectively $t_2$ in $V_2$ with $x$, if they occur in the **same
 6. Goto 2.
 
 Let us use this algorithm to find the *least general generalisation* of the terms
-$V\_1 = P(f(x), g(z))$ and $V\_2 = P(f(g(z)), g(z))$:
+$V_1 = P(f(x), g(z))$ and $V_2 = P(f(g(z)), g(z))$:
 
 We take:
-$t\_1 = f(x); t\_2= g(z)$ and $v$ as new variable.
+$t_1 = f(x); t_2= g(z)$ and $v$ as new variable.
 
-$V\_1 = P(f(v), g(z))$ and $V\_2 = P(f(v), g(z))$:
+$V_1 = P(f(v), g(z))$ and $V_2 = P(f(v), g(z))$:
 
-With: $\epsilon\_1 = \{x | v\}$ and $\epsilon\_2 = \{g(z) | v\}$
+With: $\epsilon_1 = \{x | v\}$ and $\epsilon_2 = \{g(z) | v\}$
 
 
 ### Inverse Entailment and Inverse Subsumption
@@ -147,10 +148,10 @@ the hypothesis $H$ with inverse relation of entailment.
 The tricky part about inverse entailment is that many different operators need to be
 applied to it until a result will be found. In addition it takes a huge
 amount of search space.
-<!--- The reason for this is, that it's general
+<!-- The reason for this is, that it's general
 undecidable whether one definite clause implies another.
  Wie genau hängen Inverse Entailment und die
-Unentscheidbarkeit der Implikation von Klauseln zusammen? --->
+Unentscheidbarkeit der Implikation von Klauseln zusammen? -->
 
 #### Subsumption
 Therefore PROGOL[@muggleton1995inverse] uses subsumption due to computational
