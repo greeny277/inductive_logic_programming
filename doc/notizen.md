@@ -178,17 +178,70 @@ Thus the searched hypothesis $H$ can be found through the following relations:
 
 In conclusion $H$ subsumes the clause $\neg F_i$ as well as $\neg(B \wedge  \neg E)$.
 
-#### Saturation
-TODO Explain Saturation to get $\not F_i$
+A solver like PROGOL has two different tasks to solve for generating the final hypothesis $H$:
 
-#### Refinement Operators
+1. Obtain $\neg F_i$ from $\neg(B \wedge  \neg E)$ by inverse entailment.
+2. Obtain $H$ from $\neg F_i$  by inverse subsumption.
+
+The following sections are explaining both procedures.
+
+#### Inverse Entailment
+
+##### The Definite Mode Language
+@muggleton1995inverse introduces for the purpose of obtaining $\neg F_i$
+the definite mode language. 
+The definite mode language is made up of two forms: modeh$(n, \text{atom})$ and modeb$(n, \text{atom})$.
+Where $n$ is either an integer with $n \geq 1$ or '\*'.
+$n$ is called *recall* represents the number of alternative solutions for instantiating
+the atom, where '\*' means all solutions.
+The atom is a ground atom, where the terms are either place markers or normal terms
+with function symbols with own terms or constants. The place markers can have the the forms
+$+$type, $-$type or #type, where type is a concrete type like int, float or any customized one.
+$+$types are the input of the function, where $-$type specifies outputs. #types are
+constants.
+As earlier mentioned, does the background knowledge
+and the given examples consist of a set of Horn clauses with form $C = a \leftarrow b_1 \ldots b_n$.
+Let $M$ be the set of mode declarations. The clause $C$ is in the definite mode language
+$\mathscr{L}(M)$ iff
+
+1. $a$ is the atom of a modeh declaration in $M$ with every place marker with $+$type and $-$type
+is replaced by a variable and each #type is replaced by a ground term.
+2. Every atom $b_i$ is the atom of a modeb declaration in $M$ with every place marker with $+$type and $-$type
+is replaced by a variable and each #type is replaced by a ground term.
+3. Every variable of $+$type in any atom $b_i$ is either of $+$type in $a$ or of $-type$ in some
+   atom $b_j, 1 \leq j < i$.
+
+
+Some examples to visualize mode declarations.
+Assume the following statement which represents the equation $A+B=C$.
+\begin{align}
+\text{plus}(A,B,C).
+\end{align}
+Transformed into mode language leads to:
+\begin{align}
+	\text{modeh}(1, plus(+int, +int, -int))
+\end{align}
+
+This declaration demonstrates a relation between different atoms. Moreover
+it is now possible deducing relations from atoms of positive examples.
+
+##### Saturation
+The saturation of clauses is used to determine, which atoms of the background
+knowledge can have potentially relevant information to satisfy the positive examples.
+The upcoming clause $\neg F_i$ is called the most-specific clause in $\mathscr{L}_{i}(M)$,
+where $i$ depth of search to find relevant atoms.
+
+
+
+#### Inverse Subsumption
+##### Refinement Operators
 Let's assume that we already have found our half way clause $\neg F_i$.
 This section shows how an hypothesis can $H$ derived from $\neg F_i$.
 
 @shapiro1983algorithmic introduced a concept of **refinement operators**
 to search from general to more specific clauses (one it subsumes).
 
-The refinement operator $\rho$ is in the context of PROLOG defined as:
+The refinement operator $\rho$ is in the context of PROGOL defined as:
 \begin{align}
 \forall D \in \rho(C). C \succeq D
 \end{align}
