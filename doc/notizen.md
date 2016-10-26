@@ -226,17 +226,20 @@ This declaration demonstrates a relation between different atoms. Moreover
 it is now possible deducing relations from atoms of positive examples.
 
 ##### Saturation
-The saturation of clauses is used to determine, which atoms of the background
-knowledge can have potentially relevant information to satisfy the positive examples.
-The upcoming clause $\neg F_i$ is called the most-specific clause in $\mathscr{L}_{i}(M)$,
-where $i$ depth of search to find relevant atoms.
+The saturation step takes all horn clauses of the positive examples
+with the form $a \leftarrow b_1 \ldots b_n$ and with the mode declarations
+of the background knowledge and $a$. Then PROGOL takes the variables,
+which replace the $+$type in $a$ and let Prolog deduce each possible term
+upon the background knowledge.
 
+The concrete specification of the algorithm is a bit complex and not that
+important. A little example with some notes shows how it in general works:
 
 
 #### Inverse Subsumption
 ##### Refinement Operators
-Let's assume that we already have found our half way clause $\neg F_i$.
-This section shows how an hypothesis can $H$ derived from $\neg F_i$.
+After the clause $\neg F_i$ has been evaluated,
+this section shows how an hypothesis can $H$ derived from $\neg F_i$.
 
 @shapiro1983algorithmic introduced a concept of **refinement operators**
 to search from general to more specific clauses (one it subsumes).
