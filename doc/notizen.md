@@ -78,9 +78,8 @@ written $\mathfrak{M} \vDash \varphi$ when the following rules hold:
 TODO
 
 
-Formal Definition
+The idea of ILP
 -----------------------------
-
 
 
 The background knowledge $B$ has the form of **Horn clauses**
@@ -125,11 +124,58 @@ following requirements:
 
      $H$ is not allow to contradict the negative examples $E^{-}$ either.
 
+
+General tools
+---------
+
+### Subsumption
+
+The motivation for the use of subsumption takes place in the undecidable
+whether one definite clause implies another.
+
+\begin{definition}
+Let $L_1$ and $L_2$ be literals. $L_1$ subsumes $L_2$ iff there exists a $\theta$
+such that $L_1\theta = L_2$, also written $L_1 \succeq L_2$.
+
+For instance:
+\begin{align}
+	p(f(x), X) \succeq p(f(a),a)\\
+	\theta=\{X | a\}.
+\end{align}
+\end{definition}
+
+\begin{definition}
+Let $C$ and $D$ be clauses. $C$ subsumes $D$ iff there exists a $\theta$
+such that $C\theta \subseteq D$, also written $C \succeq D$.
+
+For instance:
+\begin{align}
+	p(a, X) \vee p(b,Z) \succeq p(a,c)\\
+	\theta=\{X | c\}.
+\end{align}
+\end{definition}
+
+### Partial ordered set (POSET)
+
+TODO: Explain POSET
+
+### Saturation
+
+
 Algorithms for hypothesis search
 ---------------------------------
-### Relative least general generalization (rlgg)
-This algorithm was the basic of GOLEM. It was invented by @plotkin1970note.
 
+### Relative least general generalization (rlgg)
+
+This algorithm was the basic of GOLEM and invented by @plotkin1970note.
+As mentioned earlier an hypothesis is searched that together with the
+background knowledge entails the positive examples but not any negative
+one: $B \wedge h \vDash E^+$. This formula can be converted to
+$h \vDash B \rightarrow E^+$. This kind of entailment can't be computed because
+it is an undecidable problem, but subsumption can be used as a very good
+approximation.
+
+<!--
 Algorithm:
 
 <!-- TODO: Introduce \theta_{1,2} -->
@@ -144,39 +190,101 @@ Algorithm:
 
 5. Convert final clause back to Horn form.
 
-#### Inductive Generalization
 The *rlgg* algorithm depends heavily on Plotkins generalization of literals (*lgg*).
+-->
+
+Plotkin introduced the *least general generalization* algorithm which finds
+for two given terms or literals the least generalization.
 
 The notation is as following: $P$ is a predicate, $g,f$ are symbols and $z$ is a variable.
 A word $W$ is a term or a variable.
 
-The lgg algorithm is defined as followed:
+The lgg-algorithm for terms is defined as followed:
 
 <!-- TODOS: Use algorithm package. What does "compatible" mean? Begins with same predicate, function
 symbol or variable? -->
 
-1. Choose two compatible words $V_1$ and $V_2$.
-2. Try to find terms $t_1,t_2$ such that $t_1 \neq t_2$
-and both have the same position in $V_1$ and $V_2$. The terms
-$t_1$ and $t_2$ either needs to start with different function
-letters or else at least one of them is a variable.
-3. When no such $t_1$ and $t_2$ are existing, the algorithm terminates.
-4. Choose a variable $x$ which is free in $V_1$ and $V_2$ and replace each
-$t_1$ in $V_1$ respectively $t_2$ in $V_2$ with $x$, if they occur in the **same** place.
-5. Add to substitution list $\theta_1$ the substitution $\{t_1 | x\}$ and to
- $\theta_2$ respectively $\{t_2 | x\}$.
-6. Goto 2.
+\begin{algorithm}[H]
+	\KwIn{Terms $t_1$ and $t_2$}
+	\KwData{$\varphi$ is a bijection from pairs of terms to variables
+	which do not appear in $t_1$ or $t_2$.}
+	\KwResult{Least generalization lgg$(t_1, t_2)$}
+		\eIf{$t_1 = f(u_1, \ldots, u_n) \&\& t_2 = f(s_1, \ldots, s_n)$}{
+			return $f(\text{lgg}(u_1, s_1), \ldots, \text{lgg}(u_n, s_n))$\;
+		}{
+			return $\varphi(t_1, t_2)$\;
+		}
+	\caption{lgg-algorithm for terms}
+\end{algorithm}
 
-Let us use this algorithm to find the *least general generalisation* of the terms
-$V_1 = P(f(x), g(z))$ and $V_2 = P(f(g(z)), g(z))$:
+For literals the algorithm is behaves very similar:
 
-We take:
-$t_1 = f(x); t_2= g(z)$ and $v$ as new variable.
+\begin{algorithm}[H]
+	\KwIn{Literals $L_1$ and $L_2$}
+	\KwResult{Least generalization lgg$(t_1, t_2)$}
+		\If{$L_1 = p(u_1, \ldots, u_n) \&\& L_2 = p(s_1, \ldots, s_n)$}{
+			return $p(\text{lgg}(u_1, s_1), \ldots, \text{lgg}(u_n, s_n))$\;
+		}
+	\caption{lgg-algorithm for literals}
+\end{algorithm}
 
-$V_1 = P(f(v), g(z))$ and $V_2 = P(f(v), g(z))$:
 
-With: $\epsilon_1 = \{x | v\}$ and $\epsilon_2 = \{g(z) | v\}$
+\begin{bsp}
+Determine the lgg of $V_1 = P(f(x), g(z))$ and $V_2 = P(f(g(z)), g(z))$:
 
+\begin{enumerate}
+	\item $lgg(V_1, V_2)$
+	\item $P(lgg(f(x), f(g(z)), lgg(g(z), g(z)))$
+	\item $P(f(lgg(x, g(z)), g(z))$
+	\item $P(f(\varphi(x, g(z)), g(z))$
+	\item $P(f(v), g(z))$
+\end{enumerate}
+$\Rightarrow \epsilon_1 = \{x | v\}$ and $\epsilon_2 = \{g(z) | v\}$
+\end{bsp}
+
+Now a partial ordered set (POSET) $(X, \succeq)$ is defined, where
+$X$ is the set of equivalent literals like $P(x), P(x,y)$. A literal of the
+set is greater than another literator of the set, iff it subsumes the other one.
+Each POSET has two special members $\top, \bot$, where $\top$ is greater than
+each other member of $X$ and $\bot$ is lover than each other member. With
+a given set of predicates the POSET constructs a lattice of atomic formulas,
+where the *lowest upper bound* of two formulas are their lgg.
+
+\begin{bsp}
+Given is a binary predicate $p$, a constant $a$ and an unlimited set
+of variables.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\node (G) at (1.5,2) {$\top$};
+			\node (A) at (1.5,1) {$p(X,Y)$};
+			\node (B) at (-1,-1) {$p(X,a)$};
+			\node (C) at (1.5,-1) {$p(X,X)$};
+			\node (D) at (4,-1) {$p(a,Y)$};
+			\node (E) at (1.5,-3) {$p(a,a)$};
+			\node (F) at (1.5,-4) {$\bot$};
+
+			\path [-] (A) edge node[left] {} (G);
+			\path [-] (A) edge node[left] {} (B);
+			\path [-] (A) edge node[left] {} (C);
+			\path [-] (A) edge node[left] {} (D);
+			\path [-] (B) edge node[left] {} (E);
+			\path [-] (C) edge node[left] {} (E);
+			\path [-] (D) edge node[left] {} (E);
+			\path [-] (F) edge node[left] {} (E);
+		\end{tikzpicture}
+	\end{center}
+	\caption{Example for POSET of atomic formulas}
+	\label{fig:refinement_operator}
+\end{figure}
+\end{bsp}
+
+The last missing step to receive the searched hypothesis $h$ is to lift this
+POSET construct towards clauses.
+Because the searched hypothesis is a formula, that each
+clauses $\neg B \vee E$ where $E$ is a positive example and $B$ the background, can
+generalize to.
 
 ### Inverse Entailment and Inverse Subsumption
 Another approach has been introduced by Stephen Muggleton in his
