@@ -18,18 +18,81 @@ by 1991.
 
 Common resolver are PROGOL and GOLEM.
 
+First order logic
+--------------------------
+
+For a better understanding of how *Inductive logic programming* with its
+algorithms works it is necessary to know the syntax and semantics of
+*first order logic* (FOL).
+
+### Syntax
+
+\begin{align*}
+\varphi ::= E \mid p(E_1, \ldots , E_n) \mid | \neg \varphi \mid \varphi_1 \wedge \varphi_2 \mid
+\forall X.\varphi \hfill(X \in Var, p/n \in \Sigma)\\
+E ::= X \mid f(E_1, \ldots, E_n) \hfill (f/n \in \Sigma)
+\end{align*}
+
+Where $\Sigma$ is a signature with a tuple $(C,F,P)$ of sets with
+\begin{itemize}
+	\item $C$ is the set of constant symbols with arity $= 0$
+	\item $F$ is the set of function symbols with arity $\geq 0$
+	\item $P$ is the set of predicate symbols with arity $\geq 0$
+\end{itemize}
+
+$Var$ contains all variable symbols $v_0, \ldots, v_n$.
+
+#### Terms
+
+Terms are inductively defined as:
+\begin{itemize}
+	\item Every variable and constant is a term
+	\item Every expression $f(t_1, \ldots, t_n)$ is a term
+\end{itemize}
+
+### Semantic
+
+The defined syntax is just a series of symbols without any meaning. Therefore
+a structure $\mathfrak{A}$ on $\Sigma=(C,F,P)$ is defined. It contains a nonempty set $D$
+together with:
+\begin{itemize}
+	\item an element $c^{\mathfrak{A}} \in D$ for each  $c \in  \Sigma$
+	\item a function $f^{\mathfrak{A}} : D^n \rightarrow D$ for each $f/n \in \Sigma$
+	\item a predicate $p^{\mathfrak{A}} \subseteq D^n$ for each $p/n \in \Sigma$
+\end{itemize}
+
+An interpetation $\mathfrak{I}$ is a pair $\mathfrak{I} = (\mathfrak{A}, \beta)$ with
+$\beta : \{v \mid v \in Var\} \rightarrow D$.
+
+Terms get interpreted as follows:
+
+\begin{align}
+	\mathfrak{I}(v) := \beta(v), v \in Var\\
+	\mathfrak{I}(c) := c^\mathfrak{A}, c \in \Sigma\\
+	\mathfrak{I}(f(t_1, \ldots, t_n) := f^\mathfrak{A}(\mathfrak{I}(t_1), \ldots, \mathfrak{I}(t_n), f/n \in \Sigma
+\end{align}
+
+A model $\mathfrak{M}$ is an interpetaion $\mathfrak{I}$ for a $\Sigma$ expression $\varphi$,
+written $\mathfrak{M} \vDash \varphi$ when the following rules hold:
+
+TODO
+
+
 Formal Definition
 -----------------------------
+
+
+
 The background knowledge $B$ has the form of **Horn clauses**
 (a disjunction with at most one positive literal).
 
 For instance:
 
-$(p \wedge q \wedge t) \to u$
-
-Which can be converted to a disjunction as following:
-
 $\lnot p \vee \lnot q \vee \lnot t \vee u$
+
+Which can be converted to an implication as following:
+
+$(p \wedge q \wedge t) \to u$
 
 The Prolog notation for this purpose is:
 
@@ -88,6 +151,9 @@ The notation is as following: $P$ is a predicate, $g,f$ are symbols and $z$ is a
 A word $W$ is a term or a variable.
 
 The lgg algorithm is defined as followed:
+
+<!-- TODOS: Use algorithm package. What does "compatible" mean? Begins with same predicate, function
+symbol or variable? -->
 
 1. Choose two compatible words $V_1$ and $V_2$.
 2. Try to find terms $t_1,t_2$ such that $t_1 \neq t_2$
