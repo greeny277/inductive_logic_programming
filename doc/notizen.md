@@ -82,6 +82,11 @@ The idea of ILP
 -----------------------------
 
 
+The general idea of inductive logic programming is to obtain new clauses
+by getting many positive and negative examples and therefore generating new
+knowledge. The program tries to build general clauses which fulfill all
+positve examples and none negative.
+
 The background knowledge $B$ has the form of **Horn clauses**
 (a disjunction with at most one positive literal).
 
@@ -92,12 +97,6 @@ $\lnot p \vee \lnot q \vee \lnot t \vee u$
 Which can be converted to an implication as following:
 
 $(p \wedge q \wedge t) \to u$
-
-The Prolog notation for this purpose is:
-
-```prolog
-u :- p, q, t
-```
 
 The examples are split in two subgroups. Positive $E^{+}$
 and negative $E^{-}$ examples composed of only non-negated
@@ -155,11 +154,6 @@ For instance:
 \end{align}
 \end{definition}
 
-### Partial ordered set (POSET)
-
-TODO: Explain POSET
-
-### Saturation
 
 
 Algorithms for hypothesis search
@@ -283,8 +277,73 @@ of variables.
 The last missing step to receive the searched hypothesis $h$ is to lift this
 POSET construct towards clauses.
 Because the searched hypothesis is a formula, that each
-clauses $\neg B \vee E$ where $E$ is a positive example and $B$ the background, can
-generalize to.
+clauses of kind $\neg B \vee E$ can be generalized to, where $E$ is any any positive
+example and $B$ the background knowlegde.
+
+The least generalization for clauses works as follows:
+\begin{algorithm}[H]
+	\KwIn{Clauses $C_1 = l_{1,1} \vee \ldots \vee l_{1,n}$ and $C_2 = l_{2,1} \vee \ldots \vee l_{2,m}$}
+	\KwResult{Least generalization lgg$(C_1, C_2)$}
+		result $= \{\}$\;
+		\ForEach{$((l_{1,i}, l_{2,j}) \mid i \leftarrow (1 .. n), j \leftarrow (1 ..m))$}{
+			lgg\_tmp $= lgg(l_{1,i}, l_{2,j})$\;
+			\If{lgg\_tmp $\neq \top$)}{
+				result $\cup $ lgg\_tmp\;
+			}
+		}
+		return result\;
+	\caption{lgg-algorithm for clauses}
+\end{algorithm}
+
+\begin{bsp}
+Given the following two clasues: $C_1 = p(a, f(a)) \vee p(b,b) \vee \neg p(b, f(b))$
+$C_2 = p(f(a), f(a)) \vee p(f(a),b) \vee \neg p(a, f(a))$:
+
+\begin{align}
+	lgg(C_1, C_2) = p(X, f(a)) \vee p(X, Y) \vee p(Z, Z) \vee p(Z, b) \vee \neg p(U, f(U))
+\end{align}
+\end{bsp}
+
+Now it is possible to create a POSET of clauses $(X, \succeq)$ where $X$ contains all variants
+of a starting clause and $\top$ and $\bot$.
+
+\begin{bsp}
+TODO: Example of clause lattice
+\end{bsp}
+
+### Saturation
+The saturation step takes all horn clauses of the positive examples
+with the form $a \leftarrow b_1 \ldots b_n$ and uses the background knowledge
+to get all possible entailments. In the next chapter a concrete algorithm for
+saturation is presented. We take it for granted for now.
+
+\begin{bsp}
+Insert Circle Example here
+\end{bsp}
+
+\begin{algorithm}[H]
+	\KwIn{Background-Knowledge $B$\\Positive Examples $E^+$\\Negative Examples $E^-$.}
+	\KwResult{Matching hypothesis $H$}
+		saturatedExamples $= \{\}$\;
+		\ForEach{$e^+$ in $E^+$}{
+			saturatedExample.pushBack(saturate$(e^+)$)\;
+		}
+		\While{saturatedExamples.size() != 1}{
+			\tcc{Just take the first two clauses. Alternatively they can be chosen at random.}
+			(e1, e2) = saturatedExample.popFrontPair()\;
+			lggE12 = lgg(e1,e2)\;
+			\ForEach{$e^-$ in $E^-$}{
+				\tcc{Check if the new clause subsumes any negative example}
+				\If{doesSubsume(lggE12, $e^-$)}{
+					return \{\};
+				}
+			}
+			saturatedExample.pushBack(lggE12)\;
+		}
+		\tcc{The last remaining clause is our hypothesis}
+		return result\;
+	\caption{Bottom-up approach using lgg}
+\end{algorithm}
 
 ### Inverse Entailment and Inverse Subsumption
 Another approach has been introduced by Stephen Muggleton in his
@@ -404,7 +463,7 @@ The saturation step takes all horn clauses of the positive examples
 with the form $a \leftarrow b_1 \ldots b_n$ and with the mode declarations
 of the background knowledge and $a$. Then PROGOL takes the variables,
 which replace the $+$type in $a$ and let Prolog deduce each possible term
-upon the background knowledge.
+by the background knowledge.
 
 The concrete specification of the algorithm is a bit complex and not that
 important. A little example with some notes shows how it in general works:
@@ -437,7 +496,7 @@ $\theta=\{X | Y\}$
 	$\theta' = \theta \cup \{v_j|u_j\}$.
 <!-- TODO Das stimmt so nicht. Siehe Muggleton S.265 -->
 
-The example \ref{fig:refinement_operator} shows a refinement graph with some operators.
+The figure \ref{fig:refinement_operator} shows a refinement graph with some operators.
 The numeration of the operators is referring to the enumeration above.
 \begin{figure}[h]
 	\begin{center}
@@ -494,9 +553,9 @@ redundant (see Figure \ref{fig:prop_refinment_op}).
 $H$ has an upper and lower border:
 
 \begin{align}
-\Box \succeq H \succeq F_i
+\bot \succeq H \succeq F_i
 \end{align}
-Where $\Box$ is the empty clause.
+Where $\bot$ is the empty clause.
 
 
 #References
