@@ -2,7 +2,7 @@
 
 \subsection{Finden von Hypothesenraum}
 \begin{frame}
-	\frametitle{Suchraum}
+	\frametitle{Subsumption}
 	Finden einer neuen Hypothese einfacher durch Eingrenzung von Suchraum
 
 	Einführung der \textbf{Subsumption}
@@ -14,13 +14,12 @@
 		\end{align*}
 		Beispiel:
 		\begin{align*}
-			 daughter(X, Y)  \subseteq daughter(mary, ann) \text{  mit  } \theta = \{X/mary, Y/ann\}
+			 daughter(X, Y)  \subseteq female(ann), daughter(mary, ann)\\\text{  mit  } \theta = \{X/mary, Y/ann\}
 		\end{align*}
 	\end{block}
 \end{frame}
-\subsection{Finden von Hypothesenraum}
 \begin{frame}
-	\frametitle{Suchraum}
+	\frametitle{Subsumption}
 	Das gleiche Prozedere für Klauseln:
 	\begin{block}{Definition: Subsumption für Klauseln}
 		Seien $C_1$ und $C_2$ Literale: $C_1 \underbrace{\preceq}_{\text{subsummiert}} C_2$
@@ -36,3 +35,116 @@
 		\end{gather*}
 	\end{block}
 \end{frame}
+
+\begin{frame}
+	\frametitle{Eigenschaften der Subsumption}
+	\begin{enumerate}
+		\item {
+			Wenn $C_1 \preceq C_2$ dann gilt:
+			\begin{align*}
+				C_1 \vDash C_2
+			\end{align*}
+		}
+		\item{ Die Relation $\leq$ führt ein Gitter (lattice) von reduzierten Klauseln ein
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}
+						\node (G) at (1.5,2) {$\top$};
+						\node (A) at (1.5,1.5) {$p(X,Y)$};
+						\node (B) at (-1,0.5) {$p(X,a)$};
+						\node (C) at (1.5,0.5) {$p(X,X)$};
+						\node (D) at (4,0.5) {$p(a,Y)$};
+						\node (E) at (1.5,-0.5) {$p(a,a)$};
+						\node (F) at (1.5,-1) {$\bot$};
+			
+						\path [-] (A) edge node[left] {} (G);
+						\path [-] (A) edge node[left] {} (B);
+						\path [-] (A) edge node[left] {} (C);
+						\path [-] (A) edge node[left] {} (D);
+						\path [-] (B) edge node[left] {} (E);
+						\path [-] (C) edge node[left] {} (E);
+						\path [-] (D) edge node[left] {} (E);
+						\path [-] (F) edge node[left] {} (E);
+					\end{tikzpicture}
+				\end{center}
+				\caption{Example for POSET of atomic formulas}
+				\label{fig:poset_atomic}
+			\end{figure}
+		}
+	\end{enumerate}
+\end{frame}
+
+\subsection{LGG}
+\begin{frame}
+	\frametitle{Least general generalization (LGG)}
+	 Die \textit{least general generalization} von zwei Klauseln $C_1, C_2$ ist
+	 die kleinste obere Schranke von $C_1,C_2$ im Gitter.
+
+	\begin{block}{Erkenntnisse}
+			\begin{itemize}
+				\item [$\Rightarrow$] Alle Beispiele die $C_1$ abdeckt werden auch von
+				allen 'kleineren Klauseln' abgedeckt
+				\item[$\Rightarrow$] Wenn $C_1$ ein Beispiel nicht abdeckt,
+				dann tut dies auch keine 'kleinere Klausel'
+			\end{itemize}
+	 \end{block}
+\end{frame}
+\subsection{LGG}
+
+\begin{frame}
+\frametitle{LGG - Algorithmus}
+	\begin{block}{$lgg$ von Termen}
+		\begin{enumerate}
+			\item $lgg(t,t) = t$\\
+			\item $lgg(f(s_1, \ldots, s_n), f(t_1, \ldots, t_n)) = f(lgg(s_1, t_1), \ldots, lgg(s_n, t_n))$
+			\item Sonst: $lgg(t_1, t_2) = v , v$ freie Variable
+		\end{enumerate}
+	\end{block}
+	\begin{block}{$lgg$ von Literalen}
+	\begin{enumerate}
+		\item $lgg(p(u_1, \ldots, u_n), p(s_1, \ldots, s_n)) = p(lgg(u_1, s_1), \ldots, lgg(u_n, s_n))$\\
+		\item Sonst: $lgg(L_1, L_2) = \top$
+	\end{enumerate}
+	\end{block}
+\end{frame}
+
+
+\subsection{Bottom-up}
+\begin{frame}
+\frametitle{RLGG - Algorithmus}
+\begin{block}{Definition -- Relative least general generalization}
+	Gegeben: Hintergrundwissen besteht nur aus \textit{ground literals} (Literale ohne Variablen)
+	Sei $K$ die Konjunktion aller Hintergrundliterale und $e_1, e_2$ positive Beispiele
+	\begin{align*}
+		rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))
+	\end{align*}
+\end{block}
+
+Beispiel: Gegebene Familienkonstellation:
+\img{family_relation}{}{Familienrelation}{0.4}
+\end{frame}
+
+\begin{frame}
+\frametitle{RLGG - Algorithmus Erweitert}
+Probleme: Große Klauseln bei kleinen Beispielen
+
+Vorheriges Beispiel:
+\begin{gather*}
+K = p(h,m), p(h,t), p(t,e), P(t,i), f(h), f(m), f(e)\\
+rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))\\
+\begin{split}
+\underline{d(V_{m,e}, V_{h,t})} \leftarrow &\; p(h,m), p(h,t), p(t,e), p(t,i), f(h), f(m), f(e),\\
+&\; p(h, V_{m,t}), \underline{p(V_{h,t}, V_{m,e})}, p(V_{h,t}, V_{m,i}), p(V_{h,t}, V_{t,e}),\\
+&\; p(V_{h,t}, V_{t,i}) ,p(t, V_{e,i}), f(V_h, m), f(V_{h,e}), \underline{f(V_{m,e})}
+\end{split}
+\end{gather*}
+
+Weiteres Problem: $K$ bekommen wenn es nicht nur aus \textit{ground literals} besteht.
+\end{frame}
+
+\begin{frame}
+\frametitle{RLGG Anschaulich}
+TODO Graph bild
+\end{frame}
+
+\subsection{Top-down}

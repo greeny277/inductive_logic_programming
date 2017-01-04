@@ -83,10 +83,24 @@
 \usepackage[ngerman]{babel}
 
 \usepackage{ulem}
+\usepackage{tikz}
 
 
 % lstlisting package
 
+%==IMAGEPATH============================
+\graphicspath{ {images/} }
+%----------------------------------------------------
+%==NEWCOMMAND=FOR=IMAGES============================
+%img{\$name}{\$caption}{\$label}{\$witdh}
+\newcommand{\img}[4] {
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=#4\textwidth]{#1}
+    \caption{#2}
+    \label{fig:#3}
+  \end{figure}}
+%----------------------------------------------------
 \usepackage{stmaryrd}
 \usepackage{multirow}
 \usepackage{amsmath}
