@@ -1,0 +1,38 @@
+\section{Techniken}
+
+\subsection{Finden von Hypothesenraum}
+\begin{frame}
+	\frametitle{Suchraum}
+	Finden einer neuen Hypothese einfacher durch Eingrenzung von Suchraum
+
+	Einführung der \textbf{Subsumption}
+	\begin{block}{Definition: Subsumption für Literale/Atome}
+		Seien $L_1$ und $L_2$ Literale: $L_1 \underbrace{\preceq}_{\text{subsummiert}} L_2$
+		wenn eine Substitution $\theta$ existert, sodass:
+		\begin{align*}
+			 L_1 \theta \subseteq L_2
+		\end{align*}
+		Beispiel:
+		\begin{align*}
+			 daughter(X, Y)  \subseteq daughter(mary, ann) \text{  mit  } \theta = \{X/mary, Y/ann\}
+		\end{align*}
+	\end{block}
+\end{frame}
+\subsection{Finden von Hypothesenraum}
+\begin{frame}
+	\frametitle{Suchraum}
+	Das gleiche Prozedere für Klauseln:
+	\begin{block}{Definition: Subsumption für Klauseln}
+		Seien $C_1$ und $C_2$ Literale: $C_1 \underbrace{\preceq}_{\text{subsummiert}} C_2$
+		wenn eine Substitution $\theta$ existert, sodass:
+		\begin{align*}
+			 C_1 \theta \subseteq C_2
+		\end{align*}
+		Beispiel:
+		\begin{gather*}
+			 daughter(X, Y) \leftarrow parent(Y,X) \subseteq\\
+			 daughter(mary, ann) \leftarrow parent(ann, mary), parent(ann, tom)\\
+			 \text{  mit  } \theta = \{X/mary, Y/ann\}
+		\end{gather*}
+	\end{block}
+\end{frame}

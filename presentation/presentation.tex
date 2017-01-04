@@ -1,0 +1,445 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Beamer Presentation
+% LaTeX Template
+% Version 1.0 (10/11/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt]{beamer}
+
+\mode<presentation>{
+
+	% The Beamer class comes with a number of default slide themes
+	% which change the colors and layouts of slides. Below this is a list
+	% of all the themes, uncomment each in turn to see what they look like.
+
+	%\usetheme{default}
+	%\usetheme{AnnArbor}
+	%\usetheme{Antibes}
+	%\usetheme{Bergen}
+	%\usetheme{Berkeley}
+	%\usetheme{Berlin}
+	%\usetheme{Boadilla}
+	%\usetheme{CambridgeUS}
+	%\usetheme{Copenhagen}
+	%\usetheme{Darmstadt}
+	%\usetheme{Dresden}
+	%\usetheme{Frankfurt}
+	%\usetheme{Goettingen}
+	%\usetheme{Hannover}
+	%\usetheme{Ilmenau}
+	%\usetheme{JuanLesPins}
+	%\usetheme{Luebeck}
+	\usetheme{Madrid}
+	%\usetheme{Malmoe}
+	%\usetheme{Marburg}
+	%\usetheme{Montpellier}
+	%\usetheme{PaloAlto}
+	%\usetheme{Pittsburgh}
+	%\usetheme{Rochester}
+	%\usetheme{Singapore}
+	%\usetheme{Szeged}
+	%\usetheme{Warsaw}
+
+	% As well as themes, the Beamer class has a number of color themes
+	% for any slide theme. Uncomment each of these in turn to see how it
+	% changes the colors of your current slide theme.
+
+	%\usecolortheme{albatross}
+	%\usecolortheme{beaver}
+	%\usecolortheme{beetle}
+	%\usecolortheme{crane}
+	%\usecolortheme{dolphin}
+	%\usecolortheme{dove}
+	%\usecolortheme{fly}
+	%\usecolortheme{lily}
+	%\usecolortheme{orchid}
+	%\usecolortheme{rose}
+	%\usecolortheme{seagull}
+	\usecolortheme{seahorse}
+	%\usecolortheme{whale}
+	%\usecolortheme{wolverine}
+
+	%\setbeamertemplate{footline} % To remove the footer line in all slides uncomment this line
+	%\setbeamertemplate{footline}[page number] % To replace the footer line in all slides with a simple slide count uncomment this line
+
+	%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
+}
+
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+
+\usepackage{ulem}
+
+
+% lstlisting package
+
+\usepackage{stmaryrd}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{lstautogobble}
+\usepackage{wrapfig}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{
+	%numbers = left,
+	frame = single,
+	basicstyle=\footnotesize, % the size of the fonts that are used for the code
+	breakatwhitespace=false, % sets if automatic breaks should only happen at whitespace
+	breaklines=true, % sets automatic line breaking
+	captionpos=b, % sets the caption-position to bottom
+	commentstyle=\color{dkgreen}, % comment style
+	keywordstyle=\color{blue}, % keyword style
+	%    language=C++, % the language of the code
+	mathescape=true,
+	basicstyle=\ttfamily\scriptsize,
+autogobble}
+\lstdefinelanguage{diff}{
+	morecomment=[f][\color{blue}]{@@},     % group identifier
+	morecomment=[f][\color{red}]-,         % deleted lines 
+	morecomment=[f][\color{green}]+,       % added lines
+	morecomment=[f][\color{magenta}]{---}, % Diff header lines (must appear after +,-)
+	morecomment=[f][\color{magenta}]{+++},
+}
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\title[Machine Learning -- ILP]{Inductive Logic Programming} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Christian Bay} % Your name
+\institute[FAU] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+	FAU Erlangen-Nürnberg \\ % Your institution for the title page
+	\medskip
+	\textit{christian.bay@fau.de} % Your email address
+}
+\date{04.02.2016} % Date, can be changed to a custom date
+
+\begin{document}
+
+% Print Titlepage
+\begin{frame}
+	\titlepage
+\end{frame}
+\tableofcontents
+
+\include{introduction}
+\include{techniques}
+\include{applications}
+\include{quellen}
+
+%\begin{frame}
+%	\frametitle{Aufgaben}
+%	\begin{itemize}
+%		\item Implementierung
+%			\begin{itemize}
+%				\item RDS-Alloc Implementierung reviewen
+%				\item Alignment in Coffee-Break implementieren
+%				\item [$\Rightarrow$]Alternative zu DRC \& LRC schaffen (Performanz verbessern)
+%			\end{itemize}
+%		\item Tests und Auswertung
+%			\begin{itemize}
+%				\item Mit FAIL* Bitkipper simulieren
+%				\item Speicher-/Laufzeitbedarf vergleichen
+%			\end{itemize}
+%		\item Stretch Goals
+%			\begin{itemize}
+%				\item Weitere Speicherbereinigung verbessern
+%			\end{itemize}
+%	\end{itemize}
+%\end{frame}
+%
+%
+%\begin{frame}
+%	\frametitle{Review (RDS-Alloc)}
+%	\begin{block}{Ergebnisse:}
+%
+%		\begin{itemize}
+%			\item Berechneter Hamming-Abstand nicht zu allen anderen Adressen sondern nur zur Letzten
+%			\item Magic-Value im Objektheader noch nicht vorhanden
+%			\item [$\Rightarrow$] Nur sehr rudiment"ar implementiert
+%		\end{itemize}
+%	\end{block}
+%
+%	\begin{alertblock}{Projektziel-Update}
+%		\begin{itemize}
+%			\item \sout{Implementierung von Coffee-Break-Alloc}
+%			\item RDS-Alloc komplett "uberarbeiten
+%
+%		\end{itemize}
+%
+%	\end{alertblock}
+%
+%
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Implementierung (Alignment)}
+%
+%	\begin{block}{Berechnung der Adressen f"ur Objektheader}
+%		\begin{itemize}
+%			\item Berechnung der Adressen "ahnlich zu Sieb des Eratosthenes
+%				\begin{itemize}
+%					\item Quadratischer Aufwand
+%					\item Bei 1MB Heapgr"o"se und 4Byte Alignment 125000 Addressen
+%					\item Sehr lange Berechnungszeiten
+%				\end{itemize}
+%			\item [$\Rightarrow$] Berechnung zur Compilezeit
+%				\begin{itemize}
+%					\item Datenstruktur mit allen Adressen-Offsets anlegen
+%				\end{itemize}
+%		\end{itemize}
+%	\end{block}
+%	\begin{center}
+%		\footnotesize
+%		\begin{tabular}{ccccc}
+%			000 & \textbf{000} & \textbf{000} & \textbf{000} & \textbf{000}\\
+%			001 & \sout{001} & \sout{001} & \sout{001} & \sout{001} \\
+%			010 & \sout{010} & \sout{010} & \sout{010}  & \sout{010}\\
+%			011 & 011 & \textbf{011} & \textbf{011}  & \textbf{011} \\
+%			100 & \sout{100} & \sout{100} & \sout{100} & \sout{100}\\
+%			101 & 101 & 101 & \textbf{101} & \textbf{101} \\
+%			110 & 110 & 110 & 110 & \textbf{110}\\
+%			111 & 111 & \sout{111} & \sout{111} & \sout{111}\\
+%		\end{tabular}
+%	\end{center}
+%
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Implementierung (Alignment)}
+%	\begin{block}{Zur Laufzeit}
+%		Speicher wird fortaufend allokiert
+%		\begin{itemize}
+%			\item Letzte Hamming-Adresse und Anfang des freien Speichers merken
+%			\item N"achste Adresse aus Liste w"ahlen, die im freien Heap liegt
+%		\end{itemize}
+%	\end{block}
+%	\begin{figure}
+%		\includegraphics<1>{graphics/rds-alloc.pdf}
+%		\includegraphics<2>{graphics/rds-alloc_o1.pdf}
+%	\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Implementierung (Magic-Value-Check)}
+%	\begin{block}{Objekt-Initialisierung }
+%		\begin{itemize}
+%			\item Im Objektheader nur 6 Bit unbelegt
+%				\begin{itemize}
+%					\item Sehr kleiner Magic-Value oder Objektlayout "andern
+%					\item "Anderung des Objektlayouts aufw"andig, viele Seiteneffekte
+%				\end{itemize}
+%			\item [$\Rightarrow$] 6 Bit Magic-Value gew"ahlt
+%		\end{itemize}
+%	\end{block}
+%
+%	\begin{figure}
+%		\includegraphics[width=0.8\textwidth]{graphics/header.pdf}
+%	\end{figure}
+%\end{frame}
+%
+%\begin{frame}[fragile]
+%	\frametitle{Implementierung (Magic-Value-Check)}
+%	\begin{block}{Header-Check}
+%		\begin{itemize}
+%			\item "Uberpr"ufung bei Dereferenzierung
+%				\begin{itemize}
+%					\item "Ahnliche "Uberpr"ufung (Parit"at des Headers) bereits in KESO implementiert
+%				\end{itemize}
+%			\item [$\Rightarrow$] Relativ einfache Implementierung
+%		\end{itemize}
+%
+%	\end{block}
+%
+%	\begin{lstlisting}
+%	class_id_t keso_decode_header(const object_t *obj, const char *_method_) {  
+%		...
+%		if ((obj->bitfld & mask) != KESO_OBJECT_HEADER_MAGIC_VALUE){
+%		keso_throw_parity("header_magic_value", _method_, -1, obj);
+%	}
+%	...
+%}
+%\end{lstlisting}
+%
+%\end{frame}
+%
+%% Laufzeitbedarf
+%\begin{frame}
+%	\frametitle{Laufzeitbedarf}
+%	\begin{block}{Vergleich der Implementierungen}
+%		Benchmark: Collision Detector\\
+%		Wiederholungen: 100\\
+%		\begin{center}
+%			\begin{tabular}{l | r}
+%				Art des Checkers & Zeitbedarf\\
+%				\hline
+%				Kein Checker & 100\%\\
+%				DRC & \color<2>[rgb]{1,0,0} 158\%\\
+%				LRC & \color<2>[rgb]{1,0,0} 113\%\\
+%				HOC & 103\%\\
+%				Alignment & \color<2>[rgb]{1,0,0} 106\%\\
+%			\end{tabular}
+%		\end{center}
+%
+%		Ergebnisse sind in Trampoline (Emulator) entstanden\\
+%		$\Rightarrow$ Laufzeiten sind nicht $1:1$ auf Mikrocontroller "ubertragbar
+%	\end{block}
+%\end{frame}
+%
+%% Speicherbedarf
+%\begin{frame}
+%	\frametitle{Speicherbedarf}
+%
+%	\begin{itemize}
+%		\item L"ucken im Heap durch Alignment
+%			\begin{itemize}
+%				\item [$\rightarrow$]  $25 - 50\%$ Overhead
+%			\end{itemize}
+%
+%		\item Zus"atzliche Datenstruktur f"ur Adressen
+%			\begin{itemize}
+%				\item Als globale Variable
+%				\item [$\rightarrow$] 1/8 Heapgr"o"se * sizeof(unsigned long)
+%			\end{itemize}
+%
+%	\end{itemize}
+%\end{frame}
+%
+%%FAIL*
+%\begin{frame}
+%	\frametitle{Auswertung mit FAIL*}
+%	\begin{block}{Ablauf von FAIL*}
+%		\begin{enumerate}
+%			\item starten von Anwendung in BOCHS nach Bitkipper-Injektion
+%			\item notiert Art des Beendigungszustandes
+%			\item setzen von Programm in korrekten Startzustand
+%		\end{enumerate}
+%	\end{block}
+%
+%	\begin{center}
+%		\begin{footnotesize}
+%			\begin{tabular}{c | c | c }
+%				& KESO Exc. & Nicht erkannte Fehler\\
+%				\hline
+%				PURE & 35\% & 65\%\\
+%				HOC & 41\% & 59\%\\
+%				HOC \& Alignment & 49.5\% & 50.5\%\\
+%				LRC & 85\% & 15\% \\
+%			\end{tabular}
+%		\end{footnotesize}
+%	\end{center}
+%
+%	Interpretation der Ergebnisse:
+%	\begin{enumerate}
+%		\item Nur LRC "uberpr"uft Referenzen auf Stack
+%		\item Magic Value: Nur 6 Bit (1/64)
+%	\end{enumerate}
+%\end{frame}
+%
+%
+%\begin{frame}
+%	\frametitle{Ausblick: Coffee-Break}
+%	\begin{itemize}
+%		\item Wie in RDS-Alloc (keine erneute Implementierung n"otig):
+%			\begin{itemize}
+%				\item Adressen berechnen
+%				\item Objekt mit Magic-Value initialisieren
+%				\item Magic-Value "uberpr"ufen
+%			\end{itemize}
+%		\item Problem: Zuordnung freier Speicher $\rightarrow$ Hamming-Adresse
+%			\begin{itemize}
+%				\item Speicher wird nicht fortlaufend allokiert (Freispeicherliste)
+%				\item Adressliste durchsuchen (z.\,B. Bisektionsverfahren) 
+%					%\item [$\Rightarrow$] Kein konstanter Overhead
+%			\end{itemize}
+%	\end{itemize}
+%	\begin{figure}
+%		\centering
+%		\includegraphics[width=0.5\textwidth]{graphics/coffee-alloc.pdf}
+%	\end{figure}
+%
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Ausblick: weitere Aufgaben}
+%	\begin{itemize}
+%		\item Hamming-Adressen im ROM statt RAM
+%			\begin{itemize}
+%				\item Weniger RAM-Verbrauch
+%				\item ROM ist robuster gegen"uber Bitkippern
+%			\end{itemize}
+%		\item Mehr Bitkipper erkennen:
+%			\begin{itemize}
+%				\item Alignment/Magic-Value bei Stack-Objekten
+%				\item Gr"o"serer Magic-Value (Ge"andertes Objektlayout)
+%			\end{itemize}
+%
+%		\item Speicher/Laufzeitbedarf auf echter Hardware ermitteln
+%	\end{itemize}
+%\end{frame}
+%
+%% Tats"achlicher Zeitplan
+%\begin{frame}
+%	\frametitle{Zeitaufwand}
+%	\begin{center}
+%		\begin{tabular}{|r|c|l|}
+%			\hline
+%			Montag & 8.9. & Startvortrag, Einlesen, Review RDS\\
+%			\hline
+%			Dienstag & 9.9. & \multirow{4}{*}{RDS-Alloc Implementierung}\\
+%			\cline{1-2}
+%			Mittwoch & 10.9. & \\
+%			\cline{1-2}
+%			Donnerstag & 11.9. &  \\
+%			\cline{1-2}
+%			Freitag & 12.9. & \\
+%			\hline
+%			\hline
+%			Montag & 15.9. & Speicher-/Laufzeitbedarf \\
+%			\hline
+%			Dienstag & 16.9. & \multirow{2}{*}{Testen mit FAIL*, Fehlerbehebung} \\
+%			\cline{1-2}
+%			Mittwoch & 17.9. &  \\
+%			\hline
+%			Donnerstag & 18.9. & Vorbereitung Abschlussvortag\\
+%			\hline
+%			Montag & 22.9. & Abschlussvortrag \\
+%			\hline
+%		\end{tabular}
+%
+%	\end{center}
+%\end{frame}
+%
+%
+%
+%\begin{frame}
+%	\frametitle{Dankesch"on}
+%	\begin{center}
+%		Wir bedanken uns f"ur die Unterst"utzung bei:\\
+%		\begin{large}
+%			Isabella Stilkerich\\
+%			Martin Hoffmann\\
+%			Christoph Erhardt\\
+%		\end{large}
+%	\end{center}
+%\end{frame}
+
+\end{document}
