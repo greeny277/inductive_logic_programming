@@ -127,7 +127,6 @@ Beispiel: Gegebene Familienkonstellation:
 \begin{frame}
 \frametitle{RLGG - Algorithmus Erweitert}
 Probleme: Große Klauseln bei kleinen Beispielen
-
 Vorheriges Beispiel:
 \begin{gather*}
 K = p(h,m), p(h,t), p(t,e), P(t,i), f(h), f(m), f(e)\\
@@ -139,12 +138,55 @@ rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))\\
 \end{split}
 \end{gather*}
 
-Weiteres Problem: $K$ bekommen wenn es nicht nur aus \textit{ground literals} besteht.
+Weiteres Probleme:
+\begin{itemize}
+	\item $K$ bekommen wenn es nicht nur aus \textit{ground literals} besteht (Anhang: Saturierung)
+	\item $\mathcal{H}$ kann nicht mehr als \emph{eine} Klausel umfassen
+\end{itemize}
+
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Linearity}
 \frametitle{RLGG Anschaulich}
-TODO Graph bild
+	\pgfdeclarelayer{background}
+	\pgfsetlayers{background,main}
+	\tikzstyle{vertex}=[rectangle,fill=black!25,minimum size=20pt,inner sep=0pt]
+	\tikzstyle{selected vertex} = [vertex, fill=red!24]
+	\tikzstyle{edge} = [draw,thick,-]
+	\tikzstyle{weight} = [font=\small]
+	\tikzstyle{selected edge} = [draw,line width=5pt,-,red!50]
+	\setbeamercovered{invisible}
+	\begin{figure}
+		\begin{tikzpicture}[scale=1.0, auto,swap]
+		\node[vertex] (a) at (0,0) {$A = e_1 \leftarrow K$};
+		\node[vertex] (b) at (2.5,0) {$B = e_2 \leftarrow K$};
+		\node[vertex] (c) at (5,0) {$C = e_3 \leftarrow K$};
+		\node[vertex] (d) at (7.5,0) {$D = e_4 \leftarrow K$};\pause
+		\node[vertex] (e) at (1.25,2) {$C' = lgg(A, B)$};
+		\node[vertex] (f) at (6.25,2) {$C''= lgg(C, D)$};\pause
+		\node[vertex] (g) at (3.75,4) {$\mathcal{H} = lgg(C', C'')$};
+		\begin{pgfonlayer}{background}
+			\path<2->[selected edge] (a.center) -- (e.center);
+			\path<2->[selected edge] (b.center) -- (e.center);
+			\path<2->[selected edge] (c.center) -- (f.center);
+			\path<2->[selected edge] (d.center) -- (f.center);
+			\path<3->[selected edge] (e.center) -- (g.center);
+			\path<3->[selected edge] (f.center) -- (g.center);
+		\end{pgfonlayer}
+		\end{tikzpicture}
+	\end{figure}
 \end{frame}
 
 \subsection{Top-down}
+\begin{frame}
+\frametitle{Top-Down Ansatz}
+Idee: Klauseln zu immer weiter spezifizieren
+
+TODO: Bild
+
+\begin{block}{Der Refinement-Operator $\rho$}
+\begin{align*}
+	\forall D \in \rho(C). C \preceq D
+\end{align*}
+\end{block}
+\end{frame}
