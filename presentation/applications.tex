@@ -1,5 +1,71 @@
 \section{Anwendungsgebiete}
 \begin{frame}
-	\frametitle{Anwendungsgebiete}
-	TODO
+	\frametitle{Quantitative structure-activity relationships}
+	Problemstellung aus \textbf{Pharmazie}: Stoffe entwickeln mit speziellen biologische Eigenschaften.
+	Welche Restgruppenkombination führt zu gewünschten Eigenschaften?\\
+
+	Restgruppen ($OH, F, Br, NH_2, No_2, \ldots)$ haben verschiedene
+	chemisch-physikalische Eigenschaften
+	\begin{itemize}
+		\item Polarität
+		\item Größe
+		\item Symmetrie
+		\item Basisch, sauer
+		\item {\hspace{5pt}\vdots}
+	\end{itemize}
 \end{frame}
+\begin{frame}
+	\frametitle{Quantitative structure-activity relationships}
+	\begin{block}{Beispiel: Thrimethoprim}
+		\img{qsar}{Trimethoprim mit Restgruppen}{fig:trim}{0.6}
+	\end{block}
+	Welche Restgruppenkombination führt zu welchen biologischen Eigenschaften?
+\end{frame}
+\begin{frame}[fragile]
+	\frametitle{Quantitative structure-activity relationships}
+	Standard Verfahren nach \textit{Hansch}: Vorhersage durch Bldung von
+	Gleichungssystem über phy.-chem. Eigenschaften der Restgruppen
+
+	\begin{block}{ILP-Ansatz}
+	Hintergrundwissen erstellen durch bereits bekannte biologische Eigenschaften
+	von Stoffen.
+	\begin{itemize}
+		\item Jeder Restgryppe Eigenschaften zuweisen: $polar(NO_2, polar\_value), \ldots$
+		\item $great(DrugX, DrugY)$: $X$ hat höhere biologische Aktivität als $Y$
+		\item Regeln für $great(A,B)$ erstellen: 
+			\begin{lstlisting}[language=prolog]
+				great(A,B) $\leftarrow$ struc(A,D,E,F), struc(B,h,C,h), flex(D,G),
+				less_4_flex(G), h_donor(D, h_don_0), pi(D, po_don_1).
+			\end{lstlisting}
+	\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Quantitative structure-activity relationships}
+	Bewertung:
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			& ILP & Hansch\\
+			\hline
+			Korelation Training & 0.92 & 0.79\\
+			\hline
+			Korelation Test     & 0.46 -- 0.54 & 0.42\\
+			\hline
+		\end{tabular}
+		\captionof{table}{Korelationstabelle für QSAR}
+		\end{center}
+		Erkenntnis:\\
+		ILP funktioniert gut solange Moleküle nicht zu komplex sind.
+\end{frame}
+
+\begin{frame}
+	\frametitle{Weitere Beispiele}
+	\begin{itemize}
+		\item Sekundäre Protein Struktur vorhersagen
+		\item Regeln für Rheuma Früherkennung
+	\end{itemize}
+	
+\end{frame}
+
