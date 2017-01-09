@@ -52,7 +52,30 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{FOL}
+	\frametitle{Art der Logik -- Beispiel}
+
+	\begin{block}{Welt}
+		$\text{Konstante} = \{\text{Zero}\}$\\
+		$\text{Funktion} =\{Succ/1, Plus/2 \}$\\
+		$\text{Prädikate} =\{even/1, is\_greater/2 \}$
+	\end{block}
+
+	Interpretation $\mathcal{I}$ besitzt eine Grundmenge $\mathcal{M}$
+	und bildet Konstanten und Funktionen auf Elemente der Grundmenge ab.
+
+	Prädikate werden auf Wahrheitswerte abgebildet
+
+	\begin{block}{Interpretation}
+			$\mathcal{M} = \mathbb{N}_0$\\
+			$\mathcal{I}(Zero) = 0$\\
+			$\mathcal{I}(Plus(Succ(Zero), Succ(Zero))) = 2$\\
+			$\mathcal{I}(even(Suc(Suc(Zero)))) = True$
+	\end{block}
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{First order logic und ILP}
 	Horn Clauses: Klausel mit maximal einem negativen Literal.
 
 	\begin{align*}
@@ -73,29 +96,6 @@
 	\end{align*}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Art der Logik -- Beispiel Pokerspiel}
-
-	\begin{block}{Konstanten}
-		$Rank = \{7,8,9,10,j,q,k,a\}$\\
-	    $Suit = \{hearts, spaces, club, diamonds\}$
-	\end{block}
-	
-	Beschreibung von Karo 7 als Horn Clause:
-	\begin{align*}
-		\underbrace{card}_{\text{Prädikat}}(\underbrace{diamonds, 7}_{\text{Konstanten}})
-	\end{align*}
-
-	Definieren von Paaren:\\
-	$\underbrace{pair(}_{\text{Prädikat}}\underbrace{card}_{\text{Funktion}}(diamonds, 7),
-	card(hearts, 7))$
-
-	Allgemein:\\
-	$pair(card(Suit_1, Rank_1),card(Suit_2, Rank_2)) \Leftarrow \underbrace{Rank_1 =
-	Rank_2}_{(Rank_1=7 \wedge Rank_2=7) \vee \ldots}$
-
-	
-\end{frame}
 
 \begin{frame}
 \frametitle{Hypothesen, Beispiele etc}
