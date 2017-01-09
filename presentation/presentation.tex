@@ -76,9 +76,6 @@
 	%\setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
 }
 
-\usepackage{graphicx} % Allows including images
-\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
-
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
 
@@ -133,6 +130,33 @@ autogobble}
 	morecomment=[f][\color{magenta}]{---}, % Diff header lines (must appear after +,-)
 	morecomment=[f][\color{magenta}]{+++},
 }
+\usepackage{filecontents}
+\begin{filecontents*}{literature.bib}
+@book{van2012latex,
+  title={\LaTeX\ and Friends},
+  author={{van Dongen}, R.C.},
+  isbn={978-3-642-23816-1},
+  lccn={2011945089},
+  year={2012},
+  publisher={Springer}
+}
+
+@book{mittelbach2004latex,
+  title={The \LaTeX\ Companion},
+  author={Mittelbach, F. and Goossens, M.},
+  isbn={978-0-133-38764-3},
+  year={2004},
+  publisher={Pearson Education}
+}
+
+@book{knuth2004texbook,
+  title={The \TeX book},
+  author={Knuth, D.E.},
+  year={2004},
+  publisher={Addison-Wesley}
+}
+\end{filecontents*}
+\setbeamertemplate{bibliography item}[triangle]
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
 %----------------------------------------------------------------------------------------

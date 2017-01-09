@@ -3,11 +3,11 @@
 \subsection{Finden des Hypothesenraums}
 \begin{frame}
 	\frametitle{Subsumption}
-	Finden einer neuen Hypothese einfacher durch Eingrenzung von Suchraum
+	Finden neuer Hypothesen ($\mathcal{H}$) durch Eingrenzung des Suchraums vereinfachen
 
 	Einführung der \textbf{Subsumption}
 	\begin{block}{Definition: Subsumption für Literale/Atome}
-		Seien $L_1$ und $L_2$ Literale: $L_1 \underbrace{\preceq}_{\text{subsummiert}} L_2$
+		Seien $L_1$ und $L_2$ Literale: $L_1 \underbrace{\preceq}_{\text{subsumiert}} L_2$
 		wenn eine Substitution $\theta$ existert, sodass:
 		\begin{align*}
 			 L_1 \theta \subseteq L_2
@@ -22,7 +22,7 @@
 	\frametitle{Subsumption}
 	Das gleiche Prozedere für Klauseln:
 	\begin{block}{Definition: Subsumption für Klauseln}
-		Seien $C_1$ und $C_2$ Literale: $C_1 \underbrace{\preceq}_{\text{subsummiert}} C_2$
+		Seien $C_1$ und $C_2$ Klauseln: $C_1 \underbrace{\preceq}_{\text{subsumiert}} C_2$
 		wenn eine Substitution $\theta$ existert, sodass:
 		\begin{align*}
 			 C_1 \theta \subseteq C_2
@@ -67,7 +67,7 @@
 						\path [-] (F) edge node[left] {} (E);
 					\end{tikzpicture}
 				\end{center}
-				\caption{Example for POSET of atomic formulas}
+				\caption{Partiell geordnete Menge von Formeln (POSET)}
 				\label{fig:poset_atomic}
 			\end{figure}
 		}
@@ -112,7 +112,7 @@
 \begin{frame}
 \frametitle{RLGG - Algorithmus}
 \begin{block}{Definition -- Relative least general generalization}
-	Gegeben: Hintergrundwissen besteht nur aus \textit{ground literals} (Literale ohne Variablen)
+	Gegeben: Hintergrundwissen besteht nur aus \textit{ground literals} (Literale ohne Variablen).
 	Sei $K$ die Konjunktion aller Hintergrundliterale und $e_1, e_2$ positive Beispiele
 	\begin{align*}
 		rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))
