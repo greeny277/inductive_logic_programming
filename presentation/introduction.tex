@@ -1,7 +1,7 @@
 \section{Einführung}
 
 \begin{frame}
-	\frametitle{ILP}
+	\frametitle{Induction Logic Programming -- ILP}
 
 	\begin{block}{Was ist ILP}
 		\begin{itemize}
@@ -10,8 +10,8 @@
 				\begin{itemize}
 					\item Basis: Background-Knowledge, positive und negative Beispiele
 					\item Darstellung in Form von Klauseln
-					\item Generierung neues Wissens durch finden von Hypothesen die positive
-					Klauseln erfüllen, negative nicht.
+					\item Generierung neuen Wissens durch das finden von Hypothesen die positive
+					Klauseln erfüllen, negative jedoch nicht.
 				\end{itemize}
 			}
 		\end{itemize}
@@ -22,32 +22,30 @@
 
 \subsection{First order logic}
 \begin{frame}
-	\frametitle{FOL}
+	\frametitle{First order logic -- FOL}
 	\begin{block}{}
-	In FOL besteht die Welt aus
+	In \textbf{FOL} besteht die Welt aus
 	% TODO: Begriffe nochmal genauer anschauen: Insbesondere Atome
 	\begin{itemize}
-		\item Objekten   (Personen, Dingen)
-		\item Relationen $(>, <)$
+		\item Objekten  Personen, Dingen)
+		\item Prädikaten $(>, <)$
 		\item Funktionen $(+, -)$
 	\end{itemize}
 	\end{block}
 
-	Terme beschreiben Objekte in der Welt:
-	\begin{itemize}
-		\item Konstanten ($2$, Chuck Norris, \ldots)
-		\item Variablen (x,y, a, \ldots)
-		\item Funktionen $(Term_1, \ldots, Term_n)$
-	\end{itemize}
-	\textit{Ground term}: Term ohne Variablen
 
+	Terme beschreiben Objekte in der Welt:\\
+	Konstanten ($2$, Chuck Norris), Variablen (x,y, a, \ldots) und
+	Funktionen von Termen sind Terme.
+
+	\textit{Ground term}: Ein Term ohne Variablen.
 
 	\begin{block}{}
 		Atome/Literale sind kleinstmögliche Ausdrücke, die wahr/falsch sind
 		\begin{itemize}
 			\item $predicate(Term_1, \ldots, Term_n)$\\ 
-				father(bob)
-			\item $Term_1 = Term_2 \Leftarrow$ Gleicheitsrelation
+				Beispiel: is\_human(Pinoccio)
+			\item $Term_1 = Term_2$ (Gleicheitsrelation)
 		\end{itemize}
 	\end{block}
 
@@ -55,19 +53,19 @@
 
 \begin{frame}
 	\frametitle{FOL}
-	Horn Clauses:
+	Horn Clauses: Klausel mit maximal einem negativen Literal.
 
 	\begin{align*}
 		\neg C_1 \vee \neg C_2 \vee \ldots \vee \neg C_n  \vee C_{n+1} \Leftrightarrow\\
 		C_1 \wedge C_2 \wedge \ldots \wedge C_n  \rightarrow C_{n+1}
 	\end{align*}
 
-	ILP verwendet zumeist \textit{definite program clauses} vom Typ:
+	ILP verwendet zumeist \textit{definite program clauses}(genau ein negatives Literal) vom Typ:
 
 	\begin{align*}
 		\underbrace{T}_{\text{head}} \Leftarrow \underbrace{L_1, \ldots, L_m}_{\text{body}}
 	\end{align*}
-	wobei $T, L_1, \ldots, L_m$ Atome sind und nur $T$ positiv ist.
+	wobei $T, L_1, \ldots, L_m$ Literale sind, wobei $T$ immer positiv ist.
 
 	Beispiel:
 	\begin{align*}
@@ -76,16 +74,17 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Art der Logik -- Beispiel}
+	\frametitle{Art der Logik -- Beispiel Pokerspiel}
 
-	\begin{block}{Pokerspiel}
-	Konstanten: $Rank = \{7,8,9,10,j,q,k,a\}$\\
-	            $Suit = \{hearts, spaces, club, diamonds\}$
+	\begin{block}{Konstanten}
+		$Rank = \{7,8,9,10,j,q,k,a\}$\\
+	    $Suit = \{hearts, spaces, club, diamonds\}$
+	\end{block}
 	
-	Beschreibung von Karo 7 als Horn Clause: $card(diamonds, 7)$
-
-	$card$: Prädikat\\
-	$diamonds, 7$: Konstanten
+	Beschreibung von Karo 7 als Horn Clause:
+	\begin{align*}
+		\underbrace{card}_{\text{Prädikat}}(\underbrace{diamonds, 7}_{\text{Konstanten}})
+	\end{align*}
 
 	Definieren von Paaren:\\
 	$\underbrace{pair(}_{\text{Prädikat}}\underbrace{card}_{\text{Funktion}}(diamonds, 7),
@@ -95,7 +94,6 @@
 	$pair(card(Suit_1, Rank_1),card(Suit_2, Rank_2)) \Leftarrow \underbrace{Rank_1 =
 	Rank_2}_{(Rank_1=7 \wedge Rank_2=7) \vee \ldots}$
 
-	\end{block}
 	
 \end{frame}
 
