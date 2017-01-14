@@ -177,6 +177,24 @@ Weiteres Probleme:
 
 \end{frame}
 
+\begin{frame}
+	\frametitle{Inverse Entailment}
+	Plotkins \textbf{LGG} Ansatz stark beschränkt
+
+	Alternative Idee: \textbf{Inverse Entailment}
+
+	\begin{align*}
+		B \wedge H \vDash E \Leftrightarrow\\
+		B \wedge \neg E \vDash \neg H
+	\end{align*}
+	Suchen einer \textit{Bridgefunktion} $F$:
+	\begin{align*}
+		B \wedge \neg E \vDash F\\
+		F \vDash \neg H\\
+		\Rightarrow \neg F \Dashv H
+	\end{align*}
+\end{frame}
+
 \subsection{Top-down}
 \begin{frame}[fragile]
 \frametitle{Top-Down Ansatz}
