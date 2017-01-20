@@ -52,7 +52,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Art der Logik -- Beispiel}
+	\frametitle{Art der Logik -- Beispiel I }
 
 	\begin{block}{Syntaktische Beschreibung der Welt}
 		$\text{Konstante} = \{\text{Zero}\}$\\
@@ -60,6 +60,10 @@
 		$\text{Prädikate} =\{even/1, is\_greater/2 \}$
 	\end{block}
 
+\end{frame}
+
+\begin{frame}
+	\frametitle{Art der Logik -- Beispiel II}
 	Interpretation $\mathcal{I}$ besitzt eine Grundmenge $\mathcal{M}$
 	und bildet Konstanten und Funktionen auf Elemente der Grundmenge ab.
 
@@ -71,7 +75,18 @@
 			$\mathcal{I}(Plus(Succ(Zero), Succ(Zero))) = 2$\\
 			$\mathcal{I}(even(Suc(Suc(Zero)))) = True$
 	\end{block}
-	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Art der Logik -- Beispiel III}
+	\begin{block}{Logische Folgerung}
+		Man schreibt
+		\begin{align*}
+			 \bigwedge\Gamma \vDash \varphi
+		\end{align*}
+		Genau dann wenn jede Intepretation $\mathcal{I}$, die alle Formeln
+		der Menge $\Gamma$ erfüllt, auch $\varphi$ erfüllt.
+	\end{block}
 \end{frame}
 
 \begin{frame}
@@ -105,4 +120,25 @@
 	\centering
 	\includegraphics[width=0.5\textwidth]{hypothesis}
 \end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Gewünschte Hypotheseneigenschaften}
+	\begin{itemize}
+		\item Necessity:          $B \nvDash E^{+}$
+
+			Beispiele dürfen nicht durch Hintergrundwissen allein schon erklärbar sein
+
+		\item Sufficiency:        $B \wedge H \vDash E^{+}$
+
+			Hypothese $\mathcal{H}$ muss alle positiven Beispiele logisch folgern
+
+		\item Weak consistency:   $B \wedge H \nvDash false$
+
+			$H$ darf dem Hintergrundwissen nicht widersprechen
+
+		\item Strong consistency: $B \wedge H \wedge E^{-} \nvDash false$
+
+			$H$ darf negativen Beispielen nicht widersprechen
+	\end{itemize}
 \end{frame}
