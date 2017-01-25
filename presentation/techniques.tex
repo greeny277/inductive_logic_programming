@@ -156,32 +156,38 @@ Beispiel: Familienkonstellation (siehe Terminal)
 \end{frame}
 
 \begin{frame}
-\frametitle{RLGG - Algorithmus Erweitert}
-Probleme: Große Klauseln bei kleinen Beispielen
-Vorheriges Beispiel:
-\begin{gather*}
-K = p(h,m), p(h,t), p(t,e), P(t,i), f(h), f(m), f(e)\\
-rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))\\
-\begin{split}
-\underline{d(V_{m,e}, V_{h,t})} \leftarrow &\; p(h,m), p(h,t), p(t,e), p(t,i), f(h), f(m), f(e),\\
-&\; p(h, V_{m,t}), \underline{p(V_{h,t}, V_{m,e})}, p(V_{h,t}, V_{m,i}), p(V_{h,t}, V_{t,e}),\\
-&\; p(V_{h,t}, V_{t,i}) ,p(t, V_{e,i}), f(V_h, m), f(V_{h,e}), \underline{f(V_{m,e})}
-\end{split}
-\end{gather*}
+	\frametitle{RLGG -- Algorithmus Erweitert}
+	\begin{block}{Hintergrundwissen der Familienkonstellation}
+		\begin{gather*}
+			K = p(h,m), p(h,t), p(t,e), p(t,i), f(h), f(m), f(e)\\
+			rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))
+		\end{gather*}
+	\end{block}
 
-Weiteres Probleme:
-\begin{itemize}
-	\item $K$ bekommen wenn es nicht nur aus \textit{ground literals} besteht (Anhang: Saturierung)
-	\item $\mathcal{H}$ kann nicht mehr als \emph{eine} Klausel umfassen
-\end{itemize}
-
+	Probleme: Große $\mathcal{H}$ bereits bei kleinen Beispielen:
+	\begin{gather*}
+		\begin{split}
+			\underline{d(V_{m,e}, V_{h,t})} \leftarrow &\; p(h,m), p(h,t), p(t,e), p(t,i), f(h), f(m), f(e),\\
+			&\; p(h, V_{m,t}), \underline{p(V_{h,t}, V_{m,e})}, p(V_{h,t}, V_{m,i}), p(V_{h,t}, V_{t,e}),\\
+			&\; p(V_{h,t}, V_{t,i}) ,p(t, V_{e,i}), f(V_h, m), f(V_{h,e}), \underline{f(V_{m,e})}
+		\end{split}
+	\end{gather*}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Inverse Entailment}
+	\frametitle{RLGG -- Weiteres Probleme}
+	\begin{itemize}
+		\item $K$ bekommen wenn es nicht nur aus \textit{ground literals} besteht (Anhang: Saturierung)
+		\item $\mathcal{H}$ kann nicht mehr als \emph{eine} Klausel umfassen
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Inverse resolution [Muggleton, Blutin '88]}
 	Plotkins \textbf{LGG} Ansatz stark beschränkt
 
-	Alternative Idee: \textbf{Inverse Entailment}
+	Alternative Idee: \textbf{Inverse resolution}
 
 	\begin{align*}
 		B \wedge H \vDash E \Leftrightarrow\\
@@ -191,10 +197,98 @@ Weiteres Probleme:
 	\begin{align*}
 		B \wedge \neg E \vDash F\\
 		F \vDash \neg H\\
-		\Rightarrow \neg F \Dashv H
+		\Rightarrow \neg F \Dashv H\\
+		\Rightarrow \neg F \succeq H\\
 	\end{align*}
 \end{frame}
 
+
+\begin{frame}
+	\frametitle{Kurze Zwischenfrage}
+	\img{wtf}{}{fig:wtf}{0.6}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Inverse resolution II}
+	Generelle Idee: Laufe den Herleitungsbaum rückwärts
+
+	\begin{block}{Herleitungsbaum Aussagenlogik}
+		Sei Theorie $\mathcal{T}=\{ u \leftarrow v; v \leftarrow w, w\}$ gegeben.
+		Herleitung von $u$:
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[scale=0.6]
+					\node (A) at (0.3, 0) {$u$};
+					\node (B) at (-3.6,2.15) {$u \leftarrow v$};
+					\node (C) at (-2,4) {$v \leftarrow w$};
+					\node (D) at (2,4) {$w$};
+					\node (E) at (1.3, 2.2) {$v$};
+
+					\path [->] (B) edge node[above] {} (A);
+					\path [->] (C) edge node[above] {} (E);
+					\path [->] (D) edge node[above] {} (E);
+					\path [->] (E) edge node[above] {} (A);
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Inverse resolution III}
+	Herleitungen in \textit{First order logic} benötigt zusätzlich Substitutionen:
+
+	\begin{itemize}
+		\item $\mathcal{H} = \{c\} = \{daugther(X,Y) \leftarrow female(X), parent(Y,X)\}$
+		\item $\mathcal{B} = b_1 \wedge b_2$ mit $b_1 = female(mary)$ und
+			$b_2 = parent(ann, mary)$
+		\item $\mathcal{T} = \mathcal{B} \cup \mathcal{H}$
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[scale=0.6]
+					\node (A) at (0.3, 0) {\tiny{$daugher(mary,ann)$}};
+					\node (B) at (-3.6,2.15) {\tiny{$b_2 = parent(ann,mary)$}};
+					\node (C) at (-2,4) {\tiny{$b_1 = female(mary)$}};
+					\node (D) at (2.5,5) {\tiny{$daughter(X,Y) \leftarrow female(X), parent(Y,X)$}};
+					\node (E) at (1.3, 2.2) {\hspace{1cm}\tiny{$daughter(mary, Y) \leftarrow parent(Y,mary)$}};
+					\node (S1) at (2.3, 1.2) {\tiny{$\theta_2 = \{Y/ann\}$}};
+					\node (S1) at (3, 3.6) {\hspace{0.5cm}\tiny{$\theta_1 = \{X/mary\}$}};
+
+
+					\path [->] (B) edge node[above] {} (A);
+					\path [->] (C) edge node[above] {} (E);
+					\path [->] (D) edge node[above] {} (E);
+					\path [->] (E) edge node[above] {} (A);
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Inverse resolution IV}
+		Frage: Was bedeutet nun dieses \textbf{Inverse}?\\
+		Antwort: Herleitung von $\mathcal{H}$ aus $\mathcal{E}$ und $\mathcal{B}$:
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[scale=0.6]
+					\node (A) at (0.3, 0) {\tiny{$daugher(mary,ann)$}};
+					\node (B) at (-3.6,2.15) {\tiny{$b_2 = parent(ann,mary)$}};
+					\node (C) at (-2,4) {\tiny{$b_1 = female(mary)$}};
+					\node (D) at (2.5,5) {\tiny{$daughter(X,Y) \leftarrow female(X), parent(Y,X)$}};
+					\node (E) at (1.3, 2.2) {\hspace{1cm}\tiny{$daughter(mary, Y) \leftarrow parent(Y,mary)$}};
+					\node (S1) at (2.3, 1.2) {\tiny{$\theta_2^{-1} = \{ann/Y\}$}};
+					\node (S1) at (3, 3.6) {\hspace{0.5cm}\tiny{$\theta_1^{-1} = \{mary/X\}$}};
+
+
+					\path [->] (B) edge node[above] {} (A);
+					\path [->] (C) edge node[above] {} (E);
+					\path [<-] (D) edge node[above] {} (E);
+					\path [<-] (E) edge node[above] {} (A);
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}
+\end{frame}
 \subsection{Top-down}
 \begin{frame}[fragile]
 \frametitle{Top-Down Ansatz}
