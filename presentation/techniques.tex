@@ -3,7 +3,7 @@
 \subsection{Finden des Hypothesenraums}
 \begin{frame}
 	\frametitle{Subsumption von Literalen}
-	\underline{Idee}: Eingrenzung des Suchraums erleichtert Hypothesensuche
+	\emph{Idee}: Eingrenzung des Suchraums erleichtert Hypothesensuche
 
 	\begin{block}{Definition: Subsumption für Literale/Atome}
 		Seien $L_1$ und $L_2$ Literale: $L_1 \underbrace{\preceq}_{\text{subsumiert}} L_2$
@@ -14,7 +14,7 @@
 	\end{block}
 	\begin{bsp}
 		\begin{align*}
-			 daughter(X, Y)  \subseteq female(ann), daughter(mary, ann)\\\text{  mit  } \theta = \{X/mary, Y/ann\}
+			 daughter(X, Y)\theta\subseteq female(ann), daughter(mary, ann)\\\text{  mit  } \theta = \{X/mary, Y/ann\}
 		\end{align*}
 	\end{bsp}
 \end{frame}
@@ -30,7 +30,7 @@
 	\end{block}
 	\begin{bsp}
 		\begin{gather*}
-			 daughter(X, Y) \leftarrow parent(Y,X) \subseteq\\
+			 daughter(X, Y)\theta\leftarrow parent(Y,X) \subseteq\\
 			 daughter(mary, ann) \leftarrow parent(ann, mary), parent(ann, tom)\\
 			 \text{  mit  } \theta = \{X/mary, Y/ann\}
 		\end{gather*}
@@ -110,22 +110,20 @@
 
 
 \begin{frame}
-\frametitle{RLGG - Algorithmus}
+\frametitle{RLGG -- Algorithmus}
 \begin{block}{Definition -- Relative least general generalization}
-	Gegeben: Hintergrundwissen besteht nur aus \textit{ground literals} (Literale ohne Variablen).
+	Gegeben: Hintergrundwissen $\mathcal{B}$ besteht nur aus \emph{ground literals} (Literale ohne Variablen).
 	Sei $K$ die Konjunktion aller Hintergrundliterale und $e_1, e_2$ positive Beispiele
 	\begin{align*}
 		rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))
 	\end{align*}
 \end{block}
 
-Beispiel: Familienkonstellation (siehe Terminal)
-\img{family_relation}{Eine schrecklich nette Familie}{Familienrelation}{0.4}
 \end{frame}
 
 
 \begin{frame}{Linearity}
-\frametitle{RLGG Anschaulich}
+\frametitle{RLGG -- Anschaulich}
 	\pgfdeclarelayer{background}
 	\pgfsetlayers{background,main}
 	\tikzstyle{vertex}=[rectangle,fill=black!25,minimum size=20pt,inner sep=0pt]
@@ -156,20 +154,26 @@ Beispiel: Familienkonstellation (siehe Terminal)
 \end{frame}
 
 \begin{frame}
-	\frametitle{RLGG -- Algorithmus Erweitert}
+	\frametitle{RLGG -- Beispiel}
+Beispiel: Familienkonstellation (siehe Terminal)
+\img{family_relation}{Eine schrecklich nette Familie}{Familienrelation}{0.4}
+\end{frame}
+
+\begin{frame}
+	\frametitle{RLGG -- Beispiel}
 	\begin{block}{Hintergrundwissen der Familienkonstellation}
-		\begin{gather*}
-			K = p(h,m), p(h,t), p(t,e), p(t,i), f(h), f(m), f(e)\\
-			rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))
-		\end{gather*}
+		\begin{align*}
+			K   &= p(h,m), p(h,t), p(t,e), p(t,i), f(h), f(m), f(e)\\
+			e_1 &= daughter(m, h)\\
+			e_2 &= daughter(e, t)
+		\end{align*}
 	\end{block}
 
-	Probleme: Große $\mathcal{H}$ bereits bei kleinen Beispielen:
 	\begin{gather*}
 		\begin{split}
-			\underline{d(V_{m,e}, V_{h,t})} \leftarrow &\; p(h,m), p(h,t), p(t,e), p(t,i), f(h), f(m), f(e),\\
-			&\; p(h, V_{m,t}), \underline{p(V_{h,t}, V_{m,e})}, p(V_{h,t}, V_{m,i}), p(V_{h,t}, V_{t,e}),\\
-			&\; p(V_{h,t}, V_{t,i}) ,p(t, V_{e,i}), f(V_h, m), f(V_{h,e}), \underline{f(V_{m,e})}
+			\emph{d(V_{m,e}, V_{h,t})} \leftarrow &\; p(h,m), p(h,t), p(t,e), p(t,i), f(h), f(m), f(e),\\
+			&\; p(h, V_{m,t}), \emph{p(V_{h,t}, V_{m,e})}, p(V_{h,t}, V_{m,i}), p(V_{h,t}, V_{t,e}),\\
+			&\; p(V_{h,t}, V_{t,i}) ,p(t, V_{e,i}), f(V_h, m), f(V_{h,e}), \emph{f(V_{m,e})}
 		\end{split}
 	\end{gather*}
 \end{frame}
@@ -177,9 +181,11 @@ Beispiel: Familienkonstellation (siehe Terminal)
 \begin{frame}
 	\frametitle{RLGG -- Weiteres Probleme}
 	\begin{itemize}
-		\item $K$ bekommen wenn es nicht nur aus \textit{ground literals} besteht (Anhang: Saturierung)
+		\item $K$ darf nur aus \textit{ground literals} bestehen (Anhang: Saturierung)
 		\item $\mathcal{H}$ kann nicht mehr als \emph{eine} Klausel umfassen
 		\item Kombination der $lgg$-Paare bestimmt Qualität der Hypothese
+		\item Große $\mathcal{H}$ bereits bei kleinen Beispielen
+
 	\end{itemize}
 \end{frame}
 
@@ -202,12 +208,6 @@ Beispiel: Familienkonstellation (siehe Terminal)
 		\Rightarrow \neg F \Dashv H\\
 		\Rightarrow \neg F \succeq H\\
 	\end{align*}
-\end{frame}
-
-
-\begin{frame}
-	\frametitle{Kurze Zwischenfrage}
-	\img{wtf}{}{fig:wtf}{0.6}
 \end{frame}
 
 \begin{frame}
@@ -328,8 +328,8 @@ Beispiel: Familienkonstellation (siehe Terminal)
 	\begin{itemize}
 		\item Nicht-deterministisch
 		\item Hohe Komplexität (großer Suchraum)
-		\item Gegenstand der aktuellen Forschung
 	\end{itemize}
+	$\Rightarrow$ Aktueller Gegenstand der Forschung
 \end{frame}
 
 \subsection{Top-down -- Refinement-Operator}
@@ -416,8 +416,8 @@ Beispiel für $\rho$:
 	\frametitle{Top-Down - Varianten}
 	Wie durchsucht man den Refinementgraph?
 	\begin{itemize}
-		\item Variante 1: Vollständig (ggf langsam)
-		\item Variante 2: Greedy (ggf unvollständig)
+		\item Variante 1: Vollständig (\emph{langsam})
+		\item Variante 2: Greedy      (\emph{unvollständig})
 	\end{itemize}
 	\begin{block}{Verbesserung von Top-Down}
 		Verkleinere Suchraum durch Seed

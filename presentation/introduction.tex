@@ -4,45 +4,40 @@
 \begin{frame}
 	\frametitle{Induction Logic Programming (ILP)}
 
-	\begin{block}{Was ist ILP}
-		\begin{itemize}
-			\item Die Schnittstelle zwischen Machine Learning und logischer Programmierung
-			\item {\underline{Idee}: Formalisierung der \textit{Umgebung}
-				\begin{itemize}
-					\item Basis: Background-Knowledge, positive und negative Beispiele
-					\item Darstellung in Form von Klauseln
-					\item Generierung neuen Wissens durch das finden von Hypothesen die positive
-					Klauseln erfüllen, negative jedoch nicht.
-				\end{itemize}
-			}
-		\end{itemize}
+	\begin{block}{Was ist Inductive Logic Programming?}
+			Die Schnittstelle zwischen Machine Learning und logischer Programmierung
 	\end{block}
-	Wieso induktiv?
-	$\Rightarrow$ Lösen von Problemen vom spezifischen zum generellen
+
+	\emph{Idee}: 
+			\begin{enumerate}
+				\item Basis: Formalisierung der Umgebung in Logik erster Stufe
+				\item Mitteilen positiver und negativer Beispiele
+				\item Generierung neuer Regeln, die sowohl positive
+					als auch negative Beispiele herleiten
+			\end{enumerate}
 \end{frame}
 
 \begin{frame}
-	\frametitle{First order logic -- FOL}
-	\begin{block}{}
+	\frametitle{Logik erster Stufe (FOL) -- Einführung}
+
 	In \textbf{FOL} besteht die Welt aus
 	\begin{itemize}
 		\item Objekten  $(Personen, Dingen)$
 		\item Prädikaten $(>, <)$
 		\item Funktionen $(+, -)$
 	\end{itemize}
-	\end{block}
 \end{frame}
 
 \begin{frame}
-	\frametitle{First order logic (FOL)}
-	Terme beschreiben Objekte in der Welt:\\
+	\frametitle{Logik erster Stufe (FOL) -- Einführung}
+	\emph{Terme} beschreiben Objekte in der Welt:\\
 	\begin{itemize}
 		\item Konstanten  ($2$, Chuck Norris)
 		\item Variablen   ($x,y, a, \ldots$)
 		\item Funktionen von Termen ($add(x,2)$)
 	\end{itemize}
 
-	\textit{Ground term}: Ein Term ohne Variablen.
+	\emph{Ground term}: Ein Term ohne Variablen.
 	\pause
 
 	\begin{block}{}
@@ -57,7 +52,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{First order logic -- Beispiel}
+	\frametitle{Logik erster Stufe -- Syntax}
 
 	\begin{block}{Syntaktische Beschreibung der Welt}
 		\begin{align*}
@@ -70,7 +65,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{First order logic -- Beispiel}
+	\frametitle{Logik erster Stufe -- Semantik}
 	Interpretation $\mathcal{I}$ besitzt eine Grundmenge $\mathcal{M}$
 	und bildet Konstanten und Funktionen auf Elemente der Grundmenge ab.
 
@@ -87,7 +82,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Art der Logik -- Beispiel III}
+	\frametitle{Logik erster Stufe -- Semantik II}
 	\begin{block}{Logische Folgerung}
 		Man schreibt
 		\begin{align*}
@@ -104,12 +99,12 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{First order logic und ILP}
+	\frametitle{Horn-Klauseln}
 	Horn Clauses: Klausel mit maximal einem positiven Literal.
 
 	\begin{align*}
-		\neg C_1 \vee \neg C_2 \vee \ldots \vee \neg C_n  \vee C_{n+1} \Leftrightarrow\\
-		C_1 \wedge C_2 \wedge \ldots \wedge C_n  \rightarrow C_{n+1}
+		\neg C_1 \lor \neg C_2 \lor \ldots \lor \neg C_n  \lor C_{n+1} \Leftrightarrow\\
+		C_1 \land C_2 \land \ldots \land C_n  \rightarrow C_{n+1}
 	\end{align*}
 
 	ILP verwendet zumeist \textit{definite program clauses } (genau ein positives Literal) vom Typ:
@@ -125,9 +120,33 @@
 	\end{align*}
 \end{frame}
 
-
 \begin{frame}
-\frametitle{Hypothesen, Beispiele etc}
+	\begin{minipage}{0.5\textwidth}
+	\begin{itemize}
+		\item Necessity:          $\mathcal{B} \nvDash E^{+}$
+
+			Beispiele dürfen nicht durch Hintergrundwissen allein schon erklärbar sein
+
+		\item Sufficiency:        $\mathcal{B} \land \mathcal{H} \vDash E^{+}$
+
+			Hypothese $\mathcal{H}$ muss alle positiven Beispiele logisch folgern
+
+		\item Weak consistency:   $\mathcal{B} \land \mathcal{H} \nvDash false$
+
+			$\mathcal{H}$ darf dem Hintergrundwissen nicht widersprechen
+
+		\item Strong consistency: $\mathcal{B} \land \mathcal{H} \land E^{-} \nvDash false$
+
+			$\mathcal{H}$ darf negativen Beispielen nicht widersprechen
+	\end{itemize}
+	\end{minipage}
+	\begin{minipage}{0.45\textwidth}
+		\centering
+		\includegraphics[scale=0.35]{hypothesis_correct}
+	\end{minipage}
+\end{frame}
+\begin{frame}
+\frametitle{Hypotheseneigenschaften}
 	\emph{Gegeben:} Background-Knowledge $(\mathcal{B})$, Menge von positiven $(E^+)$ und negativen $(E^-)$ Beispielen\\
 	\emph{Ziel:} Finden einer Hypothese $(\mathcal{H})$ die alle positiven und kein negatives Beispiele erfüllt
 \begin{figure}[H]
@@ -143,15 +162,15 @@
 
 			Beispiele dürfen nicht durch Hintergrundwissen allein schon erklärbar sein
 
-		\item Sufficiency:        $\mathcal{B} \wedge \mathcal{H} \vDash E^{+}$
+		\item Sufficiency:        $\mathcal{B} \land \mathcal{H} \vDash E^{+}$
 
 			Hypothese $\mathcal{H}$ muss alle positiven Beispiele logisch folgern
 
-		\item Weak consistency:   $\mathcal{B} \wedge \mathcal{H} \nvDash false$
+		\item Weak consistency:   $\mathcal{B} \land \mathcal{H} \nvDash false$
 
 			$\mathcal{H}$ darf dem Hintergrundwissen nicht widersprechen
 
-		\item Strong consistency: $\mathcal{B} \wedge \mathcal{H} \wedge E^{-} \nvDash false$
+		\item Strong consistency: $\mathcal{B} \land \mathcal{H} \land E^{-} \nvDash false$
 
 			$\mathcal{H}$ darf negativen Beispielen nicht widersprechen
 	\end{itemize}
