@@ -1,13 +1,13 @@
-\section{Einführung}
+\section{Grundlagen}
 
 \frame{\frametitle{Agenda}\tableofcontents[currentsection]}
 \begin{frame}
-	\frametitle{Induction Logic Programming -- ILP}
+	\frametitle{Induction Logic Programming (ILP)}
 
 	\begin{block}{Was ist ILP}
 		\begin{itemize}
 			\item Die Schnittstelle zwischen Machine Learning und logischer Programmierung
-			\item {Idee: Formalisierung der \textit{Umgebung}
+			\item {\underline{Idee}: Formalisierung der \textit{Umgebung}
 				\begin{itemize}
 					\item Basis: Background-Knowledge, positive und negative Beispiele
 					\item Darstellung in Form von Klauseln
@@ -25,20 +25,25 @@
 	\frametitle{First order logic -- FOL}
 	\begin{block}{}
 	In \textbf{FOL} besteht die Welt aus
-	% TODO: Begriffe nochmal genauer anschauen: Insbesondere Atome
 	\begin{itemize}
-		\item Objekten  Personen, Dingen)
+		\item Objekten  $(Personen, Dingen)$
 		\item Prädikaten $(>, <)$
 		\item Funktionen $(+, -)$
 	\end{itemize}
 	\end{block}
+\end{frame}
 
-
+\begin{frame}
+	\frametitle{First order logic (FOL)}
 	Terme beschreiben Objekte in der Welt:\\
-	Konstanten ($2$, Chuck Norris), Variablen (x,y, a, \ldots) und
-	Funktionen von Termen sind Terme.
+	\begin{itemize}
+		\item Konstanten  ($2$, Chuck Norris)
+		\item Variablen   ($x,y, a, \ldots$)
+		\item Funktionen von Termen ($add(x,2)$)
+	\end{itemize}
 
 	\textit{Ground term}: Ein Term ohne Variablen.
+	\pause
 
 	\begin{block}{}
 		Atome/Literale sind kleinstmögliche Ausdrücke, die wahr/falsch sind
@@ -52,28 +57,32 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Art der Logik -- Beispiel I }
+	\frametitle{First order logic -- Beispiel}
 
 	\begin{block}{Syntaktische Beschreibung der Welt}
-		$\text{Konstante} = \{\text{Zero}\}$\\
-		$\text{Funktion} =\{Succ/1, Plus/2 \}$\\
-		$\text{Prädikate} =\{even/1, is\_greater/2 \}$
+		\begin{align*}
+			\text{Konstante} &= \{\text{Zero}\}\\
+			\text{Funktion}  &=\{Succ/1, Plus/2 \}\\
+			\text{Prädikate} &=\{even/1, is\_greater/2 \}
+		\end{align*}
 	\end{block}
 
 \end{frame}
 
 \begin{frame}
-	\frametitle{Art der Logik -- Beispiel II}
+	\frametitle{First order logic -- Beispiel}
 	Interpretation $\mathcal{I}$ besitzt eine Grundmenge $\mathcal{M}$
 	und bildet Konstanten und Funktionen auf Elemente der Grundmenge ab.
 
 	Prädikate werden auf Wahrheitswerte abgebildet
 
 	\begin{block}{Interpretation}
-			$\mathcal{M} = \mathbb{N}_0$\\
-			$\mathcal{I}(Zero) = 0$\\
-			$\mathcal{I}(Plus(Succ(Zero), Succ(Zero))) = 2$\\
-			$\mathcal{I}(even(Suc(Suc(Zero)))) = True$
+		\begin{align*}
+			\mathcal{M} &= \mathbb{N}_0\\
+			\mathcal{I}(Zero) &= 0\\
+			\mathcal{I}(Plus(Succ(Zero), Succ(Zero))) &= 2\\
+			\mathcal{I}(even(Suc(Suc(Zero)))) &= True
+		\end{align*}
 	\end{block}
 \end{frame}
 
@@ -82,23 +91,28 @@
 	\begin{block}{Logische Folgerung}
 		Man schreibt
 		\begin{align*}
-			 \bigwedge\Gamma \vDash \varphi
+			\Gamma \vDash \varphi
 		\end{align*}
-		Genau dann wenn jede Intepretation $\mathcal{I}$, die alle Formeln
+		Gdw. jede Intepretation $\mathcal{I}$, die alle Formeln
 		der Menge $\Gamma$ erfüllt, auch $\varphi$ erfüllt.
 	\end{block}
+	\begin{bsp}
+		\begin{align*}
+			\{father(X,Y)\} \vDash father(\text{Darth Vader}, \text{Luke Skywalker})
+		\end{align*}
+	\end{bsp}
 \end{frame}
 
 \begin{frame}
 	\frametitle{First order logic und ILP}
-	Horn Clauses: Klausel mit maximal einem negativen Literal.
+	Horn Clauses: Klausel mit maximal einem positiven Literal.
 
 	\begin{align*}
 		\neg C_1 \vee \neg C_2 \vee \ldots \vee \neg C_n  \vee C_{n+1} \Leftrightarrow\\
 		C_1 \wedge C_2 \wedge \ldots \wedge C_n  \rightarrow C_{n+1}
 	\end{align*}
 
-	ILP verwendet zumeist \textit{definite program clauses}(genau ein negatives Literal) vom Typ:
+	ILP verwendet zumeist \textit{definite program clauses } (genau ein positives Literal) vom Typ:
 
 	\begin{align*}
 		\underbrace{T}_{\text{head}} \leftarrow \underbrace{L_1, \ldots, L_m}_{\text{body}}
@@ -114,7 +128,7 @@
 
 \begin{frame}
 \frametitle{Hypothesen, Beispiele etc}
-	\emph{Gegeben:} Background-Knowledge $(B)$, Menge von positiven $(E^+)$ und negativen $(E^-)$ Beispielen\\
+	\emph{Gegeben:} Background-Knowledge $(\mathcal{B})$, Menge von positiven $(E^+)$ und negativen $(E^-)$ Beispielen\\
 	\emph{Ziel:} Finden einer Hypothese $(\mathcal{H})$ die alle positiven und kein negatives Beispiele erfüllt
 \begin{figure}[H]
 	\centering
@@ -125,19 +139,19 @@
 \begin{frame}
 	\frametitle{Gewünschte Hypotheseneigenschaften}
 	\begin{itemize}
-		\item Necessity:          $B \nvDash E^{+}$
+		\item Necessity:          $\mathcal{B} \nvDash E^{+}$
 
 			Beispiele dürfen nicht durch Hintergrundwissen allein schon erklärbar sein
 
-		\item Sufficiency:        $B \wedge \mathcal{H} \vDash E^{+}$
+		\item Sufficiency:        $\mathcal{B} \wedge \mathcal{H} \vDash E^{+}$
 
 			Hypothese $\mathcal{H}$ muss alle positiven Beispiele logisch folgern
 
-		\item Weak consistency:   $B \wedge \mathcal{H} \nvDash false$
+		\item Weak consistency:   $\mathcal{B} \wedge \mathcal{H} \nvDash false$
 
 			$\mathcal{H}$ darf dem Hintergrundwissen nicht widersprechen
 
-		\item Strong consistency: $B \wedge \mathcal{H} \wedge E^{-} \nvDash false$
+		\item Strong consistency: $\mathcal{B} \wedge \mathcal{H} \wedge E^{-} \nvDash false$
 
 			$\mathcal{H}$ darf negativen Beispielen nicht widersprechen
 	\end{itemize}
