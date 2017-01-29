@@ -8,19 +8,21 @@
 			Die Schnittstelle zwischen Machine Learning und logischer Programmierung
 	\end{block}
 
-	\emph{Idee}: 
-			\begin{enumerate}
-				\item Basis: Formalisierung der Umgebung in Logik erster Stufe
-				\item Mitteilen positiver und negativer Beispiele
-				\item Generierung neuer Regeln, die sowohl positive
-					als auch negative Beispiele herleiten
-			\end{enumerate}
+	\vspace{5pt}
+	\emph{Idee}:
+		\begin{enumerate}
+			\item Basis: Formalisierung der Umgebung in Logik erster Stufe
+			\item Eingabe positiver und negativer Beispiele
+			\item Generierung einer neuen Regel, die sowohl positive
+				als auch negative Beispiele herleitet
+			\item Hinzufügen neuer Regel zum Basiswissen
+		\end{enumerate}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Logik erster Stufe (FOL) -- Einführung}
+	\frametitle{Logik erster Stufe -- Einführung}
 
-	In \textbf{FOL} besteht die Welt aus
+	In \textbf{Logik erster Stufe} besteht die Welt aus
 	\begin{itemize}
 		\item Objekten  $(Personen, Dingen)$
 		\item Prädikaten $(>, <)$
@@ -29,7 +31,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Logik erster Stufe (FOL) -- Einführung}
+	\frametitle{Logik erster Stufe -- Einführung}
 	\emph{Terme} beschreiben Objekte in der Welt:\\
 	\begin{itemize}
 		\item Konstanten  ($2$, Chuck Norris)
@@ -37,17 +39,16 @@
 		\item Funktionen von Termen ($add(x,2)$)
 	\end{itemize}
 
-	\emph{Ground term}: Ein Term ohne Variablen.
+	\emph{Grundterm}: Ein Term ohne Variablen.
 	\pause
 
-	\begin{block}{}
-		Atome/Literale sind kleinstmögliche Ausdrücke, die wahr/falsch sind
-		\begin{itemize}
-			\item $predicate(Term_1, \ldots, Term_n)$\\ 
-				Beispiel: is\_human(Pinoccio)
-			\item $Term_1 = Term_2$ (Gleicheitsrelation)
-		\end{itemize}
-	\end{block}
+	\vspace{15pt}
+	\emph{Atome/Literale} sind kleinstmögliche Ausdrücke, die wahr/falsch sind
+	\begin{itemize}
+		\item $predicate(Term_1, \ldots, Term_n)$\\ 
+			Beispiel: is\_human(Pinoccio)
+		\item $Term_1 = Term_2$ (Gleicheitsrelation)
+	\end{itemize}
 
 \end{frame}
 
@@ -121,57 +122,56 @@
 \end{frame}
 
 \begin{frame}
+	\frametitle{Hypotheseneigenschaften}
+	\emph{Gegeben:} Background-Knowledge $(\mathcal{B})$, Menge von positiven $(E^+)$ und negativen $(E^-)$ Beispielen\\
+	\emph{Ziel:} Finden einer Hypothese $(\mathcal{H})$ die alle positiven und keine negativen
+	Beispiele erfüllt
+
 	\begin{minipage}{0.5\textwidth}
-	\begin{itemize}
-		\item Necessity:          $\mathcal{B} \nvDash E^{+}$
+		\vspace{5pt}
+		\underline{Eigenschaften}
+		\begin{itemize}
+			\item Sufficiency:        $\mathcal{B} \land \mathcal{H} \vDash E^{+}$
 
-			Beispiele dürfen nicht durch Hintergrundwissen allein schon erklärbar sein
+				Hypothese $\mathcal{H}$ muss alle positiven Beispiele logisch folgern
 
-		\item Sufficiency:        $\mathcal{B} \land \mathcal{H} \vDash E^{+}$
+			\item Strong consistency: $\mathcal{B} \land \mathcal{H} \land E^{-} \nvDash false$
 
-			Hypothese $\mathcal{H}$ muss alle positiven Beispiele logisch folgern
-
-		\item Weak consistency:   $\mathcal{B} \land \mathcal{H} \nvDash false$
-
-			$\mathcal{H}$ darf dem Hintergrundwissen nicht widersprechen
-
-		\item Strong consistency: $\mathcal{B} \land \mathcal{H} \land E^{-} \nvDash false$
-
-			$\mathcal{H}$ darf negativen Beispielen nicht widersprechen
-	\end{itemize}
+				$\mathcal{H}$ darf negativen Beispielen nicht widersprechen
+		\end{itemize}
 	\end{minipage}
 	\begin{minipage}{0.45\textwidth}
 		\centering
 		\includegraphics[scale=0.35]{hypothesis_correct}
 	\end{minipage}
 \end{frame}
-\begin{frame}
-\frametitle{Hypotheseneigenschaften}
-	\emph{Gegeben:} Background-Knowledge $(\mathcal{B})$, Menge von positiven $(E^+)$ und negativen $(E^-)$ Beispielen\\
-	\emph{Ziel:} Finden einer Hypothese $(\mathcal{H})$ die alle positiven und kein negatives Beispiele erfüllt
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.5\textwidth]{hypothesis}
-\end{figure}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Gewünschte Hypotheseneigenschaften}
-	\begin{itemize}
-		\item Necessity:          $\mathcal{B} \nvDash E^{+}$
-
-			Beispiele dürfen nicht durch Hintergrundwissen allein schon erklärbar sein
-
-		\item Sufficiency:        $\mathcal{B} \land \mathcal{H} \vDash E^{+}$
-
-			Hypothese $\mathcal{H}$ muss alle positiven Beispiele logisch folgern
-
-		\item Weak consistency:   $\mathcal{B} \land \mathcal{H} \nvDash false$
-
-			$\mathcal{H}$ darf dem Hintergrundwissen nicht widersprechen
-
-		\item Strong consistency: $\mathcal{B} \land \mathcal{H} \land E^{-} \nvDash false$
-
-			$\mathcal{H}$ darf negativen Beispielen nicht widersprechen
-	\end{itemize}
-\end{frame}
+%\begin{frame}
+%\frametitle{Hypotheseneigenschaften}
+%	\emph{Gegeben:} Background-Knowledge $(\mathcal{B})$, Menge von positiven $(E^+)$ und negativen $(E^-)$ Beispielen\\
+%	\emph{Ziel:} Finden einer Hypothese $(\mathcal{H})$ die alle positiven und kein negatives Beispiele erfüllt
+%\begin{figure}[H]
+%	\centering
+%	\includegraphics[width=0.5\textwidth]{hypothesis}
+%\end{figure}
+%\end{frame}
+%
+%\begin{frame}
+%	\frametitle{Gewünschte Hypotheseneigenschaften}
+%	\begin{itemize}
+%		\item Necessity:          $\mathcal{B} \nvDash E^{+}$
+%
+%			Beispiele dürfen nicht durch Hintergrundwissen allein schon erklärbar sein
+%
+%		\item Sufficiency:        $\mathcal{B} \land \mathcal{H} \vDash E^{+}$
+%
+%			Hypothese $\mathcal{H}$ muss alle positiven Beispiele logisch folgern
+%
+%		\item Weak consistency:   $\mathcal{B} \land \mathcal{H} \nvDash false$
+%
+%			$\mathcal{H}$ darf dem Hintergrundwissen nicht widersprechen
+%
+%		\item Strong consistency: $\mathcal{B} \land \mathcal{H} \land E^{-} \nvDash false$
+%
+%			$\mathcal{H}$ darf negativen Beispielen nicht widersprechen
+%	\end{itemize}
+%\end{frame}
