@@ -155,8 +155,24 @@
 
 \begin{frame}
 	\frametitle{RLGG -- Beispiel}
-Beispiel: Familienkonstellation (siehe Terminal)
-\img{family_relation}{Eine schrecklich nette Familie}{Familienrelation}{0.4}
+	Beispiel: Familienkonstellation (siehe Terminal)
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\node (A) at (0, 2)  {\color{blue}georg};
+				\node (B) at (2,0)   {\color{red}mary};
+				\node (C) at (4, 2)   {\color{red}helen};
+				\node (D) at (6,0)   {\color{blue}tom};
+				\node (E) at (8, -2) {\color{red}eve};
+
+				\path [->] (A) edge node[above] {} (B);
+				\path [<-] (B) edge node[above] {} (C);
+				\path [->] (C) edge node[above] {} (D);
+				\path [->] (D) edge node[above] {} (E);
+			\end{tikzpicture}
+		\end{center}
+		\caption{Eine schrecklich nette Famlie}
+	\end{figure}
 \end{frame}
 
 \begin{frame}
@@ -184,7 +200,7 @@ Beispiel: Familienkonstellation (siehe Terminal)
 		\item $K$ darf nur aus \textit{ground literals} bestehen (Anhang: Saturierung)
 		\item $\mathcal{H}$ kann nicht mehr als \emph{eine} Klausel umfassen
 		\item Kombination der $lgg$-Paare bestimmt Qualität der Hypothese
-		\item Große $\mathcal{H}$ bereits bei kleinen Beispielen
+		\item \emph{Große} $\mathcal{H}$ bereits bei kleinen Beispielen
 
 	\end{itemize}
 \end{frame}
@@ -211,7 +227,7 @@ Beispiel: Familienkonstellation (siehe Terminal)
 \end{frame}
 
 \begin{frame}
-	\frametitle{Inverse resolution II}
+	\frametitle{Bottom-up -- Inverse Resolution}
 	Generelle Idee: Laufe den Herleitungsbaum rückwärts
 
 	\begin{block}{Herleitungsbaum Aussagenlogik}
@@ -237,7 +253,7 @@ Beispiel: Familienkonstellation (siehe Terminal)
 \end{frame}
 
 \begin{frame}
-	\frametitle{Inverse resolution III}
+	\frametitle{Bottom-up -- Inverse Resolution}
 	Herleitungen in \textit{First order logic} benötigt zusätzlich Substitutionen:
 
 	\begin{itemize}
@@ -268,23 +284,30 @@ Beispiel: Familienkonstellation (siehe Terminal)
 \end{frame}
 
 \begin{frame}
-	\frametitle{Inverse resolution IV}
-		Frage: Was bedeutet nun dieses \textbf{Inverse}?\\
-		Antwort: Herleitung von $\mathcal{H}$ aus $\mathcal{E}$ und $\mathcal{B}$ mittels
-		Inverse-Substitution
-
-		\begin{block}{Beispiel: Inverse Substitution}
-			Gegeben $c = daughter(X, Y) \leftarrow female(X), parent(Y,X)$ und
-			die Substitution: $\theta = \{X/mary, Y/ann\}$
+	\frametitle{Bottom-up -- Inverse Resolution}
+		\textbf{Inverse Substitution}: Umkehrung der Substitution:
+		\begin{bsp}
 			\begin{align*}
-				c' &= c\theta = daughter(mary, ann) \leftarrow female(mary), parent(ann, mary)\\
-					c &= c'\theta^{-1} = daughter(X, Y) \leftarrow female(X), parent(Y,X)
+				c &= daughter(X, Y) \leftarrow female(X), parent(Y,X)\\
+				\text{ mit } \theta &= \{X/mary, Y/ann\}\\
 			\end{align*}
-		\end{block}
+		\end{bsp}
+
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[scale=0.6]
+					\node[text width=3cm] (A) at (0, 0) {\tiny{$daughter(mary, ann) \leftarrow female(mary),
+					parent(ann, mary)$}};
+					\node[text width=3cm] (B) at (8, 0) {\tiny{$daughter(X, Y)\leftarrow female(X), parent(Y,X)$}};
+				    \path[dashed,->] (A) edge [red, bend left=70]  node[above] {$c\theta$} (B);
+					\path[dashed,->] (B) edge [blue, bend left=50]  node[above] {$c\theta^{-1}$} (A);
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}
 \end{frame}
 
 \begin{frame}
-	\frametitle{Inverse resolution V}
+	\frametitle{Bottom-up -- Inverse Resolution}
 	Inverse resolution beginnt mit $\mathcal{H} = \{\} = \emptyset$
 
 	\begin{itemize}
@@ -295,7 +318,7 @@ Beispiel: Familienkonstellation (siehe Terminal)
 \end{frame}
 
 \begin{frame}
-	\frametitle{Inverse resolution VI}
+	\frametitle{Bottom-up -- Inverse Resolution}
 	Algorithmus:
 	\begin{itemize}
 		\item [1.] Finde Klausel $c_1$, sodass $\{b_2\} \cup c_1 \vDash e_1$
@@ -323,7 +346,8 @@ Beispiel: Familienkonstellation (siehe Terminal)
 \end{frame}
 
 \begin{frame}
-	\frametitle{Inverse resolution -- Zusammenfassung}
+	\frametitle{Bottom-up -- Inverse Resolution}
+	Zusammenfassung:
 	Problem der \textit{Inverse resolution}:
 	\begin{itemize}
 		\item Nicht-deterministisch
