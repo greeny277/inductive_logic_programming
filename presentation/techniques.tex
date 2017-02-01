@@ -161,7 +161,7 @@
 			\begin{tikzpicture}[scale=0.6]
 				\node (A) at (0, 2)  {\color{blue}georg};
 				\node (B) at (2,0)   {\color{red}mary};
-				\node (C) at (4, 2)   {\color{red}helen};
+				\node (C) at (4, 2)   {\color{red}ann};
 				\node (D) at (6,0)   {\color{blue}tom};
 				\node (E) at (8, -2) {\color{red}eve};
 
@@ -179,17 +179,17 @@
 	\frametitle{RLGG -- Beispiel}
 	\begin{block}{Hintergrundwissen der Familienkonstellation}
 		\begin{align*}
-			K   &= p(h,m), p(h,t), p(t,e), p(t,i), f(h), f(m), f(e)\\
-			e_1 &= daughter(m, h)\\
+			K   &= p(a,m), p(a,t), p(t,e), p(t,i), f(a), f(m), f(e)\\
+			e_1 &= daughter(m, a)\\
 			e_2 &= daughter(e, t)
 		\end{align*}
 	\end{block}
 
 	\begin{gather*}
 		\begin{split}
-			\emph{d(V_{m,e}, V_{h,t})} \leftarrow &\; p(h,m), p(h,t), p(t,e), p(t,i), f(h), f(m), f(e),\\
-			&\; p(h, V_{m,t}), \emph{p(V_{h,t}, V_{m,e})}, p(V_{h,t}, V_{m,i}), p(V_{h,t}, V_{t,e}),\\
-			&\; p(V_{h,t}, V_{t,i}) ,p(t, V_{e,i}), f(V_h, m), f(V_{h,e}), \emph{f(V_{m,e})}
+			\emph{d(V_{m,e}, V_{a,t})} \leftarrow &\; p(a,m), p(a,t), p(t,e), p(t,i), f(a), f(m), f(e),\\
+			&\; p(a, V_{m,t}), \emph{p(V_{a,t}, V_{m,e})}, p(V_{a,t}, V_{m,i}), p(V_{a,t}, V_{t,e}),\\
+			&\; p(V_{a,t}, V_{t,i}) ,p(t, V_{e,i}), f(V_a, m), f(V_{a,e}), \emph{f(V_{m,e})}
 		\end{split}
 	\end{gather*}
 \end{frame}
@@ -214,8 +214,8 @@
 	Alternative Idee: \textbf{Inverse resolution}
 
 	\begin{align*}
-		B \wedge H \vDash E \Leftrightarrow\\
-		B \wedge \neg E \vDash \neg H
+		B \wedge H &\vDash E \Leftrightarrow\\
+		B \wedge \neg E &\vDash \neg H
 	\end{align*}
 
 	\vspace{5pt}
@@ -223,10 +223,10 @@
 	Suchen einer \textit{Bridgefunktion} $F$:
 	\vspace{5pt}
 	\begin{align*}
-		B \wedge \neg E \vDash F\\
-		F \vDash \neg H\\
-		\Rightarrow \neg F \Dashv H\\
-		\Rightarrow \neg F \succeq H\\
+		B \wedge \neg E     &\vDash F\\
+		F                   &\vDash \neg H\\
+		\Rightarrow \neg F  &\Dashv H\\
+		\Rightarrow \neg F  &\succeq H\\
 	\end{align*}
 \end{frame}
 
@@ -300,10 +300,10 @@
 		\begin{figure}[H]
 			\begin{center}
 				\begin{tikzpicture}[scale=0.6]
-					\node[text width=3cm] (A) at (0, 0) {\tiny{$daughter(mary, ann) \leftarrow female(mary),
+					\node[text width=3cm] (A) at (0, 0) {\tiny{$c' = daughter(mary, ann) \leftarrow female(mary),
 					parent(ann, mary)$}};
-					\node[text width=3cm] (B) at (8, 0) {\tiny{$daughter(X, Y)\leftarrow female(X), parent(Y,X)$}};
-				    \path[dashed,->] (A) edge [red, bend left=70]  node[above] {$c\theta$} (B);
+					\node[text width=3cm] (B) at (8, 0) {\tiny{$c = daughter(X, Y)\leftarrow female(X), parent(Y,X)$}};
+				    \path[dashed,->] (A) edge [red, bend left=70]  node[above] {$c'\theta$} (B);
 					\path[dashed,->] (B) edge [blue, bend left=50]  node[above] {$c\theta^{-1}$} (A);
 				\end{tikzpicture}
 			\end{center}
@@ -326,7 +326,7 @@
 	Algorithmus:
 	\begin{itemize}
 		\item [1.] Finde Klausel $c_1$, sodass $\{b_2\} \cup c_1 \vDash e_1$
-		\item [2.] Finde Klausel $c$, sodass $\{b_1\} \cup c \vDash c_1$
+		\item [2.] Finde Klausel $c$\hspace{4pt}, sodass $\{b_1\} \cup c\hspace{4pt} \vDash c_1$
 	\end{itemize}
 		\begin{figure}[H]
 			\begin{center}
