@@ -208,7 +208,7 @@
 
 \subsection{Bottom-up -- Inverse Resolution}
 \begin{frame}
-	\frametitle{Inverse resolution [Muggleton, Blutin '88]}
+	\frametitle{Bottom-up -- Inverse resolution [Muggleton '88]}
 	Plotkins \textbf{LGG} Ansatz stark beschränkt
 
 	Alternative Idee: \textbf{Inverse resolution}
@@ -217,7 +217,11 @@
 		B \wedge H \vDash E \Leftrightarrow\\
 		B \wedge \neg E \vDash \neg H
 	\end{align*}
+
+	\vspace{5pt}
+
 	Suchen einer \textit{Bridgefunktion} $F$:
+	\vspace{5pt}
 	\begin{align*}
 		B \wedge \neg E \vDash F\\
 		F \vDash \neg H\\
@@ -356,60 +360,61 @@
 	$\Rightarrow$ Aktueller Gegenstand der Forschung
 \end{frame}
 
-\subsection{Top-down -- Refinement-Operator}
+\subsection{Top-Down -- Refinement-Operator}
 \begin{frame}[fragile]
-\frametitle{Top-Down Ansatz}
-Idee: Klauseln zu immer weiter spezifizieren
+	\frametitle{Top--Down -- Refinement-Operator}
+	Idee: Klauseln zu immer weiter spezifizieren
 
-\begin{enumerate}
-	\item Beginne mit Prädikat von dem Beispiele gebaut sind
-	\item Füge solange Literale in Header hinzu, bis passende Beispiele erfüllt sind.
-\end{enumerate}
+	\begin{enumerate}
+		\item Beginne mit Prädikat von dem Beispiele gebaut sind
+		\item Füge solange Literale in Header hinzu, bis passende Beispiele erfüllt sind.
+	\end{enumerate}
 
 
 
 	\begin{block}{Der Refinement-Operator $\rho$ [Shapiro '83]}
-\begin{align*}
-	\forall D \in \rho(C). C \preceq D
-\end{align*}
-	Gewünschte Eigenschaften:
-	\begin{itemize}
-		\item \textit{Finite}: Erhalte endliche Menge an Klauseln
-		\item \textit{Complete}: Generierung aller subsummierenden Klauseln
-		\item \textit{Non-redundant}: Jede Klausel kann nur auf einen Weg generiert werden
-			(Vernachlässigbar)
-	\end{itemize}
-\end{block}
+		\begin{align*}
+			\forall D \in \rho(C). C \preceq D
+		\end{align*}
+		Gewünschte Eigenschaften:
+		\begin{itemize}
+			\item \textit{Finite}: Erhalte endliche Menge an Klauseln
+			\item \textit{Complete}: Generierung aller subsummierenden Klauseln
+			\item \textit{Non-redundant}: Jede Klausel kann nur auf einen Weg generiert werden
+				(Vernachlässigbar)
+		\end{itemize}
+	\end{block}
 \end{frame}
 
 \begin{frame}
-\frametitle{Refinement-Operator}
-Beispiel für $\rho$:
-\begin{figure}[H]
-	\begin{center}
-		\begin{tikzpicture}[scale=0.93]
-			\node (A) at (1.5,1) {$p(X,Y)$};
-			\node (B) at (-3,-1) {$p(X,X)$};
-			\node (C) at (0,-1) {$p(f(Z_1,Z_2), Y)$};
-			\node (D) at (3,-1) {$p(X,f(Z_1,Z_2))$};
-			\node (E) at (7,-1) {$p(X,Y) \leftarrow q(Z_1, Z_2)$};
-
-			\path [->] (A) edge node[above] {op2} (B);
-			\path [->] (A) edge node[right] {op1} (C);
-			\path [->] (A) edge node[right] {op1} (D);
-			\path [->] (A) edge node[above] {op3} (E);
-		\end{tikzpicture}
-	\end{center}
-	\caption{Beispiel für einen refinement-operator}
-	\label{fig:refinement_operator}
-\end{figure}
-\end{frame}
-
-\begin{frame}
-	\frametitle{Familienkonstellation: Top-Down}
+\definecolor{wine-red}{rgb}{0.8,0.1,0.6}
+	\frametitle{Top--Down -- Refinement-Operator}
+	Beispiel für $\rho$:
 	\begin{figure}[H]
 		\begin{center}
-			\begin{tikzpicture}[scale=1.0]
+			\begin{tikzpicture}[scale=0.93]
+				\node (A) at (1.5,1)   {$p(X,Y)$};
+				\node (B) at (-3,-0.5) {\color{blue}$p(X,X)$};
+				\node (C) at (-0.6,-1) {\color{red}$p(f(Z_1,Z_2), Y)$};
+				\node (D) at (3.4,-1)  {\color{red}$p(X,f(Z_1,Z_2))$};
+				\node (E)[text width=3cm] at (7,-0.5) {\color{wine-red}$p(X,Y) \leftarrow q(Z_1, Z_2)$};
+
+				\path [->, blue] (A) edge node[above] {op2} (B);
+				\path [->, red]  (A) edge node[right] {op1} (C);
+				\path [->, red]  (A) edge node[right] {op1} (D);
+				\path [->, wine-red]       (A) edge node[above] {op3} (E);
+			\end{tikzpicture}
+		\end{center}
+		\caption{Beispiel für einen Refinement-operator}
+		\label{fig:refinement_operator}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Top--Down -- Refinement-Operator}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=1.2]
 				\node[font=\tiny] (A) at (1.5,1) {$daughter(X,Y)\leftarrow$};
 				\node[font=\tiny] (B) at (-1,0) {$daughter(X,Y) \leftarrow X = Y$};
 				\node[font=\tiny] (C) at (0,-1) {$daughter(X,Y) \leftarrow female(X)$};
@@ -419,7 +424,7 @@ Beispiel für $\rho$:
 				\node[font=\tiny] (G) at (2.75, -1.75) {$daughter(X,Y) \leftarrow female(X), parent(Y,X)$};
 				\node[font=\tiny] (X) at (1.35, -0) {$\ldots$};
 				\node[font=\tiny] (Y) at (0.3, -1.5) {$\ldots$};
-	
+
 				\path [->] (A) edge node[left] {} (B);
 				\path [->] (A) edge node[left] {} (C);
 				\path [->] (A) edge node[left] {} (D);
@@ -432,7 +437,11 @@ Beispiel für $\rho$:
 		\label{fig:refinement_operator}
 	\end{figure}
 	\begin{block}{Refinement-Operator}
-		$\rho(c) = \{daughter(X, Y) \leftarrow L\}$\\
+		$\rho(c) = \{daughter(X, Y) \leftarrow L\}$ mit
+		\begin{enumerate}
+			\item Argumente von $L$ sind Variablen vom Header
+			\item $L$ darf eine neue Variable einführen
+		\end{enumerate}
 	\end{block}
 \end{frame}
 
@@ -447,8 +456,8 @@ Beispiel für $\rho$:
 		Verkleinere Suchraum durch Seed
 	\end{block}
 	\begin{center}
-	\begin{tikzpicture}
-				\node[font=\tiny] (A) at (1.5,1) {$p(X,Y)$};
+		\begin{tikzpicture}
+			\node[font=\tiny] (A) at (1.5,1) {$p(X,Y)$};
 				\node[font=\tiny] (B) at (-1,0) {$p(X,X)$};
 				\node[font=\tiny] (C) at (0.55,0) {$p(X,Y) \leftarrow r(U)$};
 				\node[font=\tiny] (D) at (2.6,0) {$p(X,Y) \leftarrow q(V)$};
@@ -462,26 +471,26 @@ Beispiel für $\rho$:
 				\node[font=\tiny] (D3) at (4,-1.5) {\ldots};
 				\node[font=\tiny] (X2) at (1, -1.25) {$\ldots$};
 				\node[font=\tiny] (Y2) at (2, -1.25) {$\ldots$};
-	
+
 				\path [->] (A) edge node[left] {} (B);
 				\path [->] (A) edge node[left] {} (C);
 				\path [->] (A) edge node[left] {} (D);
 				\path [->] (B2) edge node[left] {} (E);
 				\path [->] (C2) edge node[left] {} (E);
 				\path [->] (D2) edge node[left] {} (E);
-		\begin{scope}[label distance=0mm,]
-			\coordinate  (aux1) at ([yshift=-15pt]A);
-			\coordinate  (aux2) at ([yshift=+10pt]E);
-			\node[regular polygon,regular polygon sides=5,draw, red,fit={(aux1) (aux2)},label=right:{\color{red}\small{Bereich mit Seed}}] {};
-		\end{scope}
-		%\begin{scope}[label distance=6mm,]
-		%	\foreach \i/\label in {1/Label 1,2/Label 2,3/Label 3}
-		%	{
-		%		  \coordinate  (aux\i) at ([xshift=2cm]t\i);
-		%		    \node[inner sep=6pt,rounded corners=6pt,draw,red,fit={(t\i) (b\i)
-		%			(aux\i)},label=right:{\color{red}\label}] {};
-		%			}
-		%\end{scope}
-	\end{tikzpicture}
+			\begin{scope}[label distance=0mm,]
+				\coordinate  (aux1) at ([yshift=-15pt]A);
+				\coordinate  (aux2) at ([yshift=+10pt]E);
+				\node[regular polygon,regular polygon sides=5,draw, red,fit={(aux1) (aux2)},label=right:{\color{red}\small{Bereich mit Seed}}] {};
+			\end{scope}
+			%\begin{scope}[label distance=6mm,]
+			%	\foreach \i/\label in {1/Label 1,2/Label 2,3/Label 3}
+			%	{
+			%		  \coordinate  (aux\i) at ([xshift=2cm]t\i);
+			%		    \node[inner sep=6pt,rounded corners=6pt,draw,red,fit={(t\i) (b\i)
+			%			(aux\i)},label=right:{\color{red}\label}] {};
+			%			}
+			%\end{scope}
+		\end{tikzpicture}
 	\end{center}
 \end{frame}
