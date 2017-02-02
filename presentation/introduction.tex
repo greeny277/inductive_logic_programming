@@ -34,12 +34,13 @@
 	\pause
 
 	\vspace{15pt}
-	\emph{Atome/Literale} sind kleinstmögliche Ausdrücke, die wahr/falsch sind
+	\emph{Atome} sind kleinstmögliche Ausdrücke, die wahr/falsch sind
 	\begin{itemize}
-		\item $predicate(Term_1, \ldots, Term_n)$\\ 
+		\item $predicate(Term_1, \ldots, Term_n)$\\
 			Beispiel: is\_human(Pinoccio)
 		\item $Term_1 = Term_2$ (Gleicheitsrelation)
 	\end{itemize}
+	\emph{Literale} sind (negierte) Atome
 
 \end{frame}
 
@@ -104,7 +105,7 @@
 	\begin{align*}
 		\underbrace{T}_{\text{head}} \leftarrow \underbrace{L_1, \ldots, L_m}_{\text{body}}
 	\end{align*}
-	wobei $T, L_1, \ldots, L_m$ Literale sind, wobei $T$ immer positiv ist.
+	wobei $L_1, \ldots, L_m$ Literale sind und $T$ ein Atom ist.
 
 	Beispiel:
 	\begin{align*}
@@ -114,9 +115,10 @@
 
 \begin{frame}
 	\frametitle{Hypotheseneigenschaften}
-	\emph{Gegeben:} Background-Knowledge $(\mathcal{B})$, Menge von positiven $(E^+)$ und negativen $(E^-)$ Beispielen\\
-	\emph{Ziel:} Finden einer Hypothese $(\mathcal{H})$ die alle positiven und keine negativen
-	Beispiele erfüllt
+	\emph{Gegeben:} Background-Knowledge $(\mathcal{B})$, Menge von positiven $(E^+)$ und negativen
+	$(E^-)$ Beispielen.\\
+	\emph{Ziel:} Finden einer Hypothese $(\mathcal{H})$, die alle positiven und keine negativen
+	Beispiele erfüllt.
 
 	\begin{minipage}{0.5\textwidth}
 		\vspace{5pt}

@@ -14,7 +14,7 @@
 	\end{block}
 	\begin{bsp}
 		\begin{align*}
-			 daughter(X, Y)\theta\subseteq female(ann), daughter(mary, ann)\\\text{  mit  } \theta = \{X/mary, Y/ann\}
+			 daughter(X, Y)\theta\subseteq daughter(mary, ann)\\\text{  mit  } \theta = \{X/mary, Y/ann\}
 		\end{align*}
 	\end{bsp}
 \end{frame}
@@ -30,7 +30,7 @@
 	\end{block}
 	\begin{bsp}
 		\begin{gather*}
-			 daughter(X, Y)\theta\leftarrow parent(Y,X) \subseteq\\
+			(daughter(X, Y)\leftarrow parent(Y,X))\theta \subseteq\\
 			 daughter(mary, ann) \leftarrow parent(ann, mary), parent(ann, tom)\\
 			 \text{  mit  } \theta = \{X/mary, Y/ann\}
 		\end{gather*}
@@ -46,7 +46,7 @@
 				C_1 \vDash C_2
 			\end{align*}
 		}
-		\item{ Die Relation $\leq$ führt ein Gitter (lattice) von reduzierten Klauseln ein
+		\item{ Die Relation $\preceq$ führt ein Gitter (lattice) von reduzierten Klauseln ein
 			\begin{figure}[H]
 				\begin{center}
 					\begin{tikzpicture}
@@ -363,7 +363,7 @@
 \subsection{Top-Down -- Refinement-Operator}
 \begin{frame}[fragile]
 	\frametitle{Top--Down -- Refinement-Operator}
-	Idee: Klauseln zu immer weiter spezifizieren
+	Idee: Klauseln immer weiter spezifizieren
 
 	\begin{enumerate}
 		\item Beginne mit Prädikat von dem Beispiele gebaut sind
