@@ -2,7 +2,7 @@
 
 \frame{\frametitle{Agenda}\tableofcontents[currentsection]}
 \begin{frame}
-	\frametitle{Induction Logic Programming (ILP)}
+	\frametitle{Inductive Logic Programming (ILP)}
 
 	\begin{block}{Was ist Inductive Logic Programming?}
 			Die Schnittstelle zwischen Machine Learning und logischer Programmierung
@@ -34,7 +34,7 @@
 	\pause
 
 	\vspace{15pt}
-	\emph{Atome} sind kleinstmögliche Ausdrücke, die wahr/falsch sind
+	\emph{Atome} sind kleinstmögliche wahre Ausdrücke
 	\begin{itemize}
 		\item $predicate(Term_1, \ldots, Term_n)$\\
 			Beispiel: is\_human(Pinoccio)
@@ -50,7 +50,7 @@
 	\begin{block}{Syntaktische Beschreibung der Welt}
 		\begin{align*}
 			\text{Konstante} &= \{\text{Zero}\}\\
-			\text{Funktion}  &=\{Succ/1, Plus/2 \}\\
+			\text{Funktionen}  &=\{Succ/1, Plus/2 \}\\
 			\text{Prädikate} &=\{even/1, is\_greater/2 \}
 		\end{align*}
 	\end{block}
@@ -68,8 +68,8 @@
 		\begin{align*}
 			\mathcal{M} &= \mathbb{N}_0\\
 			\mathcal{I}(Zero) &= 0\\
-			\mathcal{I}(Plus(Succ(Zero), Succ(Zero))) &= 2\\
-			\mathcal{I}(even(Suc(Suc(Zero)))) &= True
+			\mathcal{I}(Plus(Succ(Zero), Succ(Zero))) = \mathcal{I}(Succ(Succ(Zero)) &=  2\\
+			\mathcal{I}(even(Succ(Succ(Zero)))) &= True
 		\end{align*}
 	\end{block}
 \end{frame}
@@ -86,7 +86,7 @@
 	\end{block}
 	\begin{bsp}
 		\begin{align*}
-			\{father(X,Y)\} \vDash father(\text{Darth Vader}, \text{Luke Skywalker})
+			\{A \rightarrow B, A\} \vDash B
 		\end{align*}
 	\end{bsp}
 \end{frame}
@@ -109,7 +109,7 @@
 
 	Beispiel:
 	\begin{align*}
-		daughter(X,Y) \Leftarrow female(X), mother(Y, X)
+		daughter(X,Y) \Leftarrow female(X), parent(Y, X)
 	\end{align*}
 \end{frame}
 
