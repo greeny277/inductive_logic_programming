@@ -77,7 +77,7 @@
 
 \subsection{Bottom-up -- Least general generalization}
 \begin{frame}
-	\frametitle{Least general generalization (LGG)}
+	\frametitle{Bottom-up -- Least general generalization (LGG)}
 	 Die \textit{least general generalization} von zwei Klauseln $C_1, C_2$ ist
 	 die kleinste obere Schranke von $C_1,C_2$ im Gitter.
 
@@ -92,7 +92,7 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{LGG - Algorithmus}
+	\frametitle{Bottom-up -- Least general generalization (LGG)}
 	\begin{block}{$lgg$ von Termen}
 		\begin{enumerate}
 			\item $lgg(t,t) = t$\\
@@ -110,7 +110,7 @@
 
 
 \begin{frame}
-\frametitle{RLGG -- Algorithmus}
+\frametitle{Bottom-up -- Relative least general generalization}
 \begin{block}{Definition -- Relative least general generalization}
 	Gegeben: Hintergrundwissen $\mathcal{B}$ besteht nur aus \emph{ground literals} (Literale ohne Variablen).
 	Sei $K$ die Konjunktion aller Hintergrundliterale und $e_1, e_2$ je positive Beispiele
@@ -123,7 +123,7 @@
 
 
 \begin{frame}{Linearity}
-\frametitle{RLGG -- Anschaulich}
+\frametitle{Bottom-up -- Relative least general generalization}
 	\pgfdeclarelayer{background}
 	\pgfsetlayers{background,main}
 	\tikzstyle{vertex}=[rectangle,fill=black!25,minimum size=20pt,inner sep=0pt]
@@ -154,7 +154,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{RLGG -- Beispiel}
+	\frametitle{Bottom-up -- Relative least general generalization}
 	Beispiel: Familienkonstellation (siehe Terminal)
 	\begin{figure}[H]
 		\begin{center}
@@ -176,7 +176,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{RLGG -- Beispiel}
+	\frametitle{Bottom-up -- Relative least general generalization}
 	\begin{block}{Hintergrundwissen der Familienkonstellation}
 		\begin{align*}
 			K   &= p(a,m), p(a,t), p(t,e), p(t,i), f(a), f(m), f(e)\\
@@ -195,7 +195,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{RLGG -- Weiteres Probleme}
+	\frametitle{Bottom-up -- Relative least general generalization}
 	\begin{itemize}
 		\item $K$ darf nur aus \textit{ground literals} bestehen (Anhang: Saturierung)
 		\item $\mathcal{H}$ kann nicht mehr als \emph{eine} Klausel umfassen
@@ -362,7 +362,7 @@
 
 \subsection{Top-Down -- Refinement-Operator}
 \begin{frame}[fragile]
-	\frametitle{Top--Down -- Refinement-Operator}
+	\frametitle{Top-Down -- Refinement-Operator}
 	Idee: Klauseln immer weiter spezifizieren
 
 	\begin{enumerate}
@@ -388,7 +388,7 @@
 
 \begin{frame}
 \definecolor{wine-red}{rgb}{0.8,0.1,0.6}
-	\frametitle{Top--Down -- Refinement-Operator}
+	\frametitle{Top-Down -- Refinement-Operator}
 	Beispiel für $\rho$:
 	\begin{figure}[H]
 		\begin{center}
@@ -411,7 +411,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Top--Down -- Refinement-Operator}
+	\frametitle{Top-Down -- Refinement-Operator}
 	\begin{figure}[H]
 		\begin{center}
 			\begin{tikzpicture}[scale=1.2]
@@ -446,7 +446,7 @@
 \end{frame}
 
 \begin{frame}
-	\frametitle{Top-Down - Varianten}
+	\frametitle{Top-Down -- Varianten}
 	Wie durchsucht man den Refinementgraph?
 	\begin{itemize}
 		\item Variante 1: Vollständig (\emph{langsam})

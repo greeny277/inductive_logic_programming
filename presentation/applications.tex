@@ -27,24 +27,66 @@
 	\end{block}
 	Welche Restgruppenkombination führt zu welchen biologischen Eigenschaften?
 \end{frame}
+
+\begin{frame}
+	\frametitle{Quantitative structure-activity relationships}
+	\begin{block}{Standard Verfahren nach \textit{Hansch}}
+	Vorhersage biologischer Eigenschaften von \emph{unbekannten} Stoffen
+	durch Bildung von Gleichungssystem über physikalisch-chemische Eigenschaften der Restgruppen.
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Quantitative structure-activity relationships}
+	\begin{block}{ILP-Ansatz}
+		\emph{Idee}: Vergleich des neuen Stoffes mit Eigenschaften von bereits \emph{bekannten}
+		Stoffen.\\
+	\end{block}
+		Hintergrundwissen:
+		\begin{enumerate}
+			\item { $9$ Prädikate für chemische Eigenschaften der Restgruppen:\\
+				$polar(subst, value), size(subst, value),
+				h\_donor(subst, value), \ldots$}
+			\item { Prädikate für Relation von chemischen Eigenschaften:\\
+				$great\_polar(polar\_value1, polar\_value2), \ldots$}
+			\item {Struktur von Stoffen:\\
+				$struc(Drug, R_3, R_4, R_5)$ }
+		\end{enumerate}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Quantitative structure-activity relationships}
+	\begin{block}{Zielrelation}
+		\begin{align*}
+			great(DrugX, DrugY)
+		\end{align*}
+	\end{block}
+	$\Rightarrow$ Stoff $X$ hat höhere biologische Aktivität als Stoff $Y$.
+
+	\vspace{1cm}
+
+	\textbf{Positive} und \textbf{negative} Beispiele:
+	Generiert durch Vergleich biologischer Aktivität von Stoffen. 
+	\begin{itemize}
+		\item $E^+$: Alle Beispiele für die $great(DrugX, DrugY)$ wahr ist
+		\item $E^-$: Alle Beispiele für die $great(DrugX, DrugY)$ falsch ist
+	\end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]
 	\frametitle{Quantitative structure-activity relationships}
-	Standard Verfahren nach \textit{Hansch}: Vorhersage durch Bildung von
-	Gleichungssystem über phy.-chem. Eigenschaften der Restgruppen
-
-	\begin{block}{ILP-Ansatz}
-	Hintergrundwissen erstellen durch bereits bekannte biologische Eigenschaften
-	von Stoffen.
-	\begin{itemize}
-		\item Jeder Restgruppe Eigenschaften zuweisen: $polar(NO_2, polar\_value), \ldots$
-		\item $great(DrugX, DrugY)$: $X$ hat höhere biologische Aktivität als $Y$
-		\item Regeln für $great(A,B)$ erstellen: 
-			\begin{lstlisting}[language=prolog]
-				great(A,B) $\leftarrow$ struc(A,D,E,F), struc(B,h,C,h), flex(D,G),
-				less_4_flex(G), h_donor(D, h_don_0), pi(D, po_don_1).
-			\end{lstlisting}
-	\end{itemize}
-	\end{block}
+	ILP System kann nun Regeln ableiten:
+	\begin{bsp}
+		\begin{lstlisting}[language=prolog]
+			great(A,B) $\leftarrow$ struc(A,D,E,F), struc(B,h,C,h), flex(D,G),
+			less_4_flex(G), h_donor(D, h_don_0), pi(D, po_don_1).
+		\end{lstlisting}
+	\end{bsp}
+	$\Rightarrow$ Stoff $A$ hat eine höhere Aktivität, wenn:
+	\begin{enumerate}
+		\item $B$ keine Restgruppen an Stelle $3$ und $5$
+		\item Restgruppe $D$ bei Stoff $A$ spezielle Eigenschaften aufweist
+	\end{enumerate}
 \end{frame}
 
 \begin{frame}
@@ -61,7 +103,7 @@
 			\hline
 		\end{tabular}
 		\captionof{table}{Korelationstabelle für QSAR}
-		\end{center}
+	\end{center}
 		Erkenntnis:\\
 		ILP funktioniert gut solange Moleküle nicht zu komplex sind.
 \end{frame}
