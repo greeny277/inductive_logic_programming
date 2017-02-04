@@ -29,11 +29,12 @@
 		\end{align*}
 	\end{block}
 	\begin{bsp}
-		\begin{gather*}
-			(daughter(X, Y)\leftarrow parent(Y,X))\theta \subseteq\\
-			 daughter(mary, ann) \leftarrow parent(ann, mary), parent(tom, mary)\\
+		\begin{align*}
+			(daughter(X, Y)      &\leftarrow parent(Y,X))\theta \subseteq\\
+			 daughter(mary, ann) &\leftarrow female(mary), parent(ann, mary),\\
+			                     & parent(tom, mary)\\
 			 \text{  mit  } \theta = \{X/mary, Y/ann\}
-		\end{gather*}
+		\end{align*}
 	\end{bsp}
 \end{frame}
 
@@ -115,7 +116,8 @@
 	Gegeben: Hintergrundwissen $\mathcal{B}$ besteht nur aus \emph{ground literals} (Literale ohne Variablen).
 	Sei $K$ die Konjunktion aller Hintergrundliterale und $e_1, e_2$ je positive Beispiele
 	\begin{align*}
-		rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))
+		rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))\\
+		\Rightarrow \text{ Das Hintergrundwissen wird negiert}
 	\end{align*}
 \end{block}
 
