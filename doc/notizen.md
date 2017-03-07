@@ -7,19 +7,50 @@ bibliography: ref.bib
 Inductive Logic Programming
 =============================
 
-General
+Introduction
 -----------------------------
-ILP is a subfield of **machine learning**. The logic programming
-is used as representation for **background knowledge**, **examples**
-and **hypothesis**.
+*Inductive logic programming* is a subfield of *machine learning* with components of
+logic based programming and knowledge representation.
 
-This term ILP for the first time was introduced at Stephen Muggleton
-by 1991.
+Programs which are using an ILP-based approach do proceed as is displayed
+by Figure \ref{fig:flowchart}. In the beginning the environment which does include every
+necessary information, needs to be formalised in some kind of logic (see Subsection \ref{ssec:fol}).
 
-Common resolver are PROGOL and GOLEM.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[scale=0.4]{images/process2cut.pdf}
+	\end{center}
+	\caption{Flowchart of an ILP-based program}
+	\label{fig:flowchart}
+\end{figure}
+
+The resulting set of formulas is called *background knowlegde* which
+consists of a bunch of different facts and rules. The main task of the
+system is to generate new and  hopefully very general rules for the
+background knowledge. Therefore the program gets feed with positive and
+negative examples of a certain matter. Afterwards the program tries to
+deduce the most general rule which fulfills all positive and no
+negative example. Subsequently the generated rule, what is called *hypothesis*
+is added to the background knowledge.
+
+Hypotheses are classified by two factors: *complete* and *consistent*. The first
+one indicated that the hypothesis fulfills each positive example, while
+the second factor displays that no negative example is fulfilled.
+In Figure \ref{fig:hypo} the four classes are shown.
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[scale=0.3]{images/hypothesis.png}
+	\end{center}
+	\caption{Classification of hypotheses}
+	\label{fig:hypo}
+\end{figure}
 
 First order logic
 --------------------------
+
+\label{ssec:fol}
 
 For a better understanding of how *Inductive logic programming* with its
 algorithms works it is necessary to know the syntax and semantics of
@@ -169,7 +200,6 @@ $h \vDash B \rightarrow E^+$. This kind of entailment can't be computed because
 it is an undecidable problem, but subsumption can be used as a very good
 approximation.
 
-<!--
 Algorithm:
 
 <!-- TODO: Introduce \theta_{1,2} -->
@@ -184,8 +214,6 @@ Algorithm:
 
 5. Convert final clause back to Horn form.
 
-The *rlgg* algorithm depends heavily on Plotkins generalization of literals (*lgg*).
--->
 
 Plotkin introduced the *least general generalization* algorithm which finds
 for two given terms or literals the least generalization.
@@ -270,7 +298,7 @@ of variables.
 		\end{tikzpicture}
 	\end{center}
 	\caption{Example for POSET of atomic formulas}
-	\label{fig:refinement_operator}
+	\label{fig:poset_atomic}
 \end{figure}
 \end{bsp}
 
@@ -309,13 +337,14 @@ of a starting clause and $\top$ and $\bot$.
 
 \begin{bsp}
 TODO: Example of clause lattice
+\label{poset_clause}
 \end{bsp}
 
 ### Saturation
 The saturation step takes all horn clauses of the positive examples
 with the form $a \leftarrow b_1 \ldots b_n$ and uses the background knowledge
-to get all possible entailments. In the next chapter a concrete algorithm for
-saturation is presented. We take it for granted for now.
+to get all possible entailments. In the appendix a concrete algorithm for
+saturation is presented \ref{app_saturation}.
 
 \begin{bsp}
 Insert Circle Example here
@@ -345,7 +374,9 @@ Insert Circle Example here
 	\caption{Bottom-up approach using lgg}
 \end{algorithm}
 
-### Inverse Entailment and Inverse Subsumption
+Inverse Entailment and Inverse Subsumption
+------
+
 Another approach has been introduced by Stephen Muggleton in his
 resolver named PROGOL. It is called **Inverse Entailment**.
 The motivation laid in the following problems by the **rlgg** approach[@muggleton1995inverse]:
@@ -359,7 +390,8 @@ $m$  ground literals. Than $rlgg_B(E)$ may consist of $(n + 1)^m$ ground literal
 3. Concepts with multiple hypothesis can not be learned since
 $rlgg_B(E)$. is a single clause.
 
-The general idea is to find a *bridge hypothesis* $F$ [@yamamoto2010inverse]. But from the beginning:
+
+<!--The general idea is to find a later called *bridge hypothesis* $F$ [@yamamoto2010inverse].-->
 We need to find an hypothesis such that Sufficiency, Necessity, Weak and Strong
 consistency holds. The *deduction theorem* in first order logic proofs that
 $B \wedge H \vDash E$ is logically equivalent to $B \wedge \neg E \vDash \neg H$.
@@ -367,62 +399,117 @@ This equivalency means that $H$ can be computed by deducing its negation $\neg H
 from $B$ and $\neg E$ as follows:
 
 \begin{align}
-B \wedge \neg E \vDash F_1 \vDash \ldots \vDash F_i \vDash \neg H
+B \wedge \neg E \vDash \neg H
 \end{align}
 
-At next the negation of the bridge theory $F_i$ can be generalized into
-the hypothesis $H$ with inverse relation of entailment.
+Now let $\neg \bot$ the potential infinit conjunction of all ground literals
+wich are true in all models of $B \wedge \neg E$. Since $\neg H$ is true in every model
+of $B \wedge \neg E$ it have to contain a subset of the ground literals in $\neg \bot$.
 
+Therefore:
 \begin{align}
-\neg(B \wedge  \neg E) \Dashv \neg F_1 \Dashv \ldots \Dashv \neg F_i \Dashv
-\ldots \Dashv \neg F_n \Dashv H
+B \wedge \neg E \vDash \neg \bot \vDash \neg H
 \end{align}
 
-The tricky part about inverse entailment is that many different operators need to be
-applied to it until a result will be found. In addition it takes a huge
-amount of search space.
-<!-- The reason for this is, that it's general
-undecidable whether one definite clause implies another.
- Wie genau hängen Inverse Entailment und die
-Unentscheidbarkeit der Implikation von Klauseln zusammen? -->
-
-#### Subsumption
-Therefore PROGOL[@muggleton1995inverse] uses subsumption due to computational
-efficiency.
-
-#####Definiton:
-Let $C$ and $D$ be clauses. $C$ subsumes $D$ if there exists a $\theta$
-such that $C\theta \subseteq D$, also written $C \succeq D$.
-
-For instance:
+What leads to:
 \begin{align}
-	p(a, X) \vee p(b,Z) \succeq p(a,c)\\
-	\theta=\{X | c\}.
+H \vDash \bot
 \end{align}
 
-In @yamamoto2010inverse work it has been shown that inverse subsumption
-is an alternative generalization method to inverse entailment.
-Thus the searched hypothesis $H$ can be found through the following relations:
+To clarify what this means consider another POSET like in \ref{poset_clause}
+which starts with the predicate from which the examples are constructed from
+and ends up in $\bot$. Anywhere in bewtween the searched hypothesis $H$ has
+to exist.
 
+### Inverse Subsumption
+
+#### Refinement Operators
+This section shows how an hypothesis can $H$ derived from the starting predicate.
+
+@shapiro1983algorithmic introduced a concept of **refinement operators**
+to search from general to more specific clauses (one it subsumes).
+
+The refinement operator $\rho$ is in the context of PROGOL defined as:
 \begin{align}
-\neg(B \wedge  \neg E) \Dashv \neg F_1 \Dashv \ldots \Dashv \neg F_i \preceq
-\ldots \preceq \neg F_n \preceq H
+\forall D \in \rho(C). C \succeq D
 \end{align}
 
-In conclusion $H$ subsumes the clause $\neg F_i$ as well as $\neg(B \wedge  \neg E)$.
+Common refinement operators are:
 
-A solver like PROGOL has two different tasks to solve for generating the final hypothesis $H$:
+1. Substitute for one variable a term built from a functor of
+arity $n$ and $n$ distinct and not in the clause existing variables:
+$\theta=\{X | f(Y_1, \ldots, Y_n)\}$
 
-1. Obtain $\neg F_i$ from $\neg(B \wedge  \neg E)$ by inverse entailment.
-2. Obtain $H$ from $\neg F_i$  by inverse subsumption.
+2. Substitute for one variable another variable already in the clause:
+$\theta=\{X | Y\}$
 
-The following sections are explaining both procedures.
+3. Add a literal $l_k = p(u_1, \ldots, u_m)$, which is the $k$-th literal of $F_i$, where each
+	$u_j$ with $1 \leq j \leq m$ is substituted by $\{v_j|u_j\} \in \theta$ or
+	$\theta' = \theta \cup \{v_j|u_j\}$.
+<!-- TODO Das stimmt so nicht. Siehe Muggleton S.265 -->
 
-#### Inverse Entailment
+The figure \ref{fig:refinement_operator} shows a refinement graph with some operators.
+The numeration of the operators is referring to the enumeration above.
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\node (A) at (1.5,1) {$p(X,Y)$};
+			\node (B) at (-3,-1) {$p(X,X)$};
+			\node (C) at (0,-1) {$p(f(Z_1,Z_2), Y)$};
+			\node (D) at (3,-1) {$p(X,f(Z_1,Z_2))$};
+			\node (E) at (7,-1) {$p(X,Y) \leftarrow q(Z_1, Z_2)$};
 
-##### The Definite Mode Language
-@muggleton1995inverse introduces for the purpose of obtaining $\neg F_i$
-the definite mode language. 
+			\path [->] (A) edge node[left] {op2} (B);
+			\path [->] (A) edge node[left] {op1} (C);
+			\path [->] (A) edge node[left] {op1} (D);
+			\path [->] (A) edge node[left] {op3} (E);
+		\end{tikzpicture}
+	\end{center}
+	\caption{Example for applied refinement operators}
+	\label{fig:refinement_operator}
+\end{figure}
+
+Such operators should fulfill the following properties:
+
+1. **Completeness**: Creating each possible subsumed clause.
+2. **Finiteness**: The cardinality of $\rho(C)$ is finite.
+3. **Non-redundancy**: Only one sequence of operators to get from a clause to
+a subsumed one.
+
+Regarding to @van1993subsumption not all three properties can be fulfilled at the same time.
+Therefore the third one is not considered.
+The set of operators shown in \ref{fig:refinement_operator} is finite and complete but
+redundant (see Figure \ref{fig:prop_refinment_op}).
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\node (A) at (1.5,1) {$p(X,Y)$};
+			\node (B) at (0,-1) {$p(X,Y)\leftarrow q(U) $};
+			\node (C) at (3,-1) {$p(X,Y)\leftarrow r(V)$};
+			\node (D) at (1.5,-3) {$p(X,Y) \leftarrow q(U), r(V)$};
+
+			\path [->] (A) edge node[left] {} (B);
+			\path [->] (A) edge node[left] {} (C);
+			\path [->] (B) edge node[left] {} (D);
+			\path [->] (C) edge node[left] {} (D);
+		\end{tikzpicture}
+	\end{center}
+	\caption{Example for non-redundancy in refinement operator $\rho$}
+	\label{fig:prop_refinment_op}
+\end{figure}
+
+
+Appendix
+------
+
+## Saturation Algorithm in PROGOL
+\label{app_saturation}
+
+### The Definite Mode Language
+@muggleton1995inverse introduces for the purpose of saturating positive examples
+the **definite mode language**.
+
 The definite mode language is made up of two forms: modeh$(n, \text{atom})$ and modeb$(n, \text{atom})$.
 Where $n$ is either an integer with $n \geq 1$ or '\*'.
 $n$ is called *recall* represents the number of alternative solutions for instantiating
@@ -458,104 +545,12 @@ Transformed into mode language leads to:
 This declaration demonstrates a relation between different atoms. Moreover
 it is now possible deducing relations from atoms of positive examples.
 
-##### Saturation
+
+
 The saturation step takes all horn clauses of the positive examples
 with the form $a \leftarrow b_1 \ldots b_n$ and with the mode declarations
 of the background knowledge and $a$. Then PROGOL takes the variables,
 which replace the $+$type in $a$ and let Prolog deduce each possible term
 by the background knowledge.
-
-The concrete specification of the algorithm is a bit complex and not that
-important. A little example with some notes shows how it in general works:
-
-
-#### Inverse Subsumption
-##### Refinement Operators
-After the clause $\neg F_i$ has been evaluated,
-this section shows how an hypothesis can $H$ derived from $\neg F_i$.
-
-@shapiro1983algorithmic introduced a concept of **refinement operators**
-to search from general to more specific clauses (one it subsumes).
-
-The refinement operator $\rho$ is in the context of PROGOL defined as:
-\begin{align}
-\forall D \in \rho(C). C \succeq D
-\end{align}
-
-Common refinement operators are:
-
-1. Substitute for one variable a term built from a functor of
-arity $n$ and $n$ distinct and not in the clause existing variables:
-$\theta=\{X | f(Y_1, \ldots, Y_n)\}$
-
-2. Substitute for one variable another variable already in the clause:
-$\theta=\{X | Y\}$
-
-3. Add a literal $l_k = p(u_1, \ldots, u_m)$, which is the $k$-th literal of $F_i$, where each
-	$u_j$ with $1 \leq j \leq m$ is substituted by $\{v_j|u_j\} \in \theta$ or
-	$\theta' = \theta \cup \{v_j|u_j\}$.
-<!-- TODO Das stimmt so nicht. Siehe Muggleton S.265 -->
-
-The figure \ref{fig:refinement_operator} shows a refinement graph with some operators.
-The numeration of the operators is referring to the enumeration above.
-\begin{figure}[h]
-	\begin{center}
-		\begin{tikzpicture}
-			\node (A) at (1.5,1) {$p(X,Y)$};
-			\node (B) at (-3,-1) {$p(X,X)$};
-			\node (C) at (0,-1) {$p(f(Z_1,Z_2), Y)$};
-			\node (D) at (3,-1) {$p(X,f(Z_1,Z_2))$};
-			\node (E) at (7,-1) {$p(X,Y) \leftarrow q(Z_1, Z_2)$};
-
-			\path [->] (A) edge node[left] {op2} (B);
-			\path [->] (A) edge node[left] {op1} (C);
-			\path [->] (A) edge node[left] {op1} (D);
-			\path [->] (A) edge node[left] {op3} (E);
-		\end{tikzpicture}
-	\end{center}
-	\caption{Example for applied refinement operators}
-	\label{fig:refinement_operator}
-\end{figure}
-
-Such operators should fulfill the following properties:
-
-1. **Completeness**: Creating each possible subsumed clause.
-2. **Finiteness**: The cardinality of $\rho(C)$ is finite.
-3. **Non-redundancy**: Only one sequence of operators to get from a clause to
-a subsumed one.
-
-Regarding to @van1993subsumption not all three properties can be fulfilled at the same time.
-Therefore the third one is not considered.
-The set of operators shown in \ref{fig:refinement_operator} is finite and complete but
-redundant (see Figure \ref{fig:prop_refinment_op}).
-
-\begin{figure}[h]
-	\begin{center}
-		\begin{tikzpicture}
-			\node (A) at (1.5,1) {$p(X,Y)$};
-			\node (B) at (0,-1) {$p(X,Y)\leftarrow q(U) $};
-			\node (C) at (3,-1) {$p(X,Y)\leftarrow r(V)$};
-			\node (D) at (1.5,-3) {$p(X,Y) \leftarrow q(U), r(V)$};
-
-			\path [->] (A) edge node[left] {} (B);
-			\path [->] (A) edge node[left] {} (C);
-			\path [->] (B) edge node[left] {} (D);
-			\path [->] (C) edge node[left] {} (D);
-		\end{tikzpicture}
-	\end{center}
-	\caption{Example for non-redundancy in refinement operator $\rho$}
-	\label{fig:prop_refinment_op}
-\end{figure}
-
-<!-- TODO: Beispiel Graph der zeigt wie mit Subsumption
-           allgemeinste klausel gefunden wird.  -->
-
-$H$ has an upper and lower border:
-
-\begin{align}
-\bot \succeq H \succeq F_i
-\end{align}
-Where $\bot$ is the empty clause.
-
 
 #References
