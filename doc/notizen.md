@@ -43,43 +43,82 @@ In Figure \ref{fig:hypo} the four classes are shown.
 	\begin{center}
 		\includegraphics[scale=0.3]{images/hypothesis.png}
 	\end{center}
-	\caption{Classification of hypotheses}
+	\caption{Shown is the classification of hypotheses, where the denotation is as follows: background knowlegde is
+	$B$, positive examples $E^+$, negative examples $E^-$ and the hypothesis is $H$.}
 	\label{fig:hypo}
 \end{figure}
 
-First order logic
+A good hyptothesis $H$ is a logic proposition satisfying
+following requirements:
+
+* Necessity:          $B \nvDash E^{+}$
+
+     Forbids gerneration of hypothesis as long as positive facts
+     can be explained without it.
+
+* Sufficiency:        $B \wedge H \vDash E^{+}$
+
+     The hypothesis $h$ need to entail all positive
+     examples in $E^{+}$.
+
+* Weak consistency:   $B \wedge H \nvDash false$
+
+     $H$ is not allow to contradict the background knowledge $B$.
+
+* Strong consistency: $B \wedge H \wedge E^{-} \nvDash false$
+
+     $H$ is not allow to contradict the negative examples $E^{-}$ either.
+
+
+
+First order logic (FOL)
 --------------------------
 
 \label{ssec:fol}
 
-For a better understanding of how *Inductive logic programming* with its
-algorithms works it is necessary to know the syntax and semantics of
-*first order logic* (FOL).
+Popular ILP-engines have in common that each of them are  using *first order logic*
+to represent the environment. Therefore its syntax and semantic is briefly
+introduced here to give a basic understanding.
 
 ### Syntax
 
-\begin{align*}
-\varphi ::= E \mid p(E_1, \ldots , E_n) \mid | \neg \varphi \mid \varphi_1 \wedge \varphi_2 \mid
-\forall X.\varphi \hfill(X \in Var, p/n \in \Sigma)\\
-E ::= X \mid f(E_1, \ldots, E_n) \hfill (f/n \in \Sigma)
-\end{align*}
-
-Where $\Sigma$ is a signature with a tuple $(C,F,P)$ of sets with
-\begin{itemize}
-	\item $C$ is the set of constant symbols with arity $= 0$
-	\item $F$ is the set of function symbols with arity $\geq 0$
-	\item $P$ is the set of predicate symbols with arity $\geq 0$
-\end{itemize}
-
-$Var$ contains all variable symbols $v_0, \ldots, v_n$.
 
 #### Terms
 
-Terms are inductively defined as:
+In FOL terms denote objects in the world. They are inductively defined as:
 \begin{itemize}
 	\item Every variable and constant is a term
 	\item Every expression $f(t_1, \ldots, t_n)$ is a term
 \end{itemize}
+The grammar for terms does look as follows:
+\begin{align}
+	Term := c \mid v \mid f(Term_1, Term_2, \ldots, Term_n) \hspace{1cm} \text{where } v \in Var, c \in
+	C, f \in F
+\end{align}
+Where
+\begin{itemize}
+	\item $C$ is the set of constant symbols with arity $= 0$
+	\item $F$ is the set of function symbols with arity $\geq 0$
+	\item $Var$ is the set of all variable symbols $v_0, \ldots, v_n$
+\end{itemize}
+
+Terms without variables are denoted as *ground terms*. Each function
+symbol $f/n$ maps $n$ objects to another single object in the world.
+
+#### Atoms and Literals
+
+An atom or literal is the smallest expression to which a truth value can
+be assigned to.
+
+\begin{itemize}
+	\item $p(Term_1, \ldots, Term_n) \text{ where } p \in P$
+	\item $Term_1 = Term_2$ \hspace{1cm}\text{(equality relation)}
+\end{itemize}
+$P$ is the set of predicate symbols with arity $\geq 0$.
+
+Literals are (negated) atoms.
+
+We call $\Sigma$ a signature a tuple of the three sets $(C,F,P)$.
 
 ### Semantic
 
@@ -104,59 +143,39 @@ Terms get interpreted as follows:
 \end{align}
 
 A model $\mathfrak{M}$ is an interpetaion $\mathfrak{I}$ for a $\Sigma$ expression $\varphi$,
-written $\mathfrak{M} \vDash \varphi$ when the following rules hold:
-
-TODO
-
-
-The idea of ILP
------------------------------
-
-
-The general idea of inductive logic programming is to obtain new clauses
-by getting many positive and negative examples and therefore generating new
-knowledge. The program tries to build general clauses which fulfill all
-positve examples and none negative.
-
-The background knowledge $B$ has the form of **Horn clauses**
-(a disjunction with at most one positive literal).
-
-For instance:
-
-$\lnot p \vee \lnot q \vee \lnot t \vee u$
-
-Which can be converted to an implication as following:
-
-$(p \wedge q \wedge t) \to u$
-
-The examples are split in two subgroups. Positive $E^{+}$
-and negative $E^{-}$ examples composed of only non-negated
-and negated ground literals respectively.
-
-A correct hyptothesis $H$ is a logic proposition satisfying
-following requirements:
-
-* Necessity:          $B \nvDash E^{+}$
-
-     Forbids gerneration of hypothesis as long as positive facts
-     can be explained without it.
-
-* Sufficiency:        $B \wedge H \vDash E^{+}$
-
-     The hypothesis $h$ need to entail all positive
-     examples in $E^{+}$.
-
-* Weak consistency:   $B \wedge H \nvDash false$
-
-     $H$ is not allow to contradict the background knowledge $B$.
-
-* Strong consistency: $B \wedge H \wedge E^{-} \nvDash false$
-
-     $H$ is not allow to contradict the negative examples $E^{-}$ either.
+written $\mathfrak{M} \vDash \varphi$ when the following rules hold: Each interpretation
+$\mathfrak{I}$ that fulfills all formulas in $\Sigma$, also fulfills $\varphi$.
 
 
 General tools
 ---------
+
+### Horn clauses
+
+A *horn clauses* is a disjunction with at most one positive literal. Furthermore
+definite program clauses are horn clauses with exactly one positive literal.
+
+For instance:
+
+\begin{align}
+	\lnot p \vee \lnot q \vee \lnot t \vee u
+\end{align}
+
+Which can be converted to an implication as following:
+
+\begin{align}
+	(p \wedge q \wedge t) \to u
+\end{align}
+
+The programming language *Prolog* is using logic as programming paradigma
+because facts and rules can be represented as implications.
+An example rule is given in Equation \ref{al:ex1}. To prove that
+someone is a daughter *breadth-first search* is used by checking
+if the person is female and has parents.
+\begin{align}
+	\label{al:ex1}
+	daugther(X, Y) \Leftarrow female(X) \wedge parent(Y,X)
+\end{align}
 
 ### Subsumption
 
