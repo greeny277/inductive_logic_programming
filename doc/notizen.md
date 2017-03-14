@@ -463,15 +463,16 @@ to exist.
 Top-Down -- Refinement graph
 ------
 
-#### Refinement Operators
-This section shows how an hypothesis can $H$ derived from the starting predicate.
+Another way of getting a new hypothesis is to start with the targeting
+predicate and step by step building a clause lattice.
+Therefore @shapiro1983algorithmic introduced a concept of *refinement operators*
+to create more specific clauses, which still get subsumed by the former one.
 
-@shapiro1983algorithmic introduced a concept of **refinement operators**
-to search from general to more specific clauses (one it subsumes).
+### Refinement Operators
 
-The refinement operator $\rho$ is in the context of PROGOL defined as:
+The refinement operator $\rho$ is defined as following:
 \begin{align}
-\forall D \in \rho(C). C \succeq D
+\forall D \in \rho(C). C \preceq D
 \end{align}
 
 Common refinement operators are:
@@ -539,7 +540,57 @@ redundant (see Figure \ref{fig:prop_refinment_op}).
 	\label{fig:prop_refinment_op}
 \end{figure}
 
-\begin{figure}[h]
+### Search algorithm
+
+
+There are two common ways to search through a refinement graph. The complete
+version takes every possible path and returns the best most specific complete and consistent
+clause. A much faster but incomplete way is to follow paths which fulfill the most
+positive examples. In return a incomplete and/or inconsistend hypothesis might be returned.
+
+Another way to decrease the search-space is to use one positive example as seed and search
+between this and the starting point as displayed in Figure \ref{fig:seed}. Because of Theorem
+\ref{thm:subs} the hypothesis has to be included in that area.
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\node[font=\tiny] (A) at (1.5,1) {$p(X,Y)$};
+				\node[font=\tiny] (B) at (-1,0) {$p(X,X)$};
+				\node[font=\tiny] (C) at (0.55,0) {$p(X,Y) \leftarrow r(U)$};
+				\node[font=\tiny] (D) at (2.6,0) {$p(X,Y) \leftarrow q(V)$};
+				\node[font=\tiny] (E) at (1.5,-2) {$p(X,Y) \leftarrow r(X), q(X), q(Y)$};
+				\node[font=\tiny] (X) at (1.75, 0.5) {$\ldots$};
+				\node[font=\tiny] (Y) at (0.6, 0.5) {$\ldots$};
+				\node[font=\tiny] (B2) at (0.3,-1.3)  {};
+				\node[font=\tiny] (C2) at (1.5,-1) {};
+				\node[font=\tiny] (D2) at (3,-1.3) {};
+				\node[font=\tiny] (B3) at (-1,-1.5) {\ldots};
+				\node[font=\tiny] (D3) at (4,-1.5) {\ldots};
+				\node[font=\tiny] (X2) at (1, -1.25) {$\ldots$};
+				\node[font=\tiny] (Y2) at (2, -1.25) {$\ldots$};
+	
+				\path [->] (A) edge node[left] {} (B);
+				\path [->] (A) edge node[left] {} (C);
+				\path [->] (A) edge node[left] {} (D);
+				\path [->] (B2) edge node[left] {} (E);
+				\path [->] (C2) edge node[left] {} (E);
+				\path [->] (D2) edge node[left] {} (E);
+			\begin{scope}[label distance=0mm,]
+				\coordinate  (aux1) at ([yshift=-15pt]A);
+				\coordinate  (aux2) at ([yshift=+10pt]E);
+				\node[regular polygon,regular polygon sides=5,draw, red,fit={(aux1) (aux2)},label=right:{\color{red}\small{Scope of the seed}}] {};
+			\end{scope}
+		\end{tikzpicture}
+	\end{center}
+	\caption{Refinement graph using a seed}
+	\label{fig:seed}
+\end{figure}
+
+### Top-Down example
+
+An example of the Top-Down approach is shown in Figure \ref{fig:refinement_operator}.
+
+\begin{figure}[H]
 	\begin{center}
 		\begin{tikzpicture}[scale=1.5]
 			\node[font=\tiny] (A) at (1.5,1) {$daughter(X,Y)\leftarrow$};
@@ -563,38 +614,6 @@ redundant (see Figure \ref{fig:prop_refinment_op}).
 	\caption{Part of the refinementgraph for the family constellation}
 	\label{fig:refinement_operator}
 \end{figure}
-
-
-\begin{center}
-	\begin{tikzpicture}
-		\node[font=\tiny] (A) at (1.5,1) {$p(X,Y)$};
-			\node[font=\tiny] (B) at (-1,0) {$p(X,X)$};
-			\node[font=\tiny] (C) at (0.55,0) {$p(X,Y) \leftarrow r(U)$};
-			\node[font=\tiny] (D) at (2.6,0) {$p(X,Y) \leftarrow q(V)$};
-			\node[font=\tiny] (E) at (1.5,-2) {$p(X,Y) \leftarrow r(X), q(X), q(Y)$};
-			\node[font=\tiny] (X) at (1.75, 0.5) {$\ldots$};
-			\node[font=\tiny] (Y) at (0.6, 0.5) {$\ldots$};
-			\node[font=\tiny] (B2) at (0.3,-1.3)  {};
-			\node[font=\tiny] (C2) at (1.5,-1) {};
-			\node[font=\tiny] (D2) at (3,-1.3) {};
-			\node[font=\tiny] (B3) at (-1,-1.5) {\ldots};
-			\node[font=\tiny] (D3) at (4,-1.5) {\ldots};
-			\node[font=\tiny] (X2) at (1, -1.25) {$\ldots$};
-			\node[font=\tiny] (Y2) at (2, -1.25) {$\ldots$};
-
-			\path [->] (A) edge node[left] {} (B);
-			\path [->] (A) edge node[left] {} (C);
-			\path [->] (A) edge node[left] {} (D);
-			\path [->] (B2) edge node[left] {} (E);
-			\path [->] (C2) edge node[left] {} (E);
-			\path [->] (D2) edge node[left] {} (E);
-		\begin{scope}[label distance=0mm,]
-			\coordinate  (aux1) at ([yshift=-15pt]A);
-			\coordinate  (aux2) at ([yshift=+10pt]E);
-			\node[regular polygon,regular polygon sides=5,draw, red,fit={(aux1) (aux2)},label=right:{\color{red}\small{Scope of the seed}}] {};
-		\end{scope}
-	\end{tikzpicture}
-\end{center}
 
 Example -- Quantitative structure-activity relationship
 ====
