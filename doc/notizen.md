@@ -539,6 +539,63 @@ redundant (see Figure \ref{fig:prop_refinment_op}).
 	\label{fig:prop_refinment_op}
 \end{figure}
 
+\begin{figure}[h]
+	\begin{center}
+		\begin{tikzpicture}[scale=1.5]
+			\node[font=\tiny] (A) at (1.5,1) {$daughter(X,Y)\leftarrow$};
+			\node[font=\tiny] (B) at (-1,0) {$daughter(X,Y) \leftarrow X = Y$};
+			\node[font=\tiny] (C) at (0,-1) {$daughter(X,Y) \leftarrow female(X)$};
+			\node[font=\tiny] (D) at (2.5,-0.5) {$daughter(X,Y) \leftarrow parent(Y,X)$};
+			\node[font=\tiny] (E) at (4.5,0) {$daughter(X,Y) \leftarrow parent(X, Z)$};
+			\node[font=\tiny] (F) at (-2,-1.75) {$daughter(X,Y)\leftarrow female(X), female(Y)$};
+			\node[font=\tiny] (G) at (2.75, -1.75) {$daughter(X,Y) \leftarrow female(X), parent(Y,X)$};
+			\node[font=\tiny] (X) at (1.35, -0) {$\ldots$};
+			\node[font=\tiny] (Y) at (0.3, -1.5) {$\ldots$};
+
+			\path [->] (A) edge node[left] {} (B);
+			\path [->] (A) edge node[left] {} (C);
+			\path [->] (A) edge node[left] {} (D);
+			\path [->] (A) edge node[left] {} (E);
+			\path [->] (C) edge node[left] {} (F);
+			\path [->] (C) edge node[left] {} (G);
+		\end{tikzpicture}
+	\end{center}
+	\caption{Part of the refinementgraph for the family constellation}
+	\label{fig:refinement_operator}
+\end{figure}
+
+
+\begin{center}
+	\begin{tikzpicture}
+		\node[font=\tiny] (A) at (1.5,1) {$p(X,Y)$};
+			\node[font=\tiny] (B) at (-1,0) {$p(X,X)$};
+			\node[font=\tiny] (C) at (0.55,0) {$p(X,Y) \leftarrow r(U)$};
+			\node[font=\tiny] (D) at (2.6,0) {$p(X,Y) \leftarrow q(V)$};
+			\node[font=\tiny] (E) at (1.5,-2) {$p(X,Y) \leftarrow r(X), q(X), q(Y)$};
+			\node[font=\tiny] (X) at (1.75, 0.5) {$\ldots$};
+			\node[font=\tiny] (Y) at (0.6, 0.5) {$\ldots$};
+			\node[font=\tiny] (B2) at (0.3,-1.3)  {};
+			\node[font=\tiny] (C2) at (1.5,-1) {};
+			\node[font=\tiny] (D2) at (3,-1.3) {};
+			\node[font=\tiny] (B3) at (-1,-1.5) {\ldots};
+			\node[font=\tiny] (D3) at (4,-1.5) {\ldots};
+			\node[font=\tiny] (X2) at (1, -1.25) {$\ldots$};
+			\node[font=\tiny] (Y2) at (2, -1.25) {$\ldots$};
+
+			\path [->] (A) edge node[left] {} (B);
+			\path [->] (A) edge node[left] {} (C);
+			\path [->] (A) edge node[left] {} (D);
+			\path [->] (B2) edge node[left] {} (E);
+			\path [->] (C2) edge node[left] {} (E);
+			\path [->] (D2) edge node[left] {} (E);
+		\begin{scope}[label distance=0mm,]
+			\coordinate  (aux1) at ([yshift=-15pt]A);
+			\coordinate  (aux2) at ([yshift=+10pt]E);
+			\node[regular polygon,regular polygon sides=5,draw, red,fit={(aux1) (aux2)},label=right:{\color{red}\small{Scope of the seed}}] {};
+		\end{scope}
+	\end{tikzpicture}
+\end{center}
+
 Example -- Quantitative structure-activity relationship
 ====
 
@@ -615,6 +672,7 @@ on the success of the ILP method.
 Conclusion
 ====
 
+<!--
 Appendix
 ------
 
@@ -701,5 +759,6 @@ Insert Circle Example here
 		return result\;
 	\caption{Bottom-up approach using lgg}
 \end{algorithm}
+-->
 
 #References
