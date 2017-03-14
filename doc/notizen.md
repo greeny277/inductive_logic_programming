@@ -539,8 +539,78 @@ redundant (see Figure \ref{fig:prop_refinment_op}).
 	\label{fig:prop_refinment_op}
 \end{figure}
 
-Example
+Example -- Quantitative structure-activity relationship
 ====
+
+It is a common task in the field of pharmacy to manipulate drugs with
+a certain biological activity to improve their effect in some ways. For instance
+to create better antidepressant drugs.
+Therefore it is tried to predict the biological activity of molecules to save
+money and time. Molecules like in Figure \ref{fig:qsar} can be manipulated at
+some positions by substituting rest-groups with so called functional-groups.
+Each of those functional-groups have physico-chemical properties like: polarity, size,
+flexibility, hydrogen-bond donor, hydrogen-bond acceptor, ...
+
+\begin{figure}[h]
+	\begin{center}
+		\includegraphics[scale=0.3]{images/qsar.png}
+	\end{center}
+	\caption{The structure of molecule Trimethoprim with three substitution positions on the phenyl
+	ring.}
+	\label{fig:qsar}
+\end{figure}
+
+Trimethoprim has three positions that can be substituted by 24 functional-groups each.
+The standard procedure by *Hansch* formulates a linear equation system based on the physico-chemical
+properties of the corresponding properties.
+
+The ILP approach doesn't try to predict the activity of the unknown molecule only by its
+properties. Instead it exists the following background knowledge:
+
+1. The relation $struc(Drug, R_n, \ldots, R_1)$ states a drug an its substitutions at
+each position.
+
+2. A predicate for each chemical property of the substitutes, like $polar(subs, value)$.
+
+3. Basic arithmetical knowledge.
+
+The target relation $great(drugX, drugY)$ declares that $drugX$ has a higher biological activity
+than $drugY$. Positive examples are those where $drugX$ has an higher activity. Pairs where
+$drugX$ has a lower activity are denoted as negative examples. Drugs with the same biological
+activity are discarded.
+
+The ILP system is able to derive rules like in Example \ref{ex:qsar} where an higher biological
+activity is predicted if drug $B$ has no substitutions at position $3$ and $5$ and the
+substituent $D$ in drug $A$ has specific properties.
+\begin{bsp}
+	\label{ex:qsar}
+	\begin{lstlisting}[language=prolog]
+		great(A,B) $\leftarrow$ struc(A,D,E,F), struc(B,h,C,h), flex(D,G),
+		less_4_flex(G), h_donor(D, h_don_0), pi(D, po_don_1).
+	\end{lstlisting}
+\end{bsp}
+
+The Table \ref{tab:correlation} shows how well ILP and Hansch performs for
+a set of training data and unknown compounds. The correlation of drug
+acitivity order predicted by the ILP approach is for the training set 0.92
+and test set 0.46 up to 0.54 (depending on the used ILP engine). The method
+by Hansch has 0.79 and 0.42, respectivly.
+\begin{center}
+	\begin{tabular}{|c|c|c|}
+		\hline
+		& ILP & Hansch\\
+		\hline
+		Correlation training & 0.92 & 0.79\\
+		\hline
+		Correlation test     & 0.46 -- 0.54 & 0.42\\
+		\hline
+	\end{tabular}
+	\captionof{table}{Correlationstable for QSAR}
+	\label{tab:correlation}
+\end{center}
+
+It was stated that the complexity of the compounds has a massive influence
+on the success of the ILP method.
 
 Conclusion
 ====
