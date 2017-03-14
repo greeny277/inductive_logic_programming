@@ -95,7 +95,6 @@ The grammar for terms does look as follows:
 	Term := c \mid v \mid f(Term_1, Term_2, \ldots, Term_n) \hspace{1cm} \text{where } v \in Var, c \in
 	C, f \in F
 \end{align}
-Where
 \begin{itemize}
 	\item $C$ is the set of constant symbols with arity $= 0$
 	\item $F$ is the set of function symbols with arity $\geq 0$
@@ -137,9 +136,9 @@ $\beta : \{v \mid v \in Var\} \rightarrow D$.
 Terms get interpreted as follows:
 
 \begin{align}
-	\mathfrak{I}(v) := \beta(v), v \in Var\\
-	\mathfrak{I}(c) := c^\mathfrak{A}, c \in \Sigma\\
-	\mathfrak{I}(f(t_1, \ldots, t_n) := f^\mathfrak{A}(\mathfrak{I}(t_1), \ldots, \mathfrak{I}(t_n), f/n \in \Sigma
+	\mathfrak{I}(v) &:= \beta(v), v \in Var\\
+	\mathfrak{I}(c) &:= c^\mathfrak{A}, c \in \Sigma\\
+	\mathfrak{I}(f(t_1, \ldots, t_n) &:= f^\mathfrak{A}(\mathfrak{I}(t_1), \ldots, \mathfrak{I}(t_n), f/n \in \Sigma
 \end{align}
 
 A model $\mathfrak{M}$ is an interpetaion $\mathfrak{I}$ for a $\Sigma$ expression $\varphi$,
@@ -152,7 +151,7 @@ General tools
 
 ### Horn clauses
 
-A *horn clauses* is a disjunction with at most one positive literal. Furthermore
+A *horn clauses* is a disjunction of clauses with at most one positive literal. Furthermore
 definite program clauses are horn clauses with exactly one positive literal.
 
 For instance:
@@ -168,10 +167,10 @@ Which can be converted to an implication as following:
 \end{align}
 
 The programming language *Prolog* is using logic as programming paradigma
-because facts and rules can be represented as implications.
-An example rule is given in Equation \ref{al:ex1}. To prove that
-someone is a daughter *breadth-first search* is used by checking
-if the person is female and has parents.
+because facts and rules can be represented as implications, which can be
+proven by *breadth-first search*.
+An example rule is given in Equation \ref{al:ex1}. To show that
+someone is a daughter  is done by checking if the person is female and has parents.
 \begin{align}
 	\label{al:ex1}
 	daugther(X, Y) \Leftarrow female(X) \wedge parent(Y,X)
@@ -179,8 +178,8 @@ if the person is female and has parents.
 
 ### Subsumption
 
-A huge difficulty by finding good hypothesis is the enormous search space that it can
-exist in. Therefore subsumption helps to find some boundaries.
+A huge difficulty by finding good hypothesis is the enormous size of search space it can
+exists in. Therefore subsumption helps to find some boundaries.
 
 \begin{definition}
 Subsumption for literals.
