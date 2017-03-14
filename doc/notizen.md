@@ -44,30 +44,30 @@ In Figure \ref{fig:hypo} the four classes are shown.
 		\includegraphics[scale=0.3]{images/hypothesis.png}
 	\end{center}
 	\caption{Shown is the classification of hypotheses, where the denotation is as follows: background knowlegde is
-	$B$, positive examples $E^+$, negative examples $E^-$ and the hypothesis is $H$.}
+		$B$, positive examples $\mathcal{E}^+$, negative examples $\mathcal{E}^-$ and the hypothesis is $H$.}
 	\label{fig:hypo}
 \end{figure}
 
 A good hyptothesis $H$ is a logic proposition satisfying
 following requirements:
 
-* Necessity:          $B \nvDash E^{+}$
+* Necessity:          $B \nvDash \mathcal{E}^{+}$
 
      Forbids gerneration of hypothesis as long as positive facts
      can be explained without it.
 
-* Sufficiency:        $B \wedge H \vDash E^{+}$
+	 * Sufficiency:        $B \wedge H \vDash \mathcal{E}^{+}$
 
      The hypothesis $h$ need to entail all positive
-     examples in $E^{+}$.
+	 examples in $\mathcal{E}^{+}$.
 
 * Weak consistency:   $B \wedge H \nvDash false$
 
      $H$ is not allow to contradict the background knowledge $B$.
 
-* Strong consistency: $B \wedge H \wedge E^{-} \nvDash false$
+	 * Strong consistency: $B \wedge H \wedge \mathcal{E}^{-} \nvDash false$
 
-     $H$ is not allow to contradict the negative examples $E^{-}$ either.
+	 $H$ is not allow to contradict the negative examples $\mathcal{E}^{-}$ either.
 
 
 
@@ -210,7 +210,8 @@ For instance:
 The most important property in the context of ILP is the following theorem.
 
 \begin{thm}
-$C_1 \preceq C_2 \rightarrow C_1 \vDash C_2$
+	\label{thm:subs}
+	$C_1 \preceq C_2 \rightarrow C_1 \vDash C_2$
 \end{thm}
 Therefore a subsumption relation between two clauses implies their logical consequence.
 
@@ -224,7 +225,7 @@ each other member in $X$. With a given set of predicates the POSET constructs a 
 Given is a binary predicate $p$, a constant $a$ and an unlimited set
 of variables.
 
-\begin{figure}[H]
+\begin{figure}[h]
 	\begin{center}
 		\begin{tikzpicture}
 			\node (G) at (1.5,2) {$\top$};
@@ -251,42 +252,47 @@ of variables.
 \end{bsp}
 
 
+
 Algorithms for hypothesis search
 ---------------------------------
 
-### Relative least general generalization (rlgg)
+This chapter presents two main strategies to obtain a new hypothesis. Both are using
+subsumption technique. The *rlgg* algorithm searches the hypothesis space in a bottom-up
+manner using generalization. On the other hand a specialization technique is shown using
+refinement graphs (@dzeroski1994inductive).
 
-This algorithm was the basic of GOLEM and invented by @plotkin1970note.
-As mentioned earlier an hypothesis is searched that together with the
-background knowledge entails the positive examples but not any negative
-one: $B \wedge h \vDash E^+$. This formula can be converted to
-$h \vDash B \rightarrow E^+$. This kind of entailment can't be computed because
-it is an undecidable problem, but subsumption can be used as a very good
-approximation.
+### Bottom-up -- Relative least general generalization (rlgg)
 
-Algorithm:
+The ILP-solver GOLEM is based on this algorithm invented by @plotkin1970note.
+As mentioned earlier an hypothesis is searched which entails the positive examples
+but not any negative one by using the background knowledge:
+$\mathcal{B} \wedge \mathcal{H} \vDash \mathcal{E}^+$. This formula can be converted to
+$\mathcal{H} \vDash \mathcal{B} \rightarrow \mathcal{E}^+$.
 
-<!-- TODO: Introduce \theta_{1,2} -->
-1. Build for each positive example $E'$ an implication
-   with $B \to E'$ <!-- TODO: Mentioning/Defining Saturation! -->
-
-2. Convert each implication to clause normalform: $\neg B \vee E'$
-
-3. Build the *least genereal generalization* of each compatible pair of literals
-
-4. Delete all negated literals containing variables that don't occur in a positive literal
-
-5. Convert final clause back to Horn form.
-
+By Theorem \ref{thm:subs} it is known that an adequate hypothesis $\mathcal{H}$ subsumes $\mathcal{B}
+\rightarrow \mathcal{E}^+$ for each positive example in $\mathcal{E}^+$.
 Figure \ref{fig:poset_atomic} shows  on the basis of a little example how the POSET $(X, \preceq)$
-extends to a lattice of clauses. Therefore a clause subsumes each clause other which is below itself
+extends to a lattice of clauses. Therefore a clause subsumes each clause which is below itself
 and in reverse gets subsumed by each clause above.
 
 \begin{definition}
-The lowest upper bound of two formulas is their least general generalization.
+	Least general generalization.
+
+	The lowest upper bound of two formulas is called their least general generalization.
 \end{definition}
 
-Plotkin introduced an algorithm for determining the *least generalization* for two given terms or literals.
+\begin{definition}
+	Relative least general generalization.
+
+	Given two positive examples $e_1$ and $e_2$ and a conjecture $\mathcal{K}$ of the background knowledge
+	consisting of ground facts the rlgg is defined as:
+	\begin{align}
+		rlgg(e_1, e_2) = lgg((e_1 \leftarrow K), (e_2 \leftarrow K))
+	\end{align}
+\end{definition}
+
+
+@plotkin1970note introduced an algorithm for determining the *least generalization* for two given terms or literals.
 The notation is as following: $P$ is a predicate, $g,f$ are symbols and $z$ is a variable.
 A word $W$ is a term or a variable.
 
@@ -319,27 +325,25 @@ For literals the algorithm proceeds very similar:
 	\caption{lgg-algorithm for literals}
 \end{algorithm}
 
-
-
-
 \begin{bsp}
-Determine the lgg of $V_1 = P(f(x), g(z))$ and $V_2 = P(f(g(z)), g(z))$:
+$lgg(p(f(x), g(z)), p(f(g(z)), g(z))$:
 
-\begin{enumerate}
-	\item $lgg(V_1, V_2)$
-	\item $P(lgg(f(x), f(g(z)), lgg(g(z), g(z)))$
-	\item $P(f(lgg(x, g(z)), g(z))$
-	\item $P(f(\varphi(x, g(z)), g(z))$
-	\item $P(f(v), g(z))$
-\end{enumerate}
+\begin{align}
+	&lgg(p(f(x), g(z)), p(f(g(z)), g(z))\\
+	&= p(lgg(f(x), f(g(z)), lgg(g(z), g(z)))\\
+	&= p(f(lgg(x, g(z)), g(z))\\
+	&= p(f(\varphi(x, g(z)), g(z))\\
+	&= p(f(v), g(z))\\
+\end{align}
 $\Rightarrow \epsilon_1 = \{x | v\}$ and $\epsilon_2 = \{g(z) | v\}$
 \end{bsp}
-
+<!--
 The last missing step to receive the searched hypothesis $h$ is to lift this
 POSET construct towards clauses.
 Because the searched hypothesis is a formula, that each
 clauses of kind $\neg B \vee E$ can be generalized to, where $E$ is any any positive
 example and $B$ the background knowlegde.
+-->
 
 The least generalization for clauses works as follows:
 \begin{algorithm}[H]
@@ -357,59 +361,61 @@ The least generalization for clauses works as follows:
 \end{algorithm}
 
 \begin{bsp}
-Given the following two clasues: $C_1 = p(a, f(a)) \vee p(b,b) \vee \neg p(b, f(b))$
-$C_2 = p(f(a), f(a)) \vee p(f(a),b) \vee \neg p(a, f(a))$:
+Compute the $lgg$ of:
+\begin{align}
+C_1 &= p(a, f(a)) \vee p(b,b) \vee \neg p(b, f(b))\\
+C_2 &= p(f(a), f(a)) \vee p(f(a),b) \vee \neg p(a, f(a))
+\end{align}
 
 \begin{align}
 	lgg(C_1, C_2) = p(X, f(a)) \vee p(X, Y) \vee p(Z, Z) \vee p(Z, b) \vee \neg p(U, f(U))
 \end{align}
 \end{bsp}
 
+The hypothesis $\mathcal{H}$ is obtained in a tournament based way as shown in Figure
+\ref{fig:rlgg}.
+
+\pgfdeclarelayer{background}
+	\begin{figure}[H]
+		\begin{center}
+		\pgfsetlayers{background,main}
+		\tikzstyle{vertex}=[rectangle,fill=black!25,minimum size=20pt,inner sep=0pt]
+		\tikzstyle{selected vertex} = [vertex, fill=red!24]
+		\tikzstyle{edge} = [draw,thick,-]
+		\tikzstyle{weight} = [font=\small]
+		\tikzstyle{selected edge} = [draw,line width=5pt,-,red!50]
+		\begin{tikzpicture}[scale=1.0, auto,swap]
+		\node[vertex] (a) at (0,0) {$A = e_1 \leftarrow K$};
+		\node[vertex] (b) at (2.5,0) {$B = e_2 \leftarrow K$};
+		\node[vertex] (c) at (5,0) {$C = e_3 \leftarrow K$};
+		\node[vertex] (d) at (7.5,0) {$D = e_4 \leftarrow K$};
+		\node[vertex] (e) at (1.25,2) {$C' = lgg(A, B)$};
+		\node[vertex] (f) at (6.25,2) {$C''= lgg(C, D)$};
+		\node[vertex] (g) at (3.75,4) {$\mathcal{H} = lgg(C', C'')$};
+		\begin{pgfonlayer}{background}
+			\path[selected edge] (a.center) -- (e.center);
+			\path[selected edge] (b.center) -- (e.center);
+			\path[selected edge] (c.center) -- (f.center);
+			\path[selected edge] (d.center) -- (f.center);
+			\path[selected edge] (e.center) -- (g.center);
+			\path[selected edge] (f.center) -- (g.center);
+		\end{pgfonlayer}
+		\end{tikzpicture}
+		\end{center}
+		\caption{The $rlgg$-alogrithm to obtain a new hypothesis $\mathcal{H}$.}
+		\label{fig:rlgg}
+	\end{figure}
 Now it is possible to create a POSET of clauses $(X, \succeq)$ where $X$ contains all variants
 of a starting clause and $\top$ and $\bot$.
 
+
 \begin{bsp}
-TODO: Example of clause lattice
+TODO: Example of family relation
 \label{poset_clause}
 \end{bsp}
 
-### Saturation
-The saturation step takes all horn clauses of the positive examples
-with the form $a \leftarrow b_1 \ldots b_n$ and uses the background knowledge
-to get all possible entailments. In the appendix a concrete algorithm for
-saturation is presented \ref{app_saturation}.
-
-\begin{bsp}
-Insert Circle Example here
-\end{bsp}
-
-\begin{algorithm}[H]
-	\KwIn{Background-Knowledge $B$\\Positive Examples $E^+$\\Negative Examples $E^-$.}
-	\KwResult{Matching hypothesis $H$}
-		saturatedExamples $= \{\}$\;
-		\ForEach{$e^+$ in $E^+$}{
-			saturatedExample.pushBack(saturate$(e^+)$)\;
-		}
-		\While{saturatedExamples.size() != 1}{
-			\tcc{Just take the first two clauses. Alternatively they can be chosen at random.}
-			(e1, e2) = saturatedExample.popFrontPair()\;
-			lggE12 = lgg(e1,e2)\;
-			\ForEach{$e^-$ in $E^-$}{
-				\tcc{Check if the new clause subsumes any negative example}
-				\If{doesSubsume(lggE12, $e^-$)}{
-					return \{\};
-				}
-			}
-			saturatedExample.pushBack(lggE12)\;
-		}
-		\tcc{The last remaining clause is our hypothesis}
-		return result\;
-	\caption{Bottom-up approach using lgg}
-\end{algorithm}
-
-Inverse Entailment and Inverse Subsumption
-------
-
+Bottom-up -- Inverse Entailment
+---------
 Another approach has been introduced by Stephen Muggleton in his
 resolver named PROGOL. It is called **Inverse Entailment**.
 The motivation laid in the following problems by the **rlgg** approach[@muggleton1995inverse]:
@@ -454,7 +460,8 @@ which starts with the predicate from which the examples are constructed from
 and ends up in $\bot$. Anywhere in bewtween the searched hypothesis $H$ has
 to exist.
 
-### Inverse Subsumption
+Top-Down -- Refinement graph
+------
 
 #### Refinement Operators
 This section shows how an hypothesis can $H$ derived from the starting predicate.
@@ -532,6 +539,11 @@ redundant (see Figure \ref{fig:prop_refinment_op}).
 	\label{fig:prop_refinment_op}
 \end{figure}
 
+Example
+====
+
+Conclusion
+====
 
 Appendix
 ------
@@ -585,5 +597,39 @@ with the form $a \leftarrow b_1 \ldots b_n$ and with the mode declarations
 of the background knowledge and $a$. Then PROGOL takes the variables,
 which replace the $+$type in $a$ and let Prolog deduce each possible term
 by the background knowledge.
+
+### Saturation
+The saturation step takes all horn clauses of the positive examples
+with the form $a \leftarrow b_1 \ldots b_n$ and uses the background knowledge
+to get all possible entailments. In the appendix a concrete algorithm for
+saturation is presented \ref{app_saturation}.
+
+\begin{bsp}
+Insert Circle Example here
+\end{bsp}
+
+\begin{algorithm}[H]
+	\KwIn{Background-Knowledge $B$\\Positive Examples $E^+$\\Negative Examples $E^-$.}
+	\KwResult{Matching hypothesis $H$}
+		saturatedExamples $= \{\}$\;
+		\ForEach{$e^+$ in $E^+$}{
+			saturatedExample.pushBack(saturate$(e^+)$)\;
+		}
+		\While{saturatedExamples.size() != 1}{
+			\tcc{Just take the first two clauses. Alternatively they can be chosen at random.}
+			(e1, e2) = saturatedExample.popFrontPair()\;
+			lggE12 = lgg(e1,e2)\;
+			\ForEach{$e^-$ in $E^-$}{
+				\tcc{Check if the new clause subsumes any negative example}
+				\If{doesSubsume(lggE12, $e^-$)}{
+					return \{\};
+				}
+			}
+			saturatedExample.pushBack(lggE12)\;
+		}
+		\tcc{The last remaining clause is our hypothesis}
+		return result\;
+	\caption{Bottom-up approach using lgg}
+\end{algorithm}
 
 #References
