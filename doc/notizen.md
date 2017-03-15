@@ -9,7 +9,7 @@ Inductive Logic Programming
 
 Introduction
 -----------------------------
-*Inductive logic programming* is a subfield of *machine learning* with components of
+*Inductive logic programming* is a sub-field of *machine learning* with components of
 logic based programming and knowledge representation.
 
 Programs which are using an ILP-based approach do proceed as is displayed
@@ -30,12 +30,12 @@ consists of a bunch of different facts and rules. The main task of the
 system is to generate new and  hopefully very general rules for the
 background knowledge. Therefore the program gets feed with positive and
 negative examples of a certain matter. Afterwards the program tries to
-deduce the most general rule which fulfills all positive and no
+deduce the most general rule which fulfils all positive and no
 negative example. Subsequently the generated rule, what is called *hypothesis*
 is added to the background knowledge.
 
 Hypotheses are classified by two factors: *complete* and *consistent*. The first
-one indicated that the hypothesis fulfills each positive example, while
+one indicated that the hypothesis fulfils each positive example, while
 the second factor displays that no negative example is fulfilled.
 In Figure \ref{fig:hypo} the four classes are shown.
 
@@ -48,26 +48,25 @@ In Figure \ref{fig:hypo} the four classes are shown.
 	\label{fig:hypo}
 \end{figure}
 
-A good hyptothesis $H$ is a logic proposition satisfying
+Represented in a logical manner an hypothesis $\mathcal{H}$ has to satisfy
 following requirements:
 
-* Necessity:          $B \nvDash \mathcal{E}^{+}$
+* Necessity:          $\mathcal{B} \nvDash \mathcal{E}^{+}$
 
-     Forbids gerneration of hypothesis as long as positive facts
-     can be explained without it.
+     A new hypthesis should only be generated when the background-knowledge alone can't
+	 explaine all positive examples.
 
-	 * Sufficiency:        $B \wedge H \vDash \mathcal{E}^{+}$
+ * Sufficiency:        $\mathcal{B} \wedge \mathcal{H} \vDash \mathcal{E}^{+}$
 
-     The hypothesis $h$ need to entail all positive
-	 examples in $\mathcal{E}^{+}$.
+     The hypothesis $\mathcal{H}$ needs to entail all positive examples $\mathcal{E}^{+}$.
 
-* Weak consistency:   $B \wedge H \nvDash false$
+* Weak consistency:   $\mathcal{B} \wedge \mathcal{H} \nvDash false$
 
-     $H$ is not allow to contradict the background knowledge $B$.
+     $\mathcal{H}$ is not allow to contradict the background knowledge $\mathcal{B}$.
 
-	 * Strong consistency: $B \wedge H \wedge \mathcal{E}^{-} \nvDash false$
+ * Strong consistency: $\mathcal{B} \wedge \mathcal{H} \wedge \mathcal{E}^{-} \nvDash false$
 
-	 $H$ is not allow to contradict the negative examples $\mathcal{E}^{-}$ either.
+	 $\mathcal{H}$ is not allow to contradict the negative examples $\mathcal{E}^{-}$ either.
 
 
 
@@ -107,22 +106,20 @@ symbol $f/n$ maps $n$ objects to another single object in the world.
 #### Atoms and Literals
 
 An atom or literal is the smallest expression to which a truth value can
-be assigned to.
+be assigned to. The grammar of atoms looks as following:
 
-\begin{itemize}
-	\item $p(Term_1, \ldots, Term_n) \text{ where } p \in P$
-	\item $Term_1 = Term_2$ \hspace{1cm}\text{(equality relation)}
-\end{itemize}
-$P$ is the set of predicate symbols with arity $\geq 0$.
+\begin{align*}
+	Atom := p(Term_1, \ldots, Term_n) \mid Term_1 = Term_2  \hspace{1cm} \text{ where } p \in P
+\end{align*}
+- $P$ is the set of predicate symbols with arity $\geq 0$.
 
-Literals are (negated) atoms.
+Literals are atoms too, which also can be negated.
 
-We call $\Sigma$ a signature a tuple of the three sets $(C,F,P)$.
 
 ### Semantic
 
 The defined syntax is just a series of symbols without any meaning. Therefore
-a structure $\mathfrak{A}$ on $\Sigma=(C,F,P)$ is defined. It contains a nonempty set $D$
+a structure $\mathfrak{A}$ on $\Sigma=(C,F,P)$ is defined. It contains a non-empty set $D$
 together with:
 \begin{itemize}
 	\item an element $c^{\mathfrak{A}} \in D$ for each  $c \in  \Sigma$
@@ -130,7 +127,7 @@ together with:
 	\item a predicate $p^{\mathfrak{A}} \subseteq D^n$ for each $p/n \in \Sigma$
 \end{itemize}
 
-An interpetation $\mathfrak{I}$ is a pair $\mathfrak{I} = (\mathfrak{A}, \beta)$ with
+An interpretation $\mathfrak{I}$ is a pair $\mathfrak{I} = (\mathfrak{A}, \beta)$ with
 $\beta : \{v \mid v \in Var\} \rightarrow D$.
 
 Terms get interpreted as follows:
@@ -142,8 +139,8 @@ Terms get interpreted as follows:
 \end{align}
 
 A model $\mathfrak{M}$ is an interpetaion $\mathfrak{I}$ for a $\Sigma$ expression $\varphi$,
-written $\mathfrak{M} \vDash \varphi$ when the following rules hold: Each interpretation
-$\mathfrak{I}$ that fulfills all formulas in $\Sigma$, also fulfills $\varphi$.
+written $\mathfrak{M} \vDash \varphi$ when each interpretation
+$\mathfrak{I}$ which fulfils all formulas in $\Sigma$ in addition fulfils $\varphi$.
 
 
 General tools
@@ -166,7 +163,7 @@ Which can be converted to an implication as following:
 	(p \wedge q \wedge t) \to u
 \end{align}
 
-The programming language *Prolog* is using logic as programming paradigma
+The programming language *Prolog* is using logic as programming paradigm
 because facts and rules can be represented as implications, which can be
 proven by *breadth-first search*.
 An example rule is given in Equation \ref{al:ex1}. To show that
@@ -185,11 +182,11 @@ exists in. Therefore subsumption helps to find some boundaries.
 Subsumption for literals.
 
 Let $L_1$ and $L_2$ be literals. $L_1$ subsumes $L_2$ iff there exists a $\theta$
-such that $L_1\theta = L_2$, also written $L_1 \succeq L_2$.
+such that $L_1\theta = L_2$, also written $L_1 \preceq L_2$.
 
 For instance:
 \begin{align}
-	p(f(x), X) \succeq p(f(a),a)\\
+	p(f(x), X) \preceq p(f(a),a)\\
 	\theta=\{X | a\}.
 \end{align}
 \end{definition}
@@ -198,11 +195,11 @@ For instance:
 Subsumption for clauses.
 
 Let $C$ and $D$ be clauses. $C$ subsumes $D$ iff there exists a $\theta$
-such that $C\theta \subseteq D$, also written $C \succeq D$.
+such that $C\theta \subseteq D$, also written $C \preceq D$.
 
 For instance:
 \begin{align}
-	p(a, X) \vee p(b,Z) \succeq p(a,c)\\
+	p(a, X) \vee p(b,Z) \preceq p(a,c)\\
 	\theta=\{X | c\}.
 \end{align}
 \end{definition}
@@ -405,60 +402,57 @@ The hypothesis $\mathcal{H}$ is obtained in a tournament based way as shown in F
 		\caption{The $rlgg$-alogrithm to obtain a new hypothesis $\mathcal{H}$.}
 		\label{fig:rlgg}
 	\end{figure}
-Now it is possible to create a POSET of clauses $(X, \succeq)$ where $X$ contains all variants
+Now it is possible to create a POSET of clauses $(X, \preceq)$ where $X$ contains all variants
 of a starting clause and $\top$ and $\bot$.
 
 
 \begin{bsp}
-TODO: Example of family relation
-\label{poset_clause}
+	In Figure \ref{fig:fam_rel} is an easy family relation given and the algorithm has to
+	deduce a rule for if someone is a daughter.
+
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\node (A) at (0, 2)  {\color{blue}georg};
+				\node (B) at (2,0)   {\color{red}mary};
+				\node (C) at (4, 2)   {\color{red}ann};
+				\node (D) at (6,0)   {\color{blue}tom};
+				\node (E) at (8, -2) {\color{red}eve};
+
+				\path [->] (A) edge node[above] {} (B);
+				\path [<-] (B) edge node[above] {} (C);
+				\path [->] (C) edge node[above] {} (D);
+				\path [->] (D) edge node[above] {} (E);
+			\end{tikzpicture}
+		\end{center}
+		\caption{A simple family relation.}
+		\label{fig:fam_rel}
+	\end{figure}
+
+	The background knowledge consists only of ground terms of
+	the two predicates $parent (p)$ and  $female (f)$.
+	The positive examples are both existing daughters Eve and Mary.
+	The formulas are using only the first letter of each name as abbrevations.
+
+	\begin{align}
+		K   &= p(a,m), p(a,t), p(t,e),\\ &p(t,i), f(a), f(m), f(e)\\
+		e_1 &= daughter(m, a)\\
+		e_2 &= daughter(e, t)
+	\end{align}
+
+	Applying the $rlgg$ algorithm ends up as a huge equation (see Equation \ref{eq:fam}) where only
+	the underlined parts are relevant for the result.
+
+	\begin{gather}
+		\begin{split}
+			\underline{d(V_{m,e}, V_{a,t})} \leftarrow &\; p(a,m), p(a,t), p(t,e), p(t,i), f(a), f(m), f(e),\\
+			&\; p(a, V_{m,t}), \underline{p(V_{a,t}, V_{m,e})}, p(V_{a,t}, V_{m,i}), p(V_{a,t}, V_{t,e}),\\
+			&\; p(V_{a,t}, V_{t,i}) ,p(t, V_{e,i}), f(V_a, m), f(V_{a,e}), \underline{f(V_{m,e})}
+		\end{split}
+		\label{eq:fam}
+	\end{gather}
 \end{bsp}
 
-Bottom-up -- Inverse Entailment
----------
-Another approach has been introduced by Stephen Muggleton in his
-resolver named PROGOL. It is called **Inverse Entailment**.
-The motivation laid in the following problems by the **rlgg** approach[@muggleton1995inverse]:
-
-1. If the background knowledge $B$ is an unrestricted definite clause there may
-be no finite $rlgg_B(E)$.
-
-2. The new hypotheses $H$ may grow exponentially. Assume $B$ has $n$ and $E$
-$m$  ground literals. Than $rlgg_B(E)$ may consist of $(n + 1)^m$ ground literals.
-
-3. Concepts with multiple hypothesis can not be learned since
-$rlgg_B(E)$. is a single clause.
-
-
-<!--The general idea is to find a later called *bridge hypothesis* $F$ [@yamamoto2010inverse].-->
-We need to find an hypothesis such that Sufficiency, Necessity, Weak and Strong
-consistency holds. The *deduction theorem* in first order logic proofs that
-$B \wedge H \vDash E$ is logically equivalent to $B \wedge \neg E \vDash \neg H$.
-This equivalency means that $H$ can be computed by deducing its negation $\neg H$
-from $B$ and $\neg E$ as follows:
-
-\begin{align}
-B \wedge \neg E \vDash \neg H
-\end{align}
-
-Now let $\neg \bot$ the potential infinit conjunction of all ground literals
-wich are true in all models of $B \wedge \neg E$. Since $\neg H$ is true in every model
-of $B \wedge \neg E$ it have to contain a subset of the ground literals in $\neg \bot$.
-
-Therefore:
-\begin{align}
-B \wedge \neg E \vDash \neg \bot \vDash \neg H
-\end{align}
-
-What leads to:
-\begin{align}
-H \vDash \bot
-\end{align}
-
-To clarify what this means consider another POSET like in \ref{poset_clause}
-which starts with the predicate from which the examples are constructed from
-and ends up in $\bot$. Anywhere in bewtween the searched hypothesis $H$ has
-to exist.
 
 Top-Down -- Refinement graph
 ------
@@ -668,9 +662,9 @@ substituent $D$ in drug $A$ has specific properties.
 
 The Table \ref{tab:correlation} shows how well ILP and Hansch performs for
 a set of training data and unknown compounds. The correlation of drug
-acitivity order predicted by the ILP approach is for the training set 0.92
+activity order predicted by the ILP approach is for the training set 0.92
 and test set 0.46 up to 0.54 (depending on the used ILP engine). The method
-by Hansch has 0.79 and 0.42, respectivly.
+by Hansch has 0.79 and 0.42, respectively.
 \begin{center}
 	\begin{tabular}{|c|c|c|}
 		\hline
