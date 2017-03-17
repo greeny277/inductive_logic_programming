@@ -14,7 +14,7 @@ logic based programming and knowledge representation.
 
 Programs which are using an ILP-based approach do proceed as is displayed
 by Figure \ref{fig:flowchart}. In the beginning the environment which does include every
-necessary information, needs to be formalised in some kind of logic (see Subsection \ref{ssec:fol}).
+necessary information, needs to be formalised in some kind of logic (see \secref{ssec:fol}).
 
 
 \begin{figure}[h]
@@ -70,16 +70,15 @@ following requirements:
 
 
 
-First order logic (FOL)
---------------------------
-
-\label{ssec:fol}
-
+First order logic (FOL) {#ssec:fol}
+------
 Popular ILP-engines have in common that each of them are  using *first order logic*
 to represent the environment. Therefore its syntax and semantic is briefly
 introduced here to give a basic understanding.
 
 ### Syntax
+
+At first the syntax of FOL is described.
 
 
 #### Terms
@@ -455,15 +454,14 @@ of a starting clause and $\top$ and $\bot$.
 \end{bsp}
 
 
-Top-Down -- Refinement graph
-------
+###Top-Down -- Refinement graph
 
 Another way of getting a new hypothesis is to start with the targeting
 predicate and step by step building a clause lattice.
 Therefore @shapiro1983algorithmic introduced a concept of *refinement operators*
 to create more specific clauses, which still get subsumed by the former one.
 
-### Refinement Operators
+#### Refinement Operators
 
 The refinement operator $\rho$ is defined as following:
 \begin{align}
@@ -535,7 +533,7 @@ redundant (see Figure \ref{fig:prop_refinment_op}).
 	\label{fig:prop_refinment_op}
 \end{figure}
 
-### Search algorithm
+#### Search algorithm
 
 There are two common ways to search through a refinement graph. The complete
 version takes every possible path and returns the best most specific complete and consistent
