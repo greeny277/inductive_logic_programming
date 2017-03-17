@@ -455,6 +455,15 @@ of a starting clause and $\top$ and $\bot$.
 	\end{gather}
 \end{bsp}
 
+The $rlgg$ algorithm has a few disadvantages:
+
+1. The algorithm ends up with only one clause. Hypothesis containing multiple clauses can't be
+   found.
+
+2. The combination of the $lgg$ pairs determine the quality of the resulting hypothesis.
+
+3. $\mathcal{H}$ becomes very huge even for small problems.
+
 
 ###Top-Down -- Refinement graph
 
@@ -541,8 +550,9 @@ redundant (see Figure \ref{fig:prop_refinment_op}).
 
 There are two common ways to search through a refinement graph. The complete
 version takes every possible path and returns the best most specific complete and consistent
-clause. A much faster but incomplete way is to follow paths which fulfill the most
-positive examples. In return a incomplete and/or inconsistend hypothesis might be returned.
+clause. A much faster but incomplete way is to follow paths which fulfil the most
+positive examples. In return a incomplete and/or inconsistent hypothesis might be returned.
+So there is always some kind of trade-off to be made.
 
 Another way to decrease the search-space is to use one positive example as seed and search
 between this and the starting point as displayed in Figure \ref{fig:seed}. Theorem
