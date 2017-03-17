@@ -57,15 +57,15 @@ following requirements:
      A new hypthesis should only be generated when the background-knowledge alone can't
 	 explaine all positive examples.
 
- * Sufficiency:        $\mathcal{B} \wedge \mathcal{H} \vDash \mathcal{E}^{+}$
+ * Sufficiency:        $\mathcal{B} \land \mathcal{H} \vDash \mathcal{E}^{+}$
 
      The hypothesis $\mathcal{H}$ needs to entail all positive examples $\mathcal{E}^{+}$.
 
-* Weak consistency:   $\mathcal{B} \wedge \mathcal{H} \nvDash false$
+* Weak consistency:   $\mathcal{B} \land \mathcal{H} \nvDash false$
 
      $\mathcal{H}$ is not allow to contradict the background knowledge $\mathcal{B}$.
 
- * Strong consistency: $\mathcal{B} \wedge \mathcal{H} \wedge \mathcal{E}^{-} \nvDash false$
+ * Strong consistency: $\mathcal{B} \land \mathcal{H} \land \mathcal{E}^{-} \nvDash false$
 
 	 $\mathcal{H}$ is not allow to contradict the negative examples $\mathcal{E}^{-}$ either.
 
@@ -79,7 +79,8 @@ introduced here to give a basic understanding.
 
 ### Syntax
 
-At first the syntax of FOL is described.
+The syntax of FOL does consist out of two different parts, which are
+*terms* and *literals*.
 
 
 #### Terms
@@ -113,7 +114,7 @@ be assigned to. The grammar of atoms looks as following:
 \end{align*}
 - $P$ is the set of predicate symbols with arity $\geq 0$.
 
-Literals are atoms too, which also can be negated.
+Literals are atoms, which can be negated too.
 
 
 ### Semantic
@@ -139,8 +140,8 @@ Terms get interpreted as follows:
 \end{align}
 
 A model $\mathfrak{M}$ is an interpetaion $\mathfrak{I}$ for a $\Sigma$ expression $\varphi$,
-written $\mathfrak{M} \vDash \varphi$ when each interpretation
-$\mathfrak{I}$ which fulfils all formulas in $\Sigma$ in addition fulfils $\varphi$.
+written $\mathfrak{M} \vDash \varphi$, if each interpretation
+$\mathfrak{I}$ which does fulfil all formulas in $\Sigma$, in addition fulfils $\varphi$.
 
 
 General tools
@@ -154,23 +155,23 @@ definite program clauses are horn clauses with exactly one positive literal.
 For instance:
 
 \begin{align}
-	\lnot p \vee \lnot q \vee \lnot t \vee u
+	\lnot p \lor \lnot q \lor \lnot t \lor u
 \end{align}
 
 Which can be converted to an implication as following:
 
 \begin{align}
-	(p \wedge q \wedge t) \to u
+	(p \land q \land t) \to u
 \end{align}
 
-The programming language *Prolog* is using logic as programming paradigm
-because facts and rules can be represented as implications, which can be
-proven by *breadth-first search*.
-An example rule is given in Equation \ref{al:ex1}. To show that
-someone is a daughter  is done by checking if the person is female and has parents.
+The programming language *Prolog* has a logic-based programming paradigm
+and represents facts and statements as horn clauses because they can be checked by *breadth-first
+search*. The statement in Equation \ref{al:ex1} says that someone is a daughter,
+when the statements that the person is female and has parents become true.
 \begin{align}
 	\label{al:ex1}
-	daugther(X, Y) \Leftarrow female(X) \wedge parent(Y,X)
+	daugther(X, Y) \leftarrow female(X) \land parent(Y,X)\\
+	\Leftrightarrow daugther(X, Y) \lor \neg female(X) \lor \neg parent(Y,X)
 \end{align}
 
 ### Subsumption
@@ -199,7 +200,7 @@ such that $C\theta \subseteq D$, also written $C \preceq D$.
 
 For instance:
 \begin{align}
-	p(a, X) \vee p(b,Z) \preceq p(a,c)\\
+	p(a, X) \lor p(b,Z) \preceq p(a,c)\\
 	\theta=\{X | c\}.
 \end{align}
 \end{definition}
@@ -254,8 +255,8 @@ of variables.
 Algorithms for hypothesis search
 ---------------------------------
 
-This chapter presents two main strategies to obtain a new hypothesis. Both are using
-subsumption technique. The *rlgg* algorithm searches the hypothesis space in a bottom-up
+This chapter presents two main strategies to obtain a new hypothesis $\mathcal{H}$. Both are using
+the introduced subsumption technique. The *rlgg* algorithm searches the hypothesis space in a bottom-up
 manner using generalization. On the other hand a specialization technique is shown using
 refinement graphs [see @dzeroski1994inductive pp. 39-42, 53-57]
 
@@ -264,7 +265,7 @@ refinement graphs [see @dzeroski1994inductive pp. 39-42, 53-57]
 The ILP-solver GOLEM is based on this algorithm invented by @plotkin1970note.
 As mentioned earlier an hypothesis is searched which entails the positive examples
 but not any negative one by using the background knowledge:
-$\mathcal{B} \wedge \mathcal{H} \vDash \mathcal{E}^+$. This formula can be converted to
+$\mathcal{B} \land \mathcal{H} \vDash \mathcal{E}^+$. This formula can be converted to
 $\mathcal{H} \vDash \mathcal{B} \rightarrow \mathcal{E}^+$.
 
 By Theorem \ref{thm:subs} it is known that an adequate hypothesis $\mathcal{H}$ subsumes $\mathcal{B}
@@ -339,13 +340,13 @@ $\Rightarrow \epsilon_1 = \{x | v\}$ and $\epsilon_2 = \{g(z) | v\}$
 The last missing step to receive the searched hypothesis $h$ is to lift this
 POSET construct towards clauses.
 Because the searched hypothesis is a formula, that each
-clauses of kind $\neg B \vee E$ can be generalized to, where $E$ is any any positive
+clauses of kind $\neg B \lor E$ can be generalized to, where $E$ is any any positive
 example and $B$ the background knowlegde.
 -->
 
 The least generalization for clauses works as follows:
 \begin{algorithm}[H]
-	\KwIn{Clauses $C_1 = l_{1,1} \vee \ldots \vee l_{1,n}$ and $C_2 = l_{2,1} \vee \ldots \vee l_{2,m}$}
+	\KwIn{Clauses $C_1 = l_{1,1} \lor \ldots \lor l_{1,n}$ and $C_2 = l_{2,1} \lor \ldots \lor l_{2,m}$}
 	\KwResult{Least generalization lgg$(C_1, C_2)$}
 		result $= \{\}$\;
 		\ForEach{$((l_{1,i}, l_{2,j}) \mid i \leftarrow (1 .. n), j \leftarrow (1 ..m))$}{
@@ -361,12 +362,12 @@ The least generalization for clauses works as follows:
 \begin{bsp}
 Compute the $lgg$ of:
 \begin{align}
-C_1 &= p(a, f(a)) \vee p(b,b) \vee \neg p(b, f(b))\\
-C_2 &= p(f(a), f(a)) \vee p(f(a),b) \vee \neg p(a, f(a))
+C_1 &= p(a, f(a)) \lor p(b,b) \lor \neg p(b, f(b))\\
+C_2 &= p(f(a), f(a)) \lor p(f(a),b) \lor \neg p(a, f(a))
 \end{align}
 
 \begin{align}
-	lgg(C_1, C_2) = p(X, f(a)) \vee p(X, Y) \vee p(Z, Z) \vee p(Z, b) \vee \neg p(U, f(U))
+	lgg(C_1, C_2) = p(X, f(a)) \lor p(X, Y) \lor p(Z, Z) \lor p(Z, b) \lor \neg p(U, f(U))
 \end{align}
 \end{bsp}
 
