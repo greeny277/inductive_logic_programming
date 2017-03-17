@@ -544,8 +544,8 @@ clause. A much faster but incomplete way is to follow paths which fulfill the mo
 positive examples. In return a incomplete and/or inconsistend hypothesis might be returned.
 
 Another way to decrease the search-space is to use one positive example as seed and search
-between this and the starting point as displayed in Figure \ref{fig:seed}. Because of Theorem
-\ref{thm:subs} the hypothesis has to be included in that area.
+between this and the starting point as displayed in Figure \ref{fig:seed}. Theorem
+\ref{thm:subs} guarantees that the searched hypothesis has to exist in this area.
 \begin{figure}[H]
 	\begin{center}
 		\begin{tikzpicture}
