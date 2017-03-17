@@ -1,6 +1,7 @@
 ---
 title: "Inductive Logic Programming"
 author: Christian Bay
+date: 17.03.2017
 bibliography: ref.bib
 ---
 
@@ -457,7 +458,9 @@ of a starting clause and $\top$ and $\bot$.
 ###Top-Down -- Refinement graph
 
 Another way of getting a new hypothesis is to start with the targeting
-predicate and step by step building a clause lattice.
+predicate and step by step building a clause lattice. The ILP-solver PROGOL
+which was invented by @muggleton1995inverse is using the algorithm.
+
 Therefore @shapiro1983algorithmic introduced a concept of *refinement operators*
 to create more specific clauses, which still get subsumed by the former one.
 
@@ -619,7 +622,7 @@ Therefore it is tried to predict the biological activity of molecules to save
 money and time. Molecules like in Figure \ref{fig:qsar} can be manipulated at
 some positions by substituting rest-groups with so called functional-groups.
 Each of those functional-groups have physico-chemical properties like: polarity, size,
-flexibility, hydrogen-bond donor, hydrogen-bond acceptor, ...
+flexibility, hydrogen-bond donor, hydrogen-bond acceptor etc.
 
 \begin{figure}[h]
 	\begin{center}
@@ -635,7 +638,7 @@ The standard procedure by *Hansch* formulates a linear equation system based on 
 properties of the corresponding properties.
 
 The ILP approach doesn't try to predict the activity of the unknown molecule only by its
-properties. Instead it exists the following background knowledge:
+properties [see @dzeroski1994inductive pp. 247-252]. Instead it exists the following background knowledge:
 
 1. The relation $struc(Drug, R_n, \ldots, R_1)$ states a drug an its substitutions at
 each position.
@@ -680,12 +683,22 @@ by Hansch has 0.79 and 0.42, respectively.
 \end{center}
 
 It was stated that the complexity of the compounds has a massive influence
-on the success of the ILP method.
+on the success of the ILP method. Other ILP-based real-world applications that
+are worth being mentioned are instance the prediction of protein secondary structures or learning
+rules for early diagnosis of rheumatic diseases [see @dzeroski1994inductive pp. 243-246, 199-214].
 
-Conclusion
+Summary
 ====
 
-TODO
+This work should gave a little overview about the topic *inductively logic programming* in the
+context of machine learning. The general idea of developing new knowledge with a set of examples
+and existing background knowledge was demonstrated by the two standard algorithms.
+Furthermore a real-world application in the field of pharmacy has been presented. Nowadays different
+engines are using various algorithms in combination to achieve better results and are able
+to deal with imperfect data[see @dzeroski1994inductive pp. 67-80, 153-168]. It is also worth to
+mention that ILP is still a topic in Computer-Science (for instance, see the work @yamamoto2010inverse),
+because new insights in first-order logic may improve existing algorithms.
+
 
 <!--
 Appendix
