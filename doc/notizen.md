@@ -215,37 +215,38 @@ Therefore a subsumption relation between two clauses implies their logical conse
 Now a partial ordered set (POSET) $(X, \preceq)$ is defined, where $X$ is a set of literals. One
 literal is greater than each other literal it subsumes.
 POSETs have in general two special members $\top, \bot$. $\top$ is greater and $\bot$ is lower than
-each other member in $X$. With a given set of predicates the POSET constructs a lattice of atomic formulas (see Example
-\ref{fig:poset_atomic}).
+each other member in $X$. With a given set of predicates the POSET constructs a lattice of atomic
+formulas (see Example \ref{ex:poset_atomic}).
 
 \begin{bsp}
 Given is a binary predicate $p$, a constant $a$ and an unlimited set
 of variables.
 
-\begin{figure}[h]
-	\begin{center}
-		\begin{tikzpicture}
-			\node (G) at (1.5,2) {$\top$};
-			\node (A) at (1.5,1) {$p(X,Y)$};
-			\node (B) at (-1,-1) {$p(X,a)$};
-			\node (C) at (1.5,-1) {$p(X,X)$};
-			\node (D) at (4,-1) {$p(a,Y)$};
-			\node (E) at (1.5,-3) {$p(a,a)$};
-			\node (F) at (1.5,-4) {$\bot$};
-
-			\path [-] (A) edge node[left] {} (G);
-			\path [-] (A) edge node[left] {} (B);
-			\path [-] (A) edge node[left] {} (C);
-			\path [-] (A) edge node[left] {} (D);
-			\path [-] (B) edge node[left] {} (E);
-			\path [-] (C) edge node[left] {} (E);
-			\path [-] (D) edge node[left] {} (E);
-			\path [-] (F) edge node[left] {} (E);
-		\end{tikzpicture}
-	\end{center}
-	\caption{Example for POSET of atomic formulas}
-	\label{fig:poset_atomic}
-\end{figure}
+	\begin{figure}[h]
+		\begin{center}
+			\begin{tikzpicture}
+				\node (G) at (1.5,2) {$\top$};
+				\node (A) at (1.5,1) {$p(X,Y)$};
+				\node (B) at (-1,-1) {$p(X,a)$};
+				\node (C) at (1.5,-1) {$p(X,X)$};
+				\node (D) at (4,-1) {$p(a,Y)$};
+				\node (E) at (1.5,-3) {$p(a,a)$};
+				\node (F) at (1.5,-4) {$\bot$};
+	
+				\path [-] (A) edge node[left] {} (G);
+				\path [-] (A) edge node[left] {} (B);
+				\path [-] (A) edge node[left] {} (C);
+				\path [-] (A) edge node[left] {} (D);
+				\path [-] (B) edge node[left] {} (E);
+				\path [-] (C) edge node[left] {} (E);
+				\path [-] (D) edge node[left] {} (E);
+				\path [-] (F) edge node[left] {} (E);
+			\end{tikzpicture}
+		\end{center}
+		\caption{Example for POSET of atomic formulas}
+		\label{fig:poset_atomic}
+	\end{figure}
+	\label{ex:poset_atomic}
 \end{bsp}
 
 
@@ -256,7 +257,7 @@ Algorithms for hypothesis search
 This chapter presents two main strategies to obtain a new hypothesis. Both are using
 subsumption technique. The *rlgg* algorithm searches the hypothesis space in a bottom-up
 manner using generalization. On the other hand a specialization technique is shown using
-refinement graphs (@dzeroski1994inductive).
+refinement graphs [see @dzeroski1994inductive pp. 39-42, 53-57]
 
 ### Bottom-up -- Relative least general generalization (rlgg)
 
@@ -483,7 +484,7 @@ $\theta=\{X | Y\}$
 	$\theta' = \theta \cup \{v_j|u_j\}$.
 <!-- TODO Das stimmt so nicht. Siehe Muggleton S.265 -->
 
-The figure \ref{fig:refinement_operator} shows a refinement graph with some operators.
+Figure \ref{fig:refinement_operator} shows a refinement graph with some operators.
 The numeration of the operators is referring to the enumeration above.
 \begin{figure}[H]
 	\begin{center}
@@ -513,7 +514,7 @@ a subsumed one.
 
 Regarding to @van1993subsumption not all three properties can be fulfilled at the same time.
 Therefore the third one is not considered.
-The set of operators shown in \ref{fig:refinement_operator} is finite and complete but
+The set of operators shown in Figure \ref{fig:refinement_operator} is finite and complete but
 redundant (see Figure \ref{fig:prop_refinment_op}).
 
 \begin{figure}[H]
@@ -535,7 +536,6 @@ redundant (see Figure \ref{fig:prop_refinment_op}).
 \end{figure}
 
 ### Search algorithm
-
 
 There are two common ways to search through a refinement graph. The complete
 version takes every possible path and returns the best most specific complete and consistent
@@ -580,34 +580,36 @@ between this and the starting point as displayed in Figure \ref{fig:seed}. Becau
 	\label{fig:seed}
 \end{figure}
 
-### Top-Down example
 
-An example of the Top-Down approach is shown in Figure \ref{fig:refinement_operator}.
-
-\begin{figure}[H]
-	\begin{center}
-		\begin{tikzpicture}[scale=1.5]
-			\node[font=\tiny] (A) at (1.5,1) {$daughter(X,Y)\leftarrow$};
-			\node[font=\tiny] (B) at (-1,0) {$daughter(X,Y) \leftarrow X = Y$};
-			\node[font=\tiny] (C) at (0,-1) {$daughter(X,Y) \leftarrow female(X)$};
-			\node[font=\tiny] (D) at (2.5,-0.5) {$daughter(X,Y) \leftarrow parent(Y,X)$};
-			\node[font=\tiny] (E) at (4.5,0) {$daughter(X,Y) \leftarrow parent(X, Z)$};
-			\node[font=\tiny] (F) at (-2,-1.75) {$daughter(X,Y)\leftarrow female(X), female(Y)$};
-			\node[font=\tiny] (G) at (2.75, -1.75) {$daughter(X,Y) \leftarrow female(X), parent(Y,X)$};
-			\node[font=\tiny] (X) at (1.35, -0) {$\ldots$};
-			\node[font=\tiny] (Y) at (0.3, -1.5) {$\ldots$};
-
-			\path [->] (A) edge node[left] {} (B);
-			\path [->] (A) edge node[left] {} (C);
-			\path [->] (A) edge node[left] {} (D);
-			\path [->] (A) edge node[left] {} (E);
-			\path [->] (C) edge node[left] {} (F);
-			\path [->] (C) edge node[left] {} (G);
-		\end{tikzpicture}
-	\end{center}
-	\caption{Part of the refinementgraph for the family constellation}
-	\label{fig:refinement_operator}
-\end{figure}
+\begin{bsp}
+	An example of the Top-Down approach:
+	
+	
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=1.5]
+				\node[font=\tiny] (A) at (1.5,1) {$daughter(X,Y)\leftarrow$};
+				\node[font=\tiny] (B) at (-1,0) {$daughter(X,Y) \leftarrow X = Y$};
+				\node[font=\tiny] (C) at (0,-1) {$daughter(X,Y) \leftarrow female(X)$};
+				\node[font=\tiny] (D) at (2.5,-0.5) {$daughter(X,Y) \leftarrow parent(Y,X)$};
+				\node[font=\tiny] (E) at (4.5,0) {$daughter(X,Y) \leftarrow parent(X, Z)$};
+				\node[font=\tiny] (F) at (-2,-1.75) {$daughter(X,Y)\leftarrow female(X), female(Y)$};
+				\node[font=\tiny] (G) at (2.75, -1.75) {$daughter(X,Y) \leftarrow female(X), parent(Y,X)$};
+				\node[font=\tiny] (X) at (1.35, -0) {$\ldots$};
+				\node[font=\tiny] (Y) at (0.3, -1.5) {$\ldots$};
+	
+				\path [->] (A) edge node[left] {} (B);
+				\path [->] (A) edge node[left] {} (C);
+				\path [->] (A) edge node[left] {} (D);
+				\path [->] (A) edge node[left] {} (E);
+				\path [->] (C) edge node[left] {} (F);
+				\path [->] (C) edge node[left] {} (G);
+			\end{tikzpicture}
+		\end{center}
+		\caption{Part of the refinementgraph for the family constellation}
+		\label{ex:refinement_operator}
+	\end{figure}
+\end{bsp}
 
 Example -- Quantitative structure-activity relationship
 ====
@@ -684,6 +686,8 @@ on the success of the ILP method.
 
 Conclusion
 ====
+
+TODO
 
 <!--
 Appendix
