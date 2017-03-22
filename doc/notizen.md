@@ -1,7 +1,7 @@
 ---
 title: "Inductive Logic Programming"
 author: Christian Bay
-date: 17.03.2017
+date: \today
 geometry: true
 numbersections: true
 links-as-notes: true
