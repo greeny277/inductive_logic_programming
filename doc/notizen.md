@@ -48,7 +48,7 @@ In Figure \ref{fig:hypo} the four classes are shown.
 		\includegraphics[scale=0.3]{images/hypothesis.png}
 	\end{center}
 	\caption{Shown is the classification of hypotheses, where the denotation is as follows: background knowlegde is
-		$B$, positive examples $\mathcal{E}^+$, negative examples $\mathcal{E}^-$ and the hypothesis is $H$.}
+		$B$, positive examples $\mathcal{E}^+$, negative examples $\mathcal{E}^-$ and the hypothesis is $\mathcal{H}$.}
 	\label{fig:hypo}
 \end{figure}
 
@@ -90,8 +90,8 @@ The syntax of FOL does consist out of two different parts, which are
 
 In FOL terms denote objects in the world. They are inductively defined as:
 \begin{itemize}
-	\item Every variable and constant is a term
-	\item Every expression $f(t_1, \ldots, t_n)$ is a term
+	\item Every variable and constant is a term.
+	\item Every expression $f(t_1, \ldots, t_n)$ is a term.
 \end{itemize}
 The grammar for terms does look as follows:
 \begin{align}
@@ -110,7 +110,7 @@ symbol $f/n$ maps $n$ objects to another single object in the world.
 #### Atoms and Literals
 
 An atom or literal is the smallest expression to which a truth value can
-be assigned to. The grammar of atoms looks as following:
+be assigned to. The grammar of atoms looks as follows:
 
 \begin{align*}
 	Atom := p(Term_1, \ldots, Term_n) \mid Term_1 = Term_2  \hspace{1cm} \text{ where } p \in P
@@ -180,7 +180,7 @@ when the statements that the person is female and has parents become true.
 ### Subsumption
 
 A huge difficulty by finding good hypothesis is the enormous size of search space it can
-exists in. Therefore subsumption helps to find some boundaries.
+exist in. Therefore subsumption helps to find some boundaries.
 
 \begin{definition}
 Subsumption for literals.
@@ -261,9 +261,9 @@ Algorithms for hypothesis search
 This chapter presents two main strategies to obtain a new hypothesis $\mathcal{H}$. Both are using
 the introduced subsumption technique. The *rlgg* algorithm searches the hypothesis space in a bottom-up
 manner using generalization. On the other hand a specialization technique is shown using
-refinement graphs [see @dzeroski1994inductive pp. 39-42, 53-57]
+refinement graphs [see @dzeroski1994inductive pp. 39-42, 53-57].
 
-### Bottom-up -- Relative least general generalization (rlgg)
+### Bottomoup -- Relative least general generalization (rlgg)
 
 The ILP-solver GOLEM is based on this algorithm invented by @plotkin1970note.
 As mentioned earlier an hypothesis is searched which entails the positive examples
@@ -295,10 +295,7 @@ and in reverse gets subsumed by each clause above.
 
 
 @plotkin1970note introduced an algorithm for determining the *least generalization* for two given terms or literals.
-The notation is as following: $P$ is a predicate, $g,f$ are symbols and $z$ is a variable.
-A word $W$ is a term or a variable.
-
-The lgg-algorithm for terms is defined as followed:
+The lgg-algorithm for terms is defined as follows:
 
 <!-- TODOS: Use algorithm package. What does "compatible" mean? Begins with same predicate, function
 symbol or variable? -->
@@ -347,7 +344,8 @@ clauses of kind $\neg B \lor E$ can be generalized to, where $E$ is any any posi
 example and $B$ the background knowlegde.
 -->
 
-The least generalization for clauses works as follows:
+The least generalization for clauses computes the $lgg$ for each pair of the two clauses
+and builds a new clause out of the results excluding $\top$.
 \begin{algorithm}[H]
 	\KwIn{Clauses $C_1 = l_{1,1} \lor \ldots \lor l_{1,n}$ and $C_2 = l_{2,1} \lor \ldots \lor l_{2,m}$}
 	\KwResult{Least generalization lgg$(C_1, C_2)$}
@@ -363,7 +361,7 @@ The least generalization for clauses works as follows:
 \end{algorithm}
 
 \begin{bsp}
-Compute the $lgg$ of:
+Compute the $lgg$ of two clauses:
 \begin{align}
 C_1 &= p(a, f(a)) \lor p(b,b) \lor \neg p(b, f(b))\\
 C_2 &= p(f(a), f(a)) \lor p(f(a),b) \lor \neg p(a, f(a))
@@ -412,8 +410,8 @@ of a starting clause and $\top$ and $\bot$.
 
 
 \begin{bsp}
-	In Figure \ref{fig:fam_rel} is an easy family relation given and the algorithm has to
-	deduce a rule for if someone is a daughter.
+	In Figure \ref{fig:fam_rel} an easy family relation is given and the algorithm has to
+	derive a rule for if someone is a daughter.
 
 	\begin{figure}[H]
 		\begin{center}
@@ -479,19 +477,19 @@ to create more specific clauses, which still get subsumed by the former one.
 
 #### Refinement Operators
 
-The refinement operator $\rho$ is defined as following:
+The refinement operator $\rho$ is defined as follows:
 \begin{align}
 \forall D \in \rho(C). C \preceq D
 \end{align}
 
-Common refinement operators are:
+Common refinement operators are (see @muggleton1995inverse page 265):
 
 1. Substitute for one variable a term built from a functor of
 arity $n$ and $n$ distinct and not in the clause existing variables:
-$\theta=\{X | f(Y_1, \ldots, Y_n)\}$
+$\theta=\{X | f(Y_1, \ldots, Y_n)\}$.
 
 2. Substitute for one variable another variable already in the clause:
-$\theta=\{X | Y\}$
+$\theta=\{X | Y\}$.
 
 3. Add a literal $l_k = p(u_1, \ldots, u_m)$, which is the $k$-th literal of $F_i$, where each
 	$u_j$ with $1 \leq j \leq m$ is substituted by $\{v_j|u_j\} \in \theta$ or
@@ -554,7 +552,7 @@ redundant (see Figure \ref{fig:prop_refinment_op}).
 There are two common ways to search through a refinement graph. The complete
 version takes every possible path and returns the best most specific complete and consistent
 clause. A much faster but incomplete way is to follow paths which fulfil the most
-positive examples. In return a incomplete and/or inconsistent hypothesis might be returned.
+positive examples. In return an incomplete and/or inconsistent hypothesis might be returned.
 So there is always some kind of trade-off to be made.
 
 Another way to decrease the search-space is to use one positive example as seed and search
@@ -652,7 +650,8 @@ The standard procedure by *Hansch* formulates a linear equation system based on 
 properties of the corresponding properties.
 
 The ILP approach doesn't try to predict the activity of the unknown molecule only by its
-properties [see @dzeroski1994inductive pp. 247-252]. Instead it exists the following background knowledge:
+properties [see @dzeroski1994inductive pp. 247-252], instead the following background knowledge
+does exist:
 
 1. The relation $struc(Drug, R_n, \ldots, R_1)$ states a drug an its substitutions at
 each position.
@@ -661,7 +660,7 @@ each position.
 
 3. Basic arithmetical knowledge.
 
-The target relation $great(drugX, drugY)$ declares that $drugX$ has a higher biological activity
+The target relation $great(drugX, drugY)$ denotes that $drugX$ has a higher biological activity
 than $drugY$. Positive examples are those where $drugX$ has an higher activity. Pairs where
 $drugX$ has a lower activity are denoted as negative examples. Drugs with the same biological
 activity are discarded.
@@ -698,20 +697,20 @@ by Hansch has 0.79 and 0.42, respectively.
 
 It was stated that the complexity of the compounds has a massive influence
 on the success of the ILP method. Other ILP-based real-world applications that
-are worth being mentioned are instance the prediction of protein secondary structures or learning
+are worth being mentioned are for instance the prediction of protein secondary structures or learning
 rules for early diagnosis of rheumatic diseases [see @dzeroski1994inductive pp. 243-246, 199-214].
 
 Summary
 ====
 
-This work should gave a little overview about the topic *inductively logic programming* in the
+This work gave a little overview about the topic *inductively logic programming* in the
 context of machine learning. The general idea of developing new knowledge with a set of examples
 and existing background knowledge was demonstrated by the two standard algorithms.
 Furthermore a real-world application in the field of pharmacy has been presented. Nowadays different
 engines are using various algorithms in combination to achieve better results and are able
 to deal with imperfect data[see @dzeroski1994inductive pp. 67-80, 153-168]. It is also worth to
 mention that ILP is still a topic in Computer-Science (for instance, see the work @yamamoto2010inverse),
-because new insights in first-order logic may improve existing algorithms.
+because new insights in first-order logic can improve existing algorithms.
 
 
 <!--
