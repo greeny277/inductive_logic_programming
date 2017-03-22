@@ -170,7 +170,7 @@ Which can be converted to an implication as following:
 The programming language *Prolog* has a logic-based programming paradigm
 and represents facts and statements as horn clauses because they can be checked by *breadth-first
 search*. The statement in Equation \ref{al:ex1} says that someone is a daughter,
-when the statements that the person is female and has parents become true.
+if that person is female and has a parent.
 \begin{align}
 	\label{al:ex1}
 	daugther(X, Y) \leftarrow female(X) \land parent(Y,X)\\
