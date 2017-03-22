@@ -19,36 +19,35 @@ $if(euro)$
 $endif$
 \else % if luatex or xelatex
   \ifxetex
-    \usepackage{mathspec}
-    \usepackage{xltxtra,xunicode}
+	\usepackage{mathspec}
+	\usepackage{xltxtra,xunicode}
   \else
-    \usepackage{fontspec}
+	\usepackage{fontspec}
   \fi
   \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
   \newcommand{\euro}{€}
 $if(mainfont)$
-    \setmainfont{$mainfont$}
+	\setmainfont{$mainfont$}
 $endif$
 $if(sansfont)$
-    \setsansfont{$sansfont$}
+	\setsansfont{$sansfont$}
 $endif$
 $if(monofont)$
-    \setmonofont[Mapping=tex-ansi]{$monofont$}
+	\setmonofont[Mapping=tex-ansi]{$monofont$}
 $endif$
 $if(mathfont)$
-    \setmathfont(Digits,Latin,Greek){$mathfont$}
+	\setmathfont(Digits,Latin,Greek){$mathfont$}
 $endif$
 \fi
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
 \IfFileExists{microtype.sty}{%
-\usepackage{microtype}
+	\usepackage{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage[hmargin=3cm,top=2.5cm,bottom=3.5cm]{geometry}
 $if(geometry)$
-\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+\usepackage[hmargin=3cm,top=2.5cm,bottom=3.5cm]{geometry}
 $endif$
 $if(lang)$
 \ifxetex
@@ -97,20 +96,20 @@ $if(graphics)$
 $endif$
 \ifxetex
   \usepackage[setpagesize=false, % page size defined by xetex
-              unicode=false, % unicode breaks when used with xetex
-              xetex]{hyperref}
+			  unicode=false, % unicode breaks when used with xetex
+			  xetex]{hyperref}
 \else
   \usepackage[unicode=true]{hyperref}
 \fi
 \hypersetup{breaklinks=true,
-            bookmarks=true,
-            pdfauthor={$author-meta$},
-            pdftitle={$title-meta$},
-            colorlinks=true,
-            citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
-            urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
-            linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
-            pdfborder={0 0 0}}
+			bookmarks=true,
+			pdfauthor={$author-meta$},
+			pdftitle={$title-meta$},
+			colorlinks=true,
+			citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
+			urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
+			linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
+			pdfborder={0 0 0}}
 \urlstyle{same}  % don't use monospace font for urls
 $if(links-as-notes)$
 % Make links footnotes instead of hotlinks:
@@ -137,7 +136,6 @@ $endif$
 % ADD YOUR \usepackage{...} COMMANDS HERE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[linesnumbered,lined,boxed,commentsnumbered]{algorithm2e}
-\usepackage{cite}
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsthm}
@@ -183,8 +181,8 @@ $endif$
 \newtheorem{thm}{Theorem}
 \newtheorem{definition}{Definition}
 \providecommand{\tightlist}{%
-	  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-$if(title)$
+\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+	$if(title)$
 \title{$title$$if(subtitle)$\\\vspace{0.5em}{\large $subtitle$}$endif$}
 $endif$
 $if(author)$
@@ -201,7 +199,7 @@ $if(title)$
 $endif$
 $if(abstract)$
 \begin{abstract}
-$abstract$
+	$abstract$
 \end{abstract}
 $endif$
 
@@ -211,7 +209,7 @@ $include-before$
 $endfor$
 $if(toc)$
 {
-\hypersetup{linkcolor=black}
+	\hypersetup{linkcolor=black}
 \setcounter{tocdepth}{$toc-depth$}
 \tableofcontents
 }

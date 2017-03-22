@@ -2,7 +2,10 @@
 title: "Inductive Logic Programming"
 author: Christian Bay
 date: 17.03.2017
-bibliography: ref.bib
+geometry: true
+numbersections: true
+links-as-notes: true
+
 ---
 
 Inductive Logic Programming
