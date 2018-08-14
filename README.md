@@ -34,6 +34,8 @@ Under `src` I implemented the *rlgg* algorithm by using [Prolog](http://www.swi-
 
 To test some code, I recommend installing the Prolog interpreter [swipl](http://www.swi-prolog.org/Download.html):
 
+The most examples are already part of the Prolog file, for instance:
+
 ```
 >>> swipl src/base_of_knowledge.pl
 ?- test_1(X).
