@@ -14,12 +14,18 @@ What is it all about
 *Inductive logic programming* is a sub-field of *machine learning* with components of
 logic based programming and knowledge representation.
 
-Programs which are using an ILP-based approach do proceed as displayed in the following flow-graph:
+The basic algorithm for an ILP-based approach is displayed in ![this](doc/images/process2cut.pdf)
+flow graph.
 
-![alt text](doc/images/process2cut.pdf)
+The background knowledge consists of a bunch of different facts and rules.
+The main task of the system is to generate new and  hopefully very general rules for the
+background knowledge. Therefore the program gets feed with positive and
+negative examples of a certain matter. Afterwards the program tries to
+deduce the most general rule which fulfils all positive and no
+negative example. Subsequently the generated rule, what is called *hypothesis*
+is added to the background knowledge.
 
-
-Under `doc/` you can find my elaboration about this topic.
+The underlying logic and basic algorithms are described in my elaboration and can be found under `doc/`.
 
 Implementation
 ----
